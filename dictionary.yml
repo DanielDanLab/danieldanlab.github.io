@@ -1,5 +1,0 @@
-hardware: [ram, gb, storage, slot, external, camera, power, wifi, battery, button]
-functionality: [video*, games, *books, email, social, media, reader, browser]
-customer_service: [service, support, customer, return]
-names: [amazon, apple, ipad, xoom, samsung, galaxy]
-experience: [screen*, display, resolution, glass*, touch, thin, light]  
