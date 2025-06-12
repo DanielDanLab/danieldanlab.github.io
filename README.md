@@ -1,2 +1,2 @@
-# ta4m.github.io
+# danieldanlab.github.io
 Companion website for the Text Analytics for Applications in Marketing using R book
