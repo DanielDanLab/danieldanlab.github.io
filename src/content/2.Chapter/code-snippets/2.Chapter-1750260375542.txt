@@ -1,0 +1,13 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Assign the string "fifth" to the fifth element of the {}character\_vector{}}
+{character\_vector[}{5}{] }{{}{-}} {"fifth"}
+
+{\# Display the contents of {}character\_vector{}}
+{character\_vector}
+{Highlighting}
+{Shaded}
+
+ [1] ""      ""      ""      ""      "fifth" ""      ""      ""      ""     
+[10] ""     

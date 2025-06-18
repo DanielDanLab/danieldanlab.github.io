@@ -1,0 +1,1594 @@
+\chapter{Clustering}\label{clustering}
+
+\textbf{Learning Objectives}
+
+\emph{Overview starts}
+
+\begin{itemize}
+\tightlist
+\item
+  Identify and understand the main clustering algorithms.
+\item
+  Explore practical examples of different clustering methods.
+\item
+  Understand the techniques for clustering text or documents to uncover
+  latent patterns.
+\item
+  Analyze and extract information from clustering to aid decision-making.
+\item
+  Experiment with clustering and apply it in different
+  contexts.
+\end{itemize}
+
+\emph{Overview ends}
+
+\section{Grouping text and linguistic
+elements}\label{grouping-text-and-linguistic-elements}
+
+Humans tend to categorize (Harnad 2017): This is a cognitive
+shortcut which identifies commonalities and creates groups, enabling the efficient processing of
+information. This is part of human cognition and
+allows us to act in a predetermined way when a specific, already familiar, situation
+arises. It is also serves as a method of evaluating homogeneity in data so that we can make decisions based on a restricted number of
+groups with specific characteristics. It is similar to summarizing: We
+condense a lot of information into few important key points that
+describe the whole in a concise manner.
+
+One practical application of categorizing is clustering. This
+involves identifying shared characteristics within data and grouping
+similar items accordingly. There are several clustering
+techniques, as well as many fields of application. In marketing,
+clustering can also be referred to as segmentation, i.e., when we try to find a
+segment of a population that exhibits similar behaviors and patterns. Of
+clustering methods one is model-based
+and uses statistical probability models, another is density-based
+clustering, which uses a model that groups objects based on objective functions, while yet another is distance-based
+and has a strong exploratory component. Various measures can be
+used for this last version, including Hamming for categorial data,
+Manhattan and Euclidean for continuous data, Jaccard for binary data,
+Mahalanobis for correlated data, or cosine similarity for text data.
+There are also hybrid methods which combine various
+clustering methods (Vries, Olech, and Moscato 2019). 
+
+A similar concept
+to clustering is classification. This uses existing
+classes with known features: New unclassified elements are
+tested against these features and then assigned to the appropriate
+class, so classification is a supervised method (Sen, Hajra, and Ghosh
+2020). Clustering seeks to uncover these commonalities autonomously,
+often through iterative, unsupervised mathematical operations within
+algorithms. Often we do not know how many clusters we can have and
+need to conduct several trials before we can extract meaningful insights into the data. This is a brief outline of two important concepts, clustering
+and classification, and in this chapter we will concentrate on the principles and
+application of the former.
+
+In clustering, the goal is to extract latent groups, or clusters, that
+contain a certain number of elements. These clusters may range from those which contain a single element to those in which all elements within a dataset are present. In any
+clustering algorithm the concept of similarity is twofold: high
+similarity (homogeneity) within clusters and marked dissimilarity
+(heterogeneity) between different clusters, as illustrated in
+Figure~\ref{fig-clusteringin}. When applying a clustering algorithm,
+several factors are of interest, including the number of clusters
+generated, their relative distances, sizes, shapes, and densities.
+
+Text clustering gives us a quick overview of the content of a corpus by
+extracting its most representative features. Grouping together
+the words that are most closely related to each other (Struhl 2015) helps us to identify underlying topics and themes. These
+methods can be very useful, for example, when clustering search results or
+finding similar word groups in emails from customers. Such insights are
+essential in refining segmentation strategies and discovering recurring
+issues in customer communications, and so helping to develop one-to-one
+marketing.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figure/chapter5/cluster.png}
+
+}
+
+\caption{\label{fig-clusteringin}Cluster similarities \newline Authors'
+own figure}
+
+\end{figure}%
+
+\section{Proximity and similarity}\label{proximity-and-similarity}
+
+\subsection{Euclidean distance}\label{sec-euclidean-distance}
+
+In text mining, clustering can be applied at various levels, for
+entire books, chapters, paragraphs, sentences, or even individual words.
+Clustering words means grouping terms that appear at similar
+frequencies across different documents (see the definition of document in
+the introductory chapter), while clustering documents allows us to
+understand the similarities between them. Authorship attribution is one
+practical application, where texts are grouped to assign them to
+specific authors. Each author's unique writing style, manifested through
+their use of stop words, distinctive expressions, word frequencies, and
+punctuation, becomes an identifier for such analyses (Stamatatos et al.
+2016). Research has also shown gender-based differences in writing
+styles, indicating potential gender segmentation in texts (Cheng,
+Chandramouli, and Subbalakshmi 2011).
+
+Frequency (i.e.,~how many times a term appears in a text) allows us
+to use algorithms that involve the concept of Euclidean distance (Huang
+et al. 2008). Documents with a high degree of similarity of word
+frequencies are considered closer in terms of Euclidean distance,
+meaning that the distance between them is minimal. A simple
+example will help to grasp the basic concept.
+
+Consider an unlikely scenario of three documents, each containing just
+two words. Each word's occurrence in a document is quantified by its
+frequency, expressed as the number of times it appears. To
+demonstrate this concept, we will use R to replicate the data presented
+in Table~\ref{tbl-firsttable} where the numerical representation of our
+example is shown.
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Three documents, two
+words}\label{tbl-firsttable}\tabularnewline
+\toprule\noalign{}
+& bank & engine \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& bank & engine \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+doc1 & 20 & 11 \\
+doc2 & 22 & 12 \\
+doc3 & 12 & 27 \\
+\end{longtable}
+
+To begin our analysis, we define the variables \texttt{doc1},
+\texttt{doc2} and \texttt{doc3} containing the frequency counts of two
+specific words within the respective documents. The function
+\texttt{rbind()} is used to merge the individual \texttt{doc} vectors
+into a single data frame consolidating them in terms of row. It is worth noting
+the existence of \texttt{cbind()}, a complementary function that
+consolidates columns.
+
+After binding these vectors, we use the function \texttt{rename()}
+to assign meaningful column names to the newly formed table stored in the variable \texttt{docs}: \texttt{bank} and \texttt{engine}. To represent the co-occurrence frequencies of these two words visually across the documents, we construct a
+scatterplot. The function \texttt{ggplot()} and its associated
+attributes are used to display our data. The function
+\texttt{geom\_point()} is applied to generate a scatterplot,
+\texttt{labs()} and \texttt{geom\_label()} enhance the plot by adding labels
+and creating an aesthetically pleasing layout, see
+Figure~\ref{fig-euclideandist}.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\CommentTok{\# Example, the word bank (appears 20 times in the first document), }
+\CommentTok{\# engine (appears 11 times in the same document)}
+\NormalTok{doc1 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{11}\NormalTok{)}
+\NormalTok{doc2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{22}\NormalTok{, }\DecValTok{12}\NormalTok{)}
+\NormalTok{doc3 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{27}\NormalTok{)}
+
+\NormalTok{docs }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(doc1, doc2, doc3) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  as.data.frame }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{bank=}\DecValTok{1}\NormalTok{, }\AttributeTok{engine=}\DecValTok{2}\NormalTok{)}
+  
+\FunctionTok{ggplot}\NormalTok{(docs, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{bank, }\AttributeTok{y=}\NormalTok{engine)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x=}\StringTok{"bank"}\NormalTok{, }\AttributeTok{y=}\StringTok{"engine"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_label}\NormalTok{(}\AttributeTok{label=}\FunctionTok{rownames}\NormalTok{(docs), }\AttributeTok{nudge\_x =} \FloatTok{0.35}\NormalTok{, }\AttributeTok{nudge\_y =} \FloatTok{0.35}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{5.Chapter_files/figure-pdf/fig-euclideandist-1.pdf}
+
+}
+
+\caption{\label{fig-euclideandist}Documents similitude \newline Authors'
+own figure}
+
+\end{figure}%
+
+\emph{Program code ends}
+
+After we bind the documents and the words together in a tabular
+structure, the data frame, we can calculate the distance between
+the documents. Note that the concept of distance is
+associated with the concept of similarity: The smaller the distance, the
+higher the similarity. Figure~\ref{fig-euclideandist} gives a
+visual interpretation of this concept, illustrating that \texttt{doc1}
+and \texttt{doc2} are closer to one another when compared with
+\texttt{doc3}. Mathematically, this can be calculated using
+Euclidean distance (Jockers and Thalken 2020b). On a
+two-dimensional plane, this is analogous to the hypotenuse in the theorem of Pythagoras. Be aware that Eucledian distance is not the only
+method that can be used to calculate the distance between two or more elements. The work of
+Deza and Deza (2009) offers an extensive overview of distance metrics
+covering a wide range of calculation methods.
+
+The equation to calculate the distance between \texttt{doc1} and
+\texttt{doc2} uses \(w\) to represent word frequencies in the
+documents. It is essential to understand that \(1^{st}w_{doc_1}\),
+\(1^{st}w_{doc_2}\), etc., represent the frequencies of the first words
+in \textbf{doc1} and \textbf{doc2} respectively. The pattern continues
+for all words, up the \(n^{th}\) word. This is a simplification which
+assumes that both documents contain exactly the same set of words. For
+words that are present in one document and absent in the other, their
+frequency in the document where they are absent is considered to be zero. The equation
+calculates the Euclidean distance by summing the squares of differences
+in word frequencies for each word across the two documents and then
+taking the square root of this sum.
+\[dist(doc_1, doc_2)=\sqrt{(1^{st}w_{doc_1}-1^{st}w_{doc_2})^2+(2^{nd}w_{doc_1}-2^{nd}w_{doc_2})^2+\ldots+(n^{th}w_{doc_1}-n^{th}w_{doc_2})^2}\]
+
+In our case, we do not have \emph{n} words, but only two: \emph{bank}
+and \emph{engine}. Let us calculate the distance between the documents
+and round the result to the first two decimals.
+
+\[
+dist(doc_1, doc_2)=\sqrt{(20-22)^2+(11-12)^2}=2.24 
+\] \[
+dist(doc_1, doc_3)=\sqrt{(20-12)^2+(11-27)^2}=17.89
+\] \[
+dist(doc_2, doc_3)=\sqrt{(22-12)^2+(12-27)^2}=18.03
+\]
+
+As was expected from the scatter plot, the Eucledian distance between
+documents \(d_1\) and \(d_2\) is considerably smaller than the distance
+between \(d_1\) and \(d_3\), or between \(d_2\) and \(d_3\). To
+facilitate the calculation of these distances, especially in cases
+involving many documents with multiple features, we can use the R
+function \texttt{dist()}. This efficiently calculates the
+distances of pairs between the documents.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compute pariwise distances between documents}
+\FunctionTok{dist}\NormalTok{(docs)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          doc1      doc2
+doc2  2.236068          
+doc3 17.888544 18.027756
+\end{verbatim}
+
+\emph{Program code ends}
+
+Euclidean distance is a simple method for calculating proximity but
+in marketing it is not frequently applied due to its sensitivity to the
+magnitude of the term frequencies. Another metric, called cosine
+distance is preferred, as it measures the angle between vectors, we will
+discuss about it more in detail in
+Chapter~\ref{sec-extracting-information-from-embeddings}. In marketing
+applications, cosine distance helps analyze text similarity, such as
+clustering customer reviews or segmenting product descriptions (Berger
+et al. 2020).
+
+\subsection{Cosine similarity}\label{cosine-similarity}
+
+We can calculate the cosine similarity of two vectors by considering the
+data from the previous subchapter. We can consider a document expressed
+as a vector, the elements of the vector are the frequencies of the words
+in a document (J. Han, Pei, and Tong 2022). The cosine similarity
+between two vectors \(\vec{A}\) and \(\vec{B}\) is defined as:
+
+\begin{equation}\phantomsection\label{eq-cosine_similarity}{
+\text{sim}(\vec{A}, \vec{B}) = \frac{\sum_{i=1}^n A_i \cdot B_i}{\sqrt{\sum_{i=1}^n A_i^2} \cdot \sqrt{\sum_{i=1}^n B_i^2}}
+}\end{equation}
+
+In Equation~\ref{eq-cosine_similarity}, \(A_i\) and \(B_i\) are the
+\(i\text{-th}\) components, in our case word frequencies, of the two
+vectors. The numerator represents their dot product while the
+denominator is the product of their Euclidean magnitudes. We have the
+three documents represented as vectors, \(\vec{doc_1} = (20, 11)\),
+\(\vec{doc_2} = (22, 12)\), \(\vec{doc_2} = (12, 27)\). The cosine
+similarity between \(\vec{doc_1}\) and \(\vec{doc_2}\) is calculated
+like
+
+\[
+\text{sim}(\vec{doc_1}, \vec{doc_2}) = \frac{(20 \cdot 22) + (11 \cdot 12)}{\sqrt{20^2 + 11^2} \cdot \sqrt{22^2 + 12^2}}
+= \frac{572}{22.83 \cdot 25.07} \approx 0.998
+\] Similarly we can calculate the cosine similarity between
+\(\vec{doc_1}\) and \(\vec{doc_3}\), and between \(\vec{doc_2}\) and
+\(\vec{doc_2}\). The closer the similarity measure between two vectors
+is to \(1\), the more similar they are. In R we can use the package
+\texttt{lsa} to speed up the computational part.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lsa)}
+
+\CommentTok{\# Example data: term frequencies}
+\NormalTok{doc1 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{, }\DecValTok{11}\NormalTok{)}
+\NormalTok{doc2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{22}\NormalTok{, }\DecValTok{12}\NormalTok{)}
+\NormalTok{doc3 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DecValTok{27}\NormalTok{)}
+
+\CommentTok{\# Combine into a matrix}
+\NormalTok{docs }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(doc1, doc2, doc3)}
+
+\CommentTok{\# Calculate cosine similarity matrix}
+\NormalTok{cosine\_sim\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{cosine}\NormalTok{(}\FunctionTok{t}\NormalTok{(docs))}
+
+\CommentTok{\# View the cosine similarity matrix}
+\NormalTok{cosine\_sim\_matrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          doc1      doc2      doc3
+doc1 1.0000000 0.9999939 0.7962479
+doc2 0.9999939 1.0000000 0.7941278
+doc3 0.7962479 0.7941278 1.0000000
+\end{verbatim}
+
+\emph{Program code ends}
+
+It is obvious to observe that \texttt{doc1} and \texttt{doc2} are the
+most similar, while \texttt{doc3} is less similar to them.
+
+\section{Hyerarchical Agglomerative
+Clustering}\label{hyerarchical-agglomerative-clustering}
+
+If we do not want to cluster or find document similarities but we need
+to focus more on the words, a directly related application, exemplifying
+the principles discussed in Section~\ref{sec-euclidean-distance}, is
+Hierarchical Clustering (HC), one of the simplest forms of clustering.
+HC has two primary methodologies: agglomerative and divisive. In
+agglomerative (or bottom-up) clustering, each element initially
+represents a distinct cluster. Then, they are merged or ``agglomerated''
+into increasingly larger clusters culminating in a single, comprehensive
+cluster. In the divisive (or top-down) clustering the algorithm begins
+with one big cluster that is sistematically divided into smaller and
+smaller ones ultimately reahcing the level of individual elements in a
+tree-like taxonomy. The analogy with a tree (dendrogram) is
+straightforward: the leaves symbolize individual objects, nodes signify
+clusters and the root contains the entire dataset, as illustrated in
+Figure~\ref{fig-clusteringhac}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.99\textwidth,height=\textheight]{figure/chapter5/hac.png}
+
+}
+
+\caption{\label{fig-clusteringhac}Hierarchical Agglomerative/Divisive
+clustering \newline Authors' own figure}
+
+\end{figure}%
+
+We have learned how to calculate the distance between objects using the
+Eucledian distance. But a cluster contains one or more than one element.
+So, if the distance between individual elements is well understood, how
+would we calculate the distance between clusters? There ar several ways
+to do that. The distance between two clusters can be given by the
+distance between the closest elements contained in the two clusters. Or
+the distance between the furthest elements. Or the mean distance between
+all pairs of elements, one from each cluster. Each of these methods,
+known collectively as linkage criteria, influences the shape and size of
+the clusters formed. To better visualize these concepts,
+Table~\ref{tbl-linkage} provides diagrams and succinct descriptions.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1806}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6389}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1806}}@{}}
+\caption{Linking Criteria}\label{tbl-linkage}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Linkage Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Explanation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagram
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Linkage Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Explanation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagram
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Single Linkage & This is the distance between the closest members of the
+two clusters &
+\includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/singlelinkage.png} \\
+Complete Linkage & This is the distance between the members that are
+farthest apart &
+\includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/completelinkage.png} \\
+Average Linkage & This method involves looking at the distances between
+all pairs and averages all of the distances. Also called UPGMA &
+\includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/averagelinkage.png} \\
+Ward Linkage & This method minimizes the total within-cluster distance
+variance &
+\includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/wardlinkage.png} \\
+\end{longtable}
+
+Apart from the linkage methods presented in Table~\ref{tbl-linkage},
+there exist other procedures such as the combined weighted algorithm, as
+discussed by (Maqbool and Babri 2004). While these methods offer nuanced
+approaches to clustering, their practical usage is somewhat limited.
+
+To illustrate the workings of HAC, consider a scenario with six elements
+(referred to as `words') across two dimensions (labelled as
+`documents'). This example is a slightly more complex than the previous
+one, but remains accessible for novice readers to understand. We will
+apply HAC using the single linkage criterion. Notice that in the
+previous example the clustering focus was on documents, while now
+clustering revolves around words. We hypothesize that these words appear
+with varying frequencies within the documents, meaning that in each
+document, the six words appear a certain number of times. The words have
+a similar characteristic if they appear with a similar frequency in the
+documents that hold them.
+
+\begin{longtable}[]{@{}lll@{}}
+\caption{Table containing six words and their frequencies in the
+corpus}\label{tbl-tablehac}\tabularnewline
+\toprule\noalign{}
+Word & Document1 & Document2 \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Word & Document1 & Document2 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Word1 & 40 & 53 \\
+Word2 & 22 & 38 \\
+Word3 & 35 & 32 \\
+Word4 & 26 & 19 \\
+Word5 & 8 & 41 \\
+Word6 & 45 & 30 \\
+\end{longtable}
+
+The first step in starting to perform HAC is to calculate the distances
+between the elements, in this case, words. Words that exhibit similar
+frequencies across documents will be positioned closer to each other in
+the conceptual space. A visual representation of this arrangement, if
+plotted on a canvas, would resemble the configuration shown in
+Figure~\ref{fig-examplehac}.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a data frame for six words and their frequencies in two documents}
+\NormalTok{words\_data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Word =} \FunctionTok{c}\NormalTok{(}\StringTok{"Word1"}\NormalTok{, }\StringTok{"Word2"}\NormalTok{, }\StringTok{"Word3"}\NormalTok{, }\StringTok{"Word4"}\NormalTok{, }\StringTok{"Word5"}\NormalTok{, }\StringTok{"Word6"}\NormalTok{),}
+  \AttributeTok{Document1 =} \FunctionTok{c}\NormalTok{(}\DecValTok{40}\NormalTok{, }\DecValTok{22}\NormalTok{, }\DecValTok{35}\NormalTok{, }\DecValTok{26}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{45}\NormalTok{),}
+  \AttributeTok{Document2 =} \FunctionTok{c}\NormalTok{(}\DecValTok{53}\NormalTok{, }\DecValTok{38}\NormalTok{, }\DecValTok{32}\NormalTok{, }\DecValTok{19}\NormalTok{, }\DecValTok{41}\NormalTok{, }\DecValTok{30}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{\# Calculate Euclidean distances}
+\NormalTok{dist\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(words\_data[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\AttributeTok{method =} \StringTok{"euclidean"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(dist\_matrix)}
+
+\CommentTok{\# Plotting using ggplot2}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{ggplot}\NormalTok{(words\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Document1, }\AttributeTok{y =}\NormalTok{ Document2, }\AttributeTok{label =}\NormalTok{ Word)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_text}\NormalTok{(}\AttributeTok{vjust =} \StringTok{"inward"}\NormalTok{, }\AttributeTok{hjust =} \StringTok{"inward"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Frequency in Document 1"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Frequency in Document 2"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+\begin{verbatim}
+         1        2        3        4        5
+2 23.43075                                    
+3 21.58703 14.31782                           
+4 36.76955 19.41649 15.81139                  
+5 34.17601 14.31782 28.46050 28.42534         
+6 23.53720 24.35159 10.19804 21.95450 38.60052
+\end{verbatim}
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{5.Chapter_files/figure-pdf/fig-examplehac-1.pdf}
+
+}
+
+\caption{\label{fig-examplehac}Six words, two documents}
+
+\end{figure}%
+
+The distance between \texttt{Word1} and \texttt{Word2} can be calculated
+using the Euclidean metric, \texttt{Document1} is represented on the X
+axis, \texttt{Document2} on the Y axis:
+
+\[
+dist(Word1, Word2)=\sqrt{(40-22)^2+(53-35)^2}=23.43 
+\] Analogously, we calculate the distance between all the pairs of
+words, (Word1, Word3), (Word1, Word4), (Word1, Word5), etc. and put them
+into a distance matrix, see Table~\ref{tbl-dd1}.
+
+\begin{longtable}[]{@{}ccccccc@{}}
+\caption{Distance matrix}\label{tbl-dd1}\tabularnewline
+\toprule\noalign{}
+& Word 1 & Word 2 & Word 3. & Word 4 & Word 5 & Word 6 \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Word 1 & Word 2 & Word 3. & Word 4 & Word 5 & Word 6 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Word 1 & 0.00 & & & & & \\
+Word 2 & 23.43 & 0.00 & & & & \\
+Word 3 & 21.59 & 14.32 & 0.00 & & & \\
+Word 4 & 36.77 & 19.42 & 15.81 & 0.00 & & \\
+Word 5 & 34.18 & 14.32 & 28.46 & 28.43 & 0.00 & \\
+Word 6 & 23.54 & 24.35 & \textbf{10.20} & 21.95 & 38.60 & 0.00 \\
+\end{longtable}
+
+We notice that the diagonal of the distance matrix is always zero
+because the distance between a word and itself is null. In symmetric
+distance matrices the values above and below the diagonal mirror each
+other, hence only one part, the lower one, is usually displayed for
+simplicity. For example, the distance between \texttt{Word1} and
+\texttt{Word3} will be the same distance as the one between
+\texttt{Word3} and \texttt{Word1}. Using the Euclidean distance formula,
+we calculate these distances and then apply single-linkage clustering,
+also known as the minimum method. In other words, we search for the
+minimum value between two elements. Initially, all the elements form a
+cluster on their own, resulting in six separate clusters. The minimum
+value between two values is between \texttt{Word3} and \texttt{Word6},
+as highlighted in Table~\ref{tbl-dd1}, leading to their combination into
+the first cluster. There are two vertical lines that represent the
+individual clusters that merge into a single line that represents the
+new cluster. The number 1 in Figure~\ref{fig-hac1} states that this is
+the first cluster, the vertical line indicates at what height on the
+dendrogram the cluster was produced, in this case at \textbf{10.20}. The
+``height'' represents the distance or dissimilarity between clusters. If
+two clusters join at a low height, it suggests they are quite similar or
+close to each other. Conversely, if two clusters join at a higher
+height, it indicates a larger dissimilarity or distance, suggesting that
+the clusters are less alike.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figure/chapter5/hac1.png}
+
+}
+
+\caption{\label{fig-hac1}Clustering Word 3 and Word 6}
+
+\end{figure}%
+
+After the initial clustering step, we update the distance matrix to
+reflect the newly formed cluster, see Table~\ref{tbl-dd2}. In this
+revised matrix, distances are recalculated to account for the cluster of
+elements that was just created. We must be consistent and apply each
+time the single-linkage criterion. In this updated scenario, the minimum
+distance is now observed between \texttt{Word2} and \texttt{Word5}, as
+highlighted in bold in the table. This indicates that these two words
+are the next closest pair.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\centering\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{Updated distance matrix}\label{tbl-dd2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+(Word 3, Word 6)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 5
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+(Word 3, Word 6)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Word 5
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Word 1 & 0.00 & & & & \\
+Word 2 & 23.43 & 0.00 & & & \\
+(Word 3, Word 6) & (21.59, 23.54) & (14.32, 24.35) & 0.00 & & \\
+Word 4 & 36.77 & 19.42 & (15.82, 21.96) & 0.00 & \\
+Word 5 & 34.17 & \textbf{14.32} & (28.46, 38.60) & 28.42 & 0.00 \\
+\end{longtable}
+
+We focus on finding the minimum distance between the newly formed
+cluster and the remaining individual words or existing clusters. We
+specifically look for the smallest value among these recalculated
+distances. In this case, the next smallest distance is observed between
+\texttt{Word2} and \texttt{Word5}, indicating that these two entities
+will form the next cluster In Figure~\ref{fig-hac2} it is marked with
+number 2.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figure/chapter5/hac2.png}
+
+}
+
+\caption{\label{fig-hac2}Clustering Word 2 and Word 5}
+
+\end{figure}%
+
+We conclude our iterative explanation at this stage, assuming the
+hierarchical clustering procedure is now clear. As it is presented in
+Figure~\ref{fig-hac5} in the end we will have one single comprehensive
+final cluster and we will label it Cluster 5. Note that the number of
+clusters can be selectively determined by cutting the dendrogram at a
+specific height. To sum up, the dendrogram's horizontal axis displays
+the clusters, while the vertical axis signifies the sequence and scale
+of cluster amalgamation, with the numerical values indicating the
+proximity or similarity between the merged clusters.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figure/chapter5/hac5.png}
+
+}
+
+\caption{\label{fig-hac5}Clustering Word 1 will al the other clusters}
+
+\end{figure}%
+
+The determination of the optimal number of clusters in a dataset is
+often challenging, as there is no definitive answer. Several heuristic
+methods, commonly referred to as stopping rules, may offer guidance by
+generating a score or index, guiding the decision on the ideal number of
+clusters. The choice of an appropriate number of clusters and how well
+data are clustered is subjective and influenced by various factors,
+including the distance metric used.
+
+Some of the prominent stopping rules or indices dealing with clustering
+validation include Bayesian Information Criterion (BIC), Akaike
+Information Criterion (AIC), Silhouette Score, Davies-Bouldin Index,
+Homogeneity Score, Completeness Score, V-measure, Calinski-Harabasz
+Index, Duda-Hartigan's Rule, and others. It's crucial to note that while
+these mathematical methods can yield an optimal result, the clusters
+formed may not always align with intuitive or meaningful groupings in
+practical scenarios.
+
+In applying HAC to our dataset, we introduce a variation. Instead of the
+conventional Euclidean distance, we opt for the Canberra distance
+(Kocher and Savoy 2017), and instead of single linkage, we employ Ward's
+method (Strauss and Maltitz 2017). As we have already mentioned, we can
+employ also the cosine distance (Maimon and Rokach 2010). For assessing
+the optimal number of clusters we implement the Hartigan index
+(Purwitasari et al. 2011) which calculates the maximum difference
+between hierarchy levels of the index.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Loading libraries}
+\FunctionTok{library}\NormalTok{(factoextra)}
+\FunctionTok{library}\NormalTok{(NbClust)}
+\FunctionTok{library}\NormalTok{(proxy)}
+
+\CommentTok{\# Convert \textquotesingle{}docs\textquotesingle{} to matrix}
+\NormalTok{m }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(docs)}
+
+\CommentTok{\# Canberra distance matrix}
+\NormalTok{d }\OtherTok{\textless{}{-}} \FunctionTok{dist}\NormalTok{(m, }\AttributeTok{method =} \StringTok{"canberra"}\NormalTok{)}
+
+\CommentTok{\# Ward\textquotesingle{}s method clustering}
+\NormalTok{hc }\OtherTok{\textless{}{-}} \FunctionTok{hclust}\NormalTok{(d, }\AttributeTok{method =} \StringTok{"ward.D"}\NormalTok{)}
+
+\CommentTok{\# Optimal cluster count}
+\NormalTok{nb }\OtherTok{\textless{}{-}} \FunctionTok{NbClust}\NormalTok{(m, }\AttributeTok{distance =} \StringTok{"canberra"}\NormalTok{, }\AttributeTok{min.nc =} \DecValTok{2}\NormalTok{, }\AttributeTok{max.nc =} \DecValTok{5}\NormalTok{, }
+              \AttributeTok{method =} \StringTok{"ward.D"}\NormalTok{, }\AttributeTok{index =} \StringTok{"all"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+*** : The Hubert index is a graphical method of determining the number
+of clusters. In the plot of Hubert index, we seek a significant knee
+that corresponds to a significant increase of the value of the measure
+i.e the significant peak in Hubert index second differences plot.
+
+*** : The D index is a graphical method of determining the number of
+clusters. In the plot of D index, we seek a significant knee (the
+significant peak in Dindex second differences plot) that corresponds to
+a significant increase of the value of the measure.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{itemize}
+\item
+  Among all indices:\\
+\item
+  6 proposed 2 as the best number of clusters
+\item
+  9 proposed 3 as the best number of clusters
+\item
+  1 proposed 4 as the best number of clusters
+\item
+  6 proposed 5 as the best number of clusters
+
+\begin{verbatim}
+             ***** Conclusion *****                            
+\end{verbatim}
+\item
+  According to the majority rule, the best number of clusters is 3
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{optimal\_clusters }\OtherTok{\textless{}{-}}\NormalTok{ nb}\SpecialCharTok{$}\NormalTok{Best.nc[}\DecValTok{1}\NormalTok{]}
+
+\CommentTok{\# Clustering result}
+\NormalTok{hc\_result }\OtherTok{\textless{}{-}} \FunctionTok{hcut}\NormalTok{(d, }\AttributeTok{k =}\NormalTok{ optimal\_clusters, }\AttributeTok{hc\_method =} \StringTok{"ward.D"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+To visualize the hierarchical clustering results in a dendrogram, see
+Figure~\ref{fig-dendrogram}, we empoloy the function
+\texttt{fviz\_dend()} from the factoextra (Kassambara and Mundt 2020)
+package. It leverages the capability of \texttt{ggplot2} that easily
+creates aesthetically informative dendrograms. For the calculation of
+distances between the clustered items, we utilize the \texttt{dist()}
+function, specifically with the cosine distance measure, from the
+\texttt{proxy} package (Meyer and Buchta 2021).
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Dendrogram visualization}
+\FunctionTok{fviz\_dend}\NormalTok{(hc\_result, }\AttributeTok{rect =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{rect\_border =} \StringTok{"jco"}\NormalTok{, }\AttributeTok{rect\_lty =} \DecValTok{2}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{5.Chapter_files/figure-pdf/fig-dendrogram-1.pdf}
+
+}
+
+\caption{\label{fig-dendrogram}Practical example}
+
+\end{figure}%
+
+\emph{Program code ends}
+
+We can also visualize the cluster plot too, see
+Figure~\ref{fig-clusterplot}.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Cluster visualization}
+\FunctionTok{fviz\_cluster}\NormalTok{(hc\_result, }\AttributeTok{data=}\NormalTok{m, }\AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{5.Chapter_files/figure-pdf/fig-clusterplot-1.pdf}
+
+}
+
+\caption{\label{fig-clusterplot}Practical example}
+
+\end{figure}%
+
+\emph{Program code ends}
+
+In this analysis, we used a weighted version of the term-document
+matrix, see Chapter~\ref{sec-basic-text-analysis-and-statistics}. Unlike
+the regular TDM that employs plain word frequencies, the weighted
+version contains a numerical statistic, considering the significance of
+words across the entire corpus.
+
+The removal of most of the words was done to manage the complexity and
+ensure clarity in visualization. Try (well, do not) without the removal
+of the words.
+
+The clustering process grouped words that appeared with similar
+importance across documents. Yes, \emph{kindle fire} is one such case
+and as you can see the words \emph{kindle} and fire frequently co-occur
+in the context of this dataset. It is the experience and the knowledge
+of the analyst to make sense of the clusters and the underlying semantic
+relationships and patterns.
+
+The \texttt{NbClust()} function yielded 3 as the best number of clusters
+using the Hubert index. Ideally, we would apply all the indexes to the
+function and choose the mode (the most frequent number). Unfortunately
+not all of them are applicable for the hierarchical clustering.
+Nevertheless, from all that can be applied, the mode is 3.
+
+The choice of the best linking criterion or distance metric in
+hierarchical clustering is subject to debate, as highlighted in sources
+like (Gower and Legendre 1986). There is a consensus that this choice
+largely depends on the specific circumstances of the data and the
+analyst's experience. As we have already mentioned the Euclidean
+distance might not always be appropriate, as it tends to group documents
+based on length rather than semantic content. In such cases, cosine
+similarity, which focuses on the orientation rather than the magnitude
+of vectors, can offer a more nuanced understanding of the textual data.
+Hereby an example that demonstrates how these changes shape the final
+result.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(proxy)  }\CommentTok{\# for cosine similarity calculation}
+\FunctionTok{library}\NormalTok{(cluster)  }\CommentTok{\# for hierarchical clustering}
+
+\CommentTok{\# Compute the similarity matrix}
+\NormalTok{similarity\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{simil}\NormalTok{(m, }\AttributeTok{method =} \StringTok{"cosine"}\NormalTok{)}
+
+\CommentTok{\# Converting similarity to distance}
+\NormalTok{distance\_matrix }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ similarity\_matrix}
+
+\CommentTok{\# Performing hierarchical clustering}
+\NormalTok{hc }\OtherTok{\textless{}{-}} \FunctionTok{hclust}\NormalTok{(}\FunctionTok{as.dist}\NormalTok{(distance\_matrix), }\AttributeTok{method =} \StringTok{"ward.D"}\NormalTok{)  }\CommentTok{\# or any other method}
+
+\CommentTok{\# Plotting the dendrogram}
+\FunctionTok{fviz\_dend}\NormalTok{(hc, }\AttributeTok{cex =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{rect =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{k\_colors =} \StringTok{"jco"}\NormalTok{, }\AttributeTok{rect\_border =} \StringTok{"jco"}\NormalTok{, }\AttributeTok{rect\_lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/unnamed-chunk-1-1.pdf}
+
+\section{K-means clustering}\label{k-means-clustering}
+
+K-means clustering is a partitioning method that segments a dataset into
+a predetermined number of clusters, `k.' The data set is divided into
+partitions, where each data point belongs to exactly one group. The
+objective is to partition the dataset into k clusters to maximize the
+data similarity within each cluster and minimize the data similarity
+between clusters. It is a play with the concepts of between and within.
+The process begins by specifying `k,' although finding the optimal `k'
+can be challenging, and methods like the Elbow or Silhouette technique
+are often employed (Saputra, Saputra, and Oswari 2020). The algorithm
+randomly selects `k' initial centroids (cluster centers), either from
+the data points or random locations. Each point is then assigned to its
+nearest centroid based on Euclidean distance (or other distance
+metrics). Centroids are recalculated as the mean of all points in the
+cluster, and points are reassigned to the closest new centroids. This
+process iterates until points no longer switch clusters or a maximum
+number of iterations is reached (typically 10 in R). The goal is to
+minimize within-cluster variance, making k-means suitable for spherical
+clusters; it may face challenges with clusters of varying densities or
+non-spherical shapes.
+
+Let us apply the k-means algorithm to our example dataset, consisting of
+six words and two documents. Because k-means involves a degree of
+randomness in its initial cluster assignments, this can lead to
+different outcomes in separate runs. The randomness is managed in R
+using the \texttt{kmeans()} function's \texttt{nstart} parameter, which
+attempts multiple initial configurations (25 in our case) to find the
+best starting point. This approach helps mitigate the algorithm's
+tendency to converge to local optima. To make the algorithm's process
+more understandable, we will use the \texttt{animation} library in R to
+create a visual clustering sequence.
+
+For our example, we will form the data into a table (\texttt{dt}
+variable) and choose to segment it into two clusters, showcasing how
+k-means partitions the data without the hierarchical structure seen in
+previous methods like HAC. The version printed on paper is not that
+spectacular, you will see only the final result, but once one runs the
+code on their machine, one can appreciate and understand the power of
+animation as an educational tool.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(animation)}
+
+\CommentTok{\# Example, six words with their frequencies}
+\NormalTok{Rowname }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Word1"}\NormalTok{, }\StringTok{"Word2"}\NormalTok{, }\StringTok{"Word3"}\NormalTok{, }\StringTok{"Word4"}\NormalTok{, }\StringTok{"Word5"}\NormalTok{, }\StringTok{"Word6"}\NormalTok{)}
+\NormalTok{Document1 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{40}\NormalTok{, }\DecValTok{22}\NormalTok{, }\DecValTok{35}\NormalTok{, }\DecValTok{26}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{45}\NormalTok{)}
+\NormalTok{Document2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{53}\NormalTok{, }\DecValTok{38}\NormalTok{, }\DecValTok{32}\NormalTok{, }\DecValTok{19}\NormalTok{, }\DecValTok{41}\NormalTok{, }\DecValTok{30}\NormalTok{)}
+
+\CommentTok{\# Create the dataset}
+\NormalTok{dt }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(Document1, Document2) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  as.data.frame }\SpecialCharTok{\%\textgreater{}\%}
+  \StringTok{\textasciigrave{}}\AttributeTok{rownames\textless{}{-}}\StringTok{\textasciigrave{}}\NormalTok{(Rowname)}
+
+\CommentTok{\# Set a random seed for reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# Perform animated k{-}means with 2 clusters}
+\FunctionTok{kmeans.ani}\NormalTok{(dt, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/kmeansani-1.pdf}
+
+\includegraphics{5.Chapter_files/figure-pdf/kmeansani-2.pdf}
+
+\includegraphics{5.Chapter_files/figure-pdf/kmeansani-3.pdf}
+
+\includegraphics{5.Chapter_files/figure-pdf/kmeansani-4.pdf}
+
+\emph{Program code ends}
+
+Several limitations should be considered in k-means clustering. One is
+that the algorithm may perform poorly when cluster sizes and densities
+vary significantly. Another one is that the presence of outliers can
+skew the clustering results since k-means is sensitive to extreme
+values. Additionally, k-means assumes clusters to be roughly spherical
+in shape, meaning it struggles with non-spherical (e.g., elongated or
+oblong) clusters. In a two-dimensional space, k-means is most effective
+when data points within a cluster are equidistant from the cluster
+center, forming a circular pattern. However, this is only sometimes the
+case in real-world data, as illustrated by the oblong shape of cluster 1
+in Figure~\ref{fig-oblongandnot}, which is not ideal for k-means.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.99\textwidth,height=\textheight]{figure/chapter5/oblongandnot.png}
+
+}
+
+\caption{\label{fig-oblongandnot}k-means clustering situations}
+
+\end{figure}%
+
+In our enhanced example, we continue to analyze the reviews dataset
+using the k-means clustering algorithm. We employ the \texttt{kmeans()}
+function in R, but we let \texttt{NbClust()} find the optima number of
+clusters. The \texttt{nstart} parameter sets the number of random
+initial centroid configurations to try, with the algorithm selecting the
+configuration that yields the most stable cluster arrangement. Empirical
+observations suggest that a higher value often benefits smaller datasets
+by enhancing cluster stability. We use the \texttt{fviz\_cluster()}
+function to visualize the clustering results, which offers several
+helpful formatting options. The \texttt{repel} argument helps to prevent
+label overlap, enhancing readability, while \texttt{show.clust.cent}
+plots the centroid of each cluster, providing a clear visual
+representation of the clustering. After plotting, one can examine the
+specific cluster assignments of individual words through the cluster
+attribute in the \texttt{km} object (accessible via
+\texttt{km\$cluster}). This analysis allows us to understand how words
+from the reviews can be grouped into distinct clusters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(RColorBrewer)}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+
+\NormalTok{tdm\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(docs)}
+
+\CommentTok{\# Calculate the optimal number of clusters using NbClust}
+\NormalTok{nckm }\OtherTok{\textless{}{-}} \FunctionTok{NbClust}\NormalTok{(tdm\_matrix, }\AttributeTok{distance =} \StringTok{"canberra"}\NormalTok{, }\AttributeTok{min.nc =} \DecValTok{2}\NormalTok{, }\AttributeTok{max.nc =} \DecValTok{10}\NormalTok{, }
+                \AttributeTok{method =} \StringTok{"kmeans"}\NormalTok{, }\AttributeTok{index =} \StringTok{"ch"}\NormalTok{)}
+\NormalTok{nbc }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(nckm}\SpecialCharTok{$}\NormalTok{Best.nc[}\DecValTok{1}\NormalTok{])  }\CommentTok{\# Extracting the optimal cluster number}
+
+\CommentTok{\# Perform k{-}means clustering with the optimal number of clusters}
+\NormalTok{km }\OtherTok{\textless{}{-}} \FunctionTok{kmeans}\NormalTok{(tdm\_matrix, }\AttributeTok{centers =}\NormalTok{ nbc, }\AttributeTok{nstart =} \DecValTok{30}\NormalTok{)}
+
+\CommentTok{\# Generate a color palette based on the number of clusters}
+\NormalTok{palette }\OtherTok{\textless{}{-}} \FunctionTok{brewer.pal}\NormalTok{(nbc, }\StringTok{"Set1"}\NormalTok{)}
+
+\CommentTok{\# Visualize the clusters using the same data matrix used in kmeans}
+\FunctionTok{fviz\_cluster}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{data =}\NormalTok{ tdm\_matrix, }\AttributeTok{cluster =}\NormalTok{ km}\SpecialCharTok{$}\NormalTok{cluster),}
+             \AttributeTok{palette =}\NormalTok{ palette,}
+             \AttributeTok{main =} \StringTok{"Partitioning Clustering Plot"}\NormalTok{,}
+             \AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{,}
+             \AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{,}
+             \AttributeTok{show.clust.cent =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/kclustering-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Print cluster assignments}
+\NormalTok{km}\SpecialCharTok{$}\NormalTok{cluster}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     able    access      also    amazon   android  anything       app      apps 
+        1         1         1         1         1         1         1         1 
+     back   battery    better    bought       buy       can      cant  computer 
+        1         1         1         2         1         2         1         1 
+      day    device    doesnt      dont      easy     email      even      fire 
+        1         1         1         1         1         1         1         2 
+    first       get      good       got     great  internet      ipad       ive 
+        1         1         2         1         2         2         1         1 
+     just      keep    kindle      like    little      long   looking      love 
+        1         1         2         1         1         1         1         2 
+     many      much      need     never      nice       now       one     price 
+        1         1         1         1         1         1         2         1 
+  product purchased      read    really  received recommend   reviews    screen 
+        1         1         2         1         1         1         2         1 
+      see     since something     still     store   support    tablet      take 
+        1         1         1         1         1         1         1         1 
+    thing     think      time       use      used     using      want    wanted 
+        1         1         1         1         1         1         1         1 
+      way      well      wifi      will      work     works     youre 
+        1         1         1         1         2         2         1 
+\end{verbatim}
+
+We determined our dataset's optimal number of clusters using the k-means
+method and applying the \texttt{ch} index. This approach resulted in an
+optimal cluster count of 2. This process enables us to visually inspect
+and understand the distribution of words across the identified clusters.
+
+The k-means algorithm has several variations tailored to different data
+characteristics. One such variation is k-medians, where the cluster's
+center is determined by the median rather than the mean, offering
+robustness against outliers (Arora, Raghavan, and Rao 1998). Another
+variation, k-medoids, designates an actual data point as the cluster
+center, usually the most centrally located point in the cluster,
+enhancing the interpretability of the clusters (Rdusseeun and Kaufman
+1987). Spherical k-means is particularly useful for high-dimensional
+data. In this approach, data points are considered as vectors on a unit
+sphere, and the cosine similarity is used as the distance metric, making
+it suitable for text and other high-dimensional data (Dhillon and Modha
+2001).
+
+\subsection{Considerations on
+k-clustering}\label{considerations-on-k-clustering}
+
+K-means clustering is a widely used algorithm due to its simplicity and
+computational efficiency, making it suitable for large datasets with
+multiple variables. The algorithm's core requirement is specifying the
+number of clusters (k), and it adapts to new cluster partitions by
+simply changing this value. It performs efficiently when clusters are
+spherical or circular in a 2D plane, often resulting in tightly grouped
+clusters with clear interpretation compared to hierarchical clustering.
+
+However, selecting the optimal number of clusters can be challenging,
+and results may vary between runs due to the algorithm's sensitivity to
+initial conditions. This inconsistency is a notable limitation.
+Moreover, k-means typically assumes clusters of approximately equal
+sizes, which may not align with the underlying distribution of the data.
+Another limitation is its exclusive focus on numerical data, which
+relies on calculating Euclidean (or other types of) distances between
+points.
+
+\section{Gaussian Mixtures Clusterig}\label{gaussian-mixtures-clusterig}
+
+Gaussian Mixture Clustering (GMC), often employed in conjunction with
+the Expectation-Maximization (EM) algorithm, is a sophisticated method
+for identifying underlying patterns in data (Bouman et al. 1997). This
+approach assumes that data points are generated from a combination of
+several Gaussian (or Normal) distributions, each representing a distinct
+cluster. The term `Mixture' in GMC reflects this concept of multiple,
+potentially overlapping, Gaussian distributions within the dataset.
+Unlike the `hard clustering' approach of k-means, where each data point
+is distinctly assigned to one cluster, GMC adopts a `soft clustering'
+technique. Each data point is associated with probabilities denoting its
+likelihood of belonging to different clusters, allowing for more nuanced
+and probabilistic classification. In GMC, each Gaussian distribution
+within the model is defined by its own mean and covariance, shaping the
+cluster's appearance in the data space. The EM algorithm plays an
+essential role in GMC by iteratively estimating and refining these
+parameters, aiming to maximize the fit of the model to the observed
+data.
+
+This model is handy in scenarios where data does not conform to the
+spherical cluster assumption of k-means, as illustrated in cluster 1 of
+Figure~\ref{fig-oblongandnot}. For instance, GMC can effectively handle
+elongated or irregularly shaped clusters. In R, the Gaussian Mixture
+Model can be implemented using the \texttt{GMM()} function from the
+\texttt{ClusterR} package (Mouselimis 2023). The process typically
+involves converting data into a suitable format (like a data frame) and
+specifying the desired number of clusters. The \texttt{predict\_GMM}
+function assigns each data point to clusters based on the probabilities
+calculated by \texttt{GMM()}. It is advisable to explore the functions'
+parameters and settings to understand their application. We will explore
+this type of clustering using 3 clusters.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ClusterR)}
+
+\CommentTok{\# Convert \textquotesingle{}docs\textquotesingle{} to distance matrix and then to a data frame}
+\NormalTok{dist\_matrix\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(docs) }\SpecialCharTok{\%\textgreater{}\%}
+                  \FunctionTok{dist}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+                  \FunctionTok{as.matrix}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+                  \FunctionTok{as.data.frame}\NormalTok{()}
+
+\CommentTok{\# Set the number of clusters}
+\NormalTok{nbc }\OtherTok{\textless{}{-}} \DecValTok{3}
+
+\CommentTok{\# Create Gaussian mixture model (use Mahalanobis distance)}
+\NormalTok{gmc\_model }\OtherTok{\textless{}{-}} \FunctionTok{GMM}\NormalTok{(dist\_matrix\_df, }\AttributeTok{gaussian\_comps =}\NormalTok{ nbc, }
+                 \AttributeTok{dist\_mode =} \StringTok{"maha\_dist"}\NormalTok{, }\AttributeTok{seed\_mode =} \StringTok{"random\_subset"}\NormalTok{,}
+                 \AttributeTok{km\_iter =} \DecValTok{10}\NormalTok{, }\AttributeTok{em\_iter =} \DecValTok{5}\NormalTok{, }\AttributeTok{verbose =} \ConstantTok{FALSE}\NormalTok{,}
+                 \AttributeTok{var\_floor =} \FloatTok{1e{-}10}\NormalTok{, }\AttributeTok{seed =} \DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# Predict cluster labels}
+\NormalTok{gmc\_labels }\OtherTok{\textless{}{-}} \FunctionTok{predict\_GMM}\NormalTok{(dist\_matrix\_df, }\AttributeTok{CENTROIDS =}\NormalTok{ gmc\_model}\SpecialCharTok{$}\NormalTok{centroids, }
+                          \AttributeTok{COVARIANCE =}\NormalTok{ gmc\_model}\SpecialCharTok{$}\NormalTok{covariance\_matrices, }
+                          \AttributeTok{WEIGHTS =}\NormalTok{ gmc\_model}\SpecialCharTok{$}\NormalTok{weights)}\SpecialCharTok{$}\NormalTok{cluster\_labels}
+
+\CommentTok{\# Visualize the clusters}
+\FunctionTok{fviz\_cluster}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{data =}\NormalTok{ dist\_matrix\_df, }\AttributeTok{cluster =}\NormalTok{ gmc\_labels), }
+             \AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{, }\AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/gaussian-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a data frame of words and their cluster labels}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{words =} \FunctionTok{rownames}\NormalTok{(dist\_matrix\_df), }\AttributeTok{cluster =}\NormalTok{ gmc\_labels)}
+
+\CommentTok{\# Display some results}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{head}\NormalTok{(df))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     words cluster
+1     able       3
+2   access       3
+3     also       3
+4   amazon       2
+5  android       1
+6 anything       3
+\end{verbatim}
+
+We notice a better clustering with respect to the k-means situation. One
+can also check to what clusters the words belong to.
+
+\subsection{Considerations on GMM}\label{considerations-on-gmm}
+
+GMM introduces significant flexibility compared to k-means, particularly
+in accommodating clusters of different shapes, orientations, and
+variances. This is partly due to GMM's ability to model each cluster
+with its own covariance structure. Unlike the hard clustering of
+k-means, where each object is assigned to a single cluster, GMM allows
+for probabilistic cluster assignments. This soft clustering approach is
+particularly advantageous in text analytics, where words often relate to
+multiple topics. In GMM, centroid updates consider both mean and
+variance, capturing more complex data structures than the mean-only
+updates of k-means. However, GMM assumes Gaussian distributed data and
+may have difficulties with highly correlated datasets. It also requires
+careful selection of the number of clusters and can be computationally
+demanding, particularly for large datasets. Despite these limitations,
+GMM is a powerful algorithm that performs well, especially where data
+exhibits complex, overlapping clustering patterns.
+
+\section{Density-based clustering}\label{density-based-clustering}
+
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is
+ideal for datasets where clusters are not necessarily spherical,
+offering, like GMC, a flexible alternative to methods such as k-means.
+It operates based on two parameters: a radius \(\epsilon\) and a minimum
+number of points (minPts). DBSCAN forms clusters from dense regions of
+data points, delineated by the \(\epsilon\) radius, and identifies
+outliers in low-density areas. Unlike some algorithms, it does not
+require the pre-specification of the number of clusters, as these
+naturally emerge from the data based on the density criteria. It is
+important to know that if a data point falls within the \(\epsilon\)
+radius of multiple clusters, it is typically assigned to the first
+cluster formed. Choosing the right \(\epsilon\) can be challenging, as
+it significantly affects the resulting clusters, but there are methods
+to find both, \(\epsilon\) and minPts (Ozkok and Celik 2017).
+
+HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications
+with Noise) extends DBSCAN's capabilities by transforming its flat
+clustering into a hierarchical structure. This method extracts clusters
+based on their stability over varying density levels, with no need for
+the user to specify \(\epsilon\). It is particularly good at handling
+datasets with clusters of different densities, automatically determining
+the optimal scale for \(\epsilon\) and revealing consistent clusters
+over a range of densities.
+
+We will use the HDBSCAN algorithm to explore density-based clustering,
+available in the \texttt{dbscan} package. This approach requires setting
+hyper-parameters, which often depend on the dataset and specific
+clustering objectives. HDBSCAN's ability to identify stable clusters
+without predefined parameters like \(\epsilon\) makes it a robust and
+user-friendly choice in case of complex datasets.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dbscan)}
+
+\CommentTok{\# calculate the hdbscan cluster}
+\NormalTok{clustering.dbscan }\OtherTok{\textless{}{-}} \FunctionTok{hdbscan}\NormalTok{(docs, }\AttributeTok{minPts =} \DecValTok{2}\NormalTok{)}
+\NormalTok{clustering.dbscan}\SpecialCharTok{$}\NormalTok{cluster}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] 2 2 2 2 0 2 2 2 2 2 2 0 2 2 2 2 2 0 2 2 2 2 2 0 2 2 0 2 2 2 0 2 2 2 0 2 2 2
+[39] 2 0 2 2 2 2 1 2 0 2 0 1 0 2 2 1 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+[77] 0 2 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# visualize the clusters created with hdbscan}
+\FunctionTok{fviz\_cluster}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{data =} \FunctionTok{as.matrix}\NormalTok{(docs), }\AttributeTok{cluster =}\NormalTok{ clustering.dbscan}\SpecialCharTok{$}\NormalTok{cluster), }
+             \AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{,}
+             \AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/dbclustering-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dbscan)}
+\FunctionTok{library}\NormalTok{(factoextra)}
+
+\CommentTok{\# Perform HDBSCAN clustering}
+\NormalTok{clustering\_hdbscan }\OtherTok{\textless{}{-}} \FunctionTok{hdbscan}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(docs), }\AttributeTok{minPts =} \DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# Check clustering results}
+\NormalTok{clustering\_hdbscan}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+HDBSCAN clustering for 79 objects.
+Parameters: minPts = 2
+The clustering contains 2 cluster(s) and 13 noise points.
+
+ 0  1  2 
+13  3 63 
+
+Available fields: cluster, minPts, coredist, cluster_scores,
+                  membership_prob, outlier_scores, hc
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a list structure that is compatible with fviz\_cluster}
+\NormalTok{cluster\_data }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{data =} \FunctionTok{as.matrix}\NormalTok{(docs), }\AttributeTok{cluster =}\NormalTok{ clustering\_hdbscan}\SpecialCharTok{$}\NormalTok{cluster)}
+
+\CommentTok{\# Visualize the clusters using fviz\_cluster}
+\FunctionTok{fviz\_cluster}\NormalTok{(cluster\_data, }\AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{, }\AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/dbclustering-2.pdf}
+
+We notice how there is a big cluster created and two smaller ones. With
+a bigger dataset the clustering result would yield better results.
+
+\subsection{(H)DBSCAN clustering
+considerations.}\label{hdbscan-clustering-considerations.}
+
+DBSCAN and its variant, HDBSCAN, separate clusters into high-density and
+low-density but has difficulties when densities are similar. Unlike in
+the previous clustering algorithms, the shape of the clusters can be
+any, outliers are dealt well with and there is no no need to set the
+number of clusters ahead. You have to tune the \(\epsilon\) and the
+minimum points parameters though. The order of the data has an influence
+on the final result and you need sufficient data to separate dense
+areas, otherwise you obtain poorer results.
+
+As a practical example, in case you have a business and we want to
+improve your products based on consumer's feedback. We can apply DBSCAN
+to our data set and find clusters based on the reviews. Using the
+created clusters we can find similarities between reviews, for example,
+if one customer writes about the screen, memory and connection of a
+tablet and another one about the screen and memory, then it is useful to
+inquiry about the connection too. In a commercial setup, if one customer
+talks about product 1, 2 and 3, and another one only about the first
+two, a recommender system might propose the third product to the second
+customer.
+
+\section{Affinity propagation
+clustering}\label{affinity-propagation-clustering}
+
+Affinity propagation clustering as delineated by (Frey and Dueck 2007;
+Dueck and Frey 2007; Dueck 2009) introduces the concept of
+``exemplars''. These are the foundational elements or the core nodes of
+a dataset around which clustering is performed. The idea that holds this
+concept is that all the elements are potential exemplars and a message
+system between data points iteratively identifies a subset of exemplars
+and their respective clusters.
+
+The implementation is done by the \texttt{apcluster} package
+(Bodenhofer, Kothmeier, and Hochreiter 2011). Unlike in the previous
+clustering algorithms, the data can be of any shape and variable
+density. Another important thing is that, the basic version of apc will
+calculate the optimal number of clusters without pre-specification.
+Nevertheless, the function \texttt{apclusterK()} in the
+\texttt{apcluster} package provides a mechanism to specify the cluster
+count a priori. In the function, the first parameter, \texttt{s},
+calculates the similarity function using the negative squared distances
+by default, although alternative similarity measures, such as Spearman
+correlation, can be employed to capture the relationships within certain
+datasets.
+
+The second parameter, \texttt{x}, represents the distance matrix we
+derived from on our previous analysis with k-means. Despite the
+possibility of setting a predetermined number of clusters via \(K\), the
+adaptive nature of the apcluster() function's algorithm can ascertain
+the optimal cluster count.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# affinity propagation}
+\FunctionTok{library}\NormalTok{(apcluster)}
+\FunctionTok{library}\NormalTok{(reshape2)}
+
+
+\CommentTok{\# negDistMat computes the similarity matrix }
+\NormalTok{similarity\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{negDistMat}\NormalTok{(docs, }\AttributeTok{r=}\DecValTok{2}\NormalTok{) }
+
+\CommentTok{\# Apply clustering}
+\NormalTok{apck }\OtherTok{\textless{}{-}} \FunctionTok{apclusterK}\NormalTok{(}\AttributeTok{s=}\NormalTok{similarity\_matrix, }\AttributeTok{K=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Trying p = -0.006489952 
+   Number of clusters: 75 
+Trying p = -0.01611412 
+   Number of clusters: 53 
+Trying p = -0.1123558 
+   Number of clusters: 4 
+Trying p = -0.5400968 (bisection step no. 1 )
+   Number of clusters: 1 
+Trying p = -0.2727587 (bisection step no. 2 )
+   Number of clusters: 1 
+Trying p = -0.1390897 (bisection step no. 3 )
+   Number of clusters: 3 
+
+Number of clusters: 3 for p = -0.1390897 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert data from a cluster type into a data frame}
+\NormalTok{apckmelt }\OtherTok{\textless{}{-}} \FunctionTok{melt}\NormalTok{(apck}\SpecialCharTok{@}\NormalTok{clusters)}
+
+\CommentTok{\# Visualize the data}
+\FunctionTok{fviz\_cluster}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{data =} \FunctionTok{as.matrix}\NormalTok{(docs)[apckmelt}\SpecialCharTok{$}\NormalTok{value,], }\AttributeTok{cluster =}\NormalTok{ apckmelt}\SpecialCharTok{$}\NormalTok{L1), }
+             \AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{,}
+             \AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/affinity-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check which words belong to each cluster}
+\NormalTok{apck}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+APResult object
+
+Number of samples     =  79 
+Number of iterations  =  138 
+Input preference      =  -0.1390897 
+Sum of similarities   =  -2.322368 
+Sum of preferences    =  -0.417269 
+Net similarity        =  -2.739637 
+Number of clusters    =  3 
+
+Exemplars:
+   can cant think
+Clusters:
+   Cluster 1, exemplar can:
+      amazon bought can great love one reviews works
+   Cluster 2, exemplar cant:
+      cant doesnt good ipad like much price since work
+   Cluster 3, exemplar think:
+      able access also android anything app apps back battery better buy 
+      computer day device dont easy email even fire first get got internet ive 
+      just keep kindle little long looking many need never nice now product 
+      purchased read really received recommend screen see something still store 
+      support tablet take thing think time use used using want wanted way well 
+      wifi will youre
+\end{verbatim}
+
+We notice that each cluster has the ``exemplar'' cluster, a prominent
+word that best represents the cluster. It is a word that should define
+the other words that come in the same cluster with it. It can be
+considered the ``topic'' of the cluster which can be the thematic focus
+of a cluster. In our case the exemplars are: can , cant and think. Check
+the words in each cluster and see if you can relate them to the
+exemplar.
+
+The examplars are chosen based on message passing between data points
+regarding their suitability as the most representative point of a
+cluster. Imagine the reviews dataset in our book. We need to want to
+group reviews that are similar between them. Each review can ``send a
+message'' to other reviews revealing its topic. If another review has
+the same topic, they group. Some reviews will receive many messages
+back, showing that they are very popular within that topic. These
+reviews become their groups' exemplars and have the strongest connection
+to all the other reviews. The process continues until each review is
+grouped. Eventually, the corpus will be organized into sections where
+each group will be characterized by a topic led by an exemplar that
+distills the essence of that topic.
+
+We may wonder which clustering algorithm performs optimally or yields
+the most appropriate number of clusters for our specific dataset.
+Various methods and packages, like \texttt{cValid}, offer comparative
+analyses of clustering algorithms by evaluating their stability and
+validity across different datasets. However, the effectiveness of these
+algorithms can significantly depend on the nature of the dataset,
+including its size, dimensionality, distribution, and the presence of
+outliers. Familiarity with these characteristics and hands-on experience
+is crucial in selecting the most suitable clustering approach.
+Practicing with diverse datasets and challenges is essential to
+developing this expertise. For a comprehensive comparison of the
+algorithms discussed, including their strengths and limitations in
+different scenarios, refer to Table A {[}reference{]} in the appendix.
+
+\section{Documents clustering}\label{documents-clustering}
+
+In marketing, clustering similar elements enables more effective
+segmentation. For illustration, let us apply a clustering method, such
+as HDBSCAN, to cluster documents. Unlike previous approaches, we will
+use a Document-Term Matrix (DTM) instead of a Term-Document Matrix
+(TDM), focusing on clustering documents with similar features. Although
+we preprocess the documents by removing elements like stopwords and
+numbers, this analysis aims to reveal insights based on the documents'
+reduced feature set. For this purpose, we utilize the same underlying
+code but apply it to a DTM. This is achieved by transposing the matrix
+so that rows and columns are switched, effectively turning document
+features into the primary axis for clustering. This allows us to examine
+the thematic similarities between documents more directly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dbscan)}
+
+\CommentTok{\# Matrix transposition}
+\NormalTok{dtm }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(docs)}
+
+\CommentTok{\# Calculate the hdbscan cluster}
+\NormalTok{clustering.dbscan }\OtherTok{\textless{}{-}} \FunctionTok{hdbscan}\NormalTok{(dtm, }\AttributeTok{minPts =} \DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# Visualize the clusters created with hdbscan}
+\FunctionTok{fviz\_cluster}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{data =} \FunctionTok{as.matrix}\NormalTok{(dtm), }\AttributeTok{cluster =}\NormalTok{ clustering.dbscan}\SpecialCharTok{$}\NormalTok{cluster), }
+             \AttributeTok{ellipse.type =} \StringTok{"norm"}\NormalTok{,}
+             \AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{5.Chapter_files/figure-pdf/dbclusteringdocs-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Clustering details}
+\NormalTok{clustering.dbscan}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+HDBSCAN clustering for 50 objects.
+Parameters: minPts = 2
+The clustering contains 2 cluster(s) and 45 noise points.
+
+ 0  1  2 
+45  3  2 
+
+Available fields: cluster, minPts, coredist, cluster_scores,
+                  membership_prob, outlier_scores, hc
+\end{verbatim}
+
+In cluster 2, there are only two elements, document 16 and 35. In R,
+type \texttt{content{[}16{]}} and \texttt{content{[}35{]}} to compare
+the documents.
+
+The two reviews seem to be similar in terms of length and content. To
+hone your skills, you can try various combinations of clustering
+methods, distances and parameters.
+
+All in all, you can apply these techniques to any corpus in order to
+extract the meaning in terms of topics, but also similarities and
+differences between and within clusters.
+
+\texttt{Exercise\ starts}
+
+\textbf{Exercise 1: Hierarchical Clustering} Apply hierarchical
+clustering using various distance metrics (e.g., Euclidean, Manhattan)
+and linkage methods (e.g., single-linkage, average-linkage,
+complete-linkage). Analyze how different combinations affect the
+resulting dendrogram structure.
+
+\textbf{Exercise 2: K-means} Experiment with the K-means algorithm by
+varying the number of clusters (K). Evaluate how the choice of K
+influences the cluster cohesion and separation. Use methods like the
+Elbow or the Silhouette score to determine the optimal K value.
+
+\textbf{Exercise 3: Gaussian Mixture Models (GMM) Clustering} Apply GMM
+clustering with varying numbers of components (clusters). Experiment
+with different covariance types (e.g., full, tied, diag, spherical) and
+initialization methods to observe their effects on cluster shapes and
+sizes.
+
+\textbf{Exercise 4: HDBSCAN Clustering} Explore the HDBSCAN algorithm by
+modifying the minimum cluster size and the \(\epsilon\) value.
+Experiment with adjusting the algorithm's parameters to see how they
+affect the number of clusters detected and the handling of noise.
+
+\textbf{Exercise 5: Affinity Propagation Clustering} Investigate the use
+of different affinity propagation methods provided by the
+\texttt{apcluster} package, such as \texttt{apcluster()} and
+\texttt{apclusterL()}. Explore the impact of preference values and
+similarity measures on the number and composition of the identified
+exemplars and clusters.
+
+\texttt{Exercise\ ends}
+
+\textbf{Conclusion} \emph{Conclusion starts}
+
+This chapter touches on the fundamentals of clustering analysis,
+starting with basic step-by-step examples and advancing to more
+sophisticated clustering methods. It covers a range of techniques,
+including hierarchical clustering, K-means, Gaussian Mixture Models
+(GMM), DBSCAN, and Affinity Propagation, each selected to showcase its
+unique approach to grouping data. Through practical coding examples, the
+chapter demonstrates how these methods can be applied to diverse
+datasets, emphasizing the adaptability and utility of clustering in
+uncovering hidden patterns within data. The discussion aims to provide
+readers with a comprehensive understanding of how different clustering
+algorithms perform and their potential applications in text analytics in
+marketing.
+
+\emph{Conclusion ends}

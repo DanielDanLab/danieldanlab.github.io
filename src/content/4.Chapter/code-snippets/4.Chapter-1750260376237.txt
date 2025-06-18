@@ -1,0 +1,41 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Isolate words}
+{etext }{{}{-}} {strsplit}{(etext, }{"}{{}{}}{W"}{)}
+{head}{(etext)}
+{Highlighting}
+{Shaded}
+
+[[1]]
+ [1] ""             ""             ""             ""             ""            
+ [6] ""             ""             ""             ""             ""            
+[11] ""             ""             ""             ""             ""            
+[16] ""             ""             ""             ""             ""            
+[21] ""             ""             ""             ""             ""            
+[26] ""             ""             ""             ""             ""            
+[31] "INTRODUCTION"
+
+[[2]]
+ [1] "The"             "Workshop"        "on"              "Electronic"     
+ [5] "Texts"           ""                "1"               ""               
+ [9] "drew"            "together"        "representatives" "of"             
+
+[[3]]
+ [1] "various"  "projects" "and"      "interest" "groups"   "to"      
+ [7] "compare"  "ideas"    ""         "beliefs" 
+
+[[4]]
+ [1] "experiences" ""            "and"         ""            "in"         
+ [6] "particular"  ""            "methods"     "of"          "placing"    
+[11] "and"         "presenting" 
+
+[[5]]
+ [1] "historical"   "textual"      "materials"    "in"           "computerized"
+ [6] "form"         ""             ""             "Most"         "attendees"   
+[11] "gained"      
+
+[[6]]
+ [1] "much"     "in"       "insight"  "and"      "outlook"  "from"    
+ [7] "the"      "event"    ""         ""         "But"      "the"     
+[13] "assembly" "did"      "not"     

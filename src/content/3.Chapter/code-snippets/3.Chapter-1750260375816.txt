@@ -1,0 +1,37 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Load necessary library}
+{library}{(rvest)}
+
+{\# Define the URL to scrape}
+{url }{{}{-}} {"https://webscraper.io/test{-}sites/e{-}commerce/allinone"}
+
+{\# Read and parse the HTML from the URL}
+{parsed\_html }{{}{-}} {read\_html}{(url)}
+
+{\# Extract product titles}
+{titles }{{}{-}}{ parsed\_html }{\%{}\%}
+  {html\_nodes}{(}{"h4 .title"}{) }{\%{}\%}
+  {html\_text}{()}
+
+{\# Extract product descriptions}
+{descriptions }{{}{-}}{ parsed\_html }{\%{}\%}
+  {html\_nodes}{(}{".description"}{) }{\%{}\%}
+  {html\_text}{()}
+
+{\# Extract product prices as text}
+{prices\_text }{{}{-}}{ parsed\_html }{\%{}\%}
+  {html\_nodes}{(}{".caption .pull{-}right"}{) }{\%{}\%}
+  {html\_text}{()}
+
+{\# Clean and convert prices to numeric}
+{prices }{{}{-}} {as.numeric}{(}{gsub}{(}{"}{{}{}}{$"}{, }{""}{, prices\_text))}
+
+{\# Combine extracted data into a data frame}
+{product\_data }{{}{-}} {data.frame}{(titles, descriptions, prices)}
+
+{\# Preview the first few rows of the data frame}
+{head}{(product\_data)}
+{Highlighting}
+{Shaded}

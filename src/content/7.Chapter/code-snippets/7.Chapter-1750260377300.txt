@@ -1,0 +1,11 @@
+      topic1        topic2      topic3     topic4      topic5    
+ [1,] "apple"       "browser"   "usb"      "christmas" "support" 
+ [2,] "tab"         "button"    "card"     "old"       "service" 
+ [3,] "galaxy"      "book"      "keyboard" "happy"     "days"    
+ [4,] "samsung"     "content"   "archos"   "perfect"   "customer"
+ [5,] "xoom"        "access"    "sd"       "book"      "unit"    
+ [6,] "asus"        "cloud"     "windows"  "watch"     "return"  
+ [7,] "camera"      "email"     "google"   "gift"      "tried"   
+ [8,] "os"          "store"     "flash"    "laptop"    "received"
+ [9,] "transformer" "available" "computer" "year"      "problems"
+[10,] "thrive"      "page"      "memory"   "wife"      "never"   

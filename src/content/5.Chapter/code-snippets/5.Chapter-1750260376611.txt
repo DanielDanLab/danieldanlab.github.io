@@ -1,0 +1,9 @@
+HDBSCAN clustering for 79 objects.
+Parameters: minPts = 2
+The clustering contains 2 cluster(s) and 13 noise points.
+
+ 0  1  2 
+13  3 63 
+
+Available fields: cluster, minPts, coredist, cluster_scores,
+                  membership_prob, outlier_scores, hc

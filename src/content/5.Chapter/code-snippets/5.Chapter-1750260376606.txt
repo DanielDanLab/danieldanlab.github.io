@@ -1,0 +1,19 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Cluster visualization}
+{fviz\_cluster}{(hc\_result, }{data=}{m, }{ellipse.type =} {"norm"}{)}
+{Highlighting}
+{Shaded}
+
+{figure}[H]
+
+{
+
+{5.Chapter_files/figure-pdf/fig-clusterplot-1.pdf}
+
+}
+
+{{fig-clusterplot}Practical example}
+
+{figure}%

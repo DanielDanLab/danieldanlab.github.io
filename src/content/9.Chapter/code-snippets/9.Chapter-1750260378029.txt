@@ -1,0 +1,23 @@
+# A tibble: 20 x 3
+   token        `Count Apple` `Count Samsung`
+   <chr>                <int>           <int>
+ 1 other                   17              14
+ 2 new                     23               7
+ 3 same                     7              17
+ 4 bad                      4              16
+ 5 disappointed            11               8
+ 6 good                     8              11
+ 7 few                      6              12
+ 8 first                   11               6
+ 9 great                    6              11
+10 more                    10               7
+11 able                     4              10
+12 many                     7               6
+13 annoying                 1               9
+14 long                     8               2
+15 much                     2               8
+16 sure                     5               4
+17 unable                   6               3
+18 dead                     5               3
+19 most                     2               6
+20 slow                     1               7

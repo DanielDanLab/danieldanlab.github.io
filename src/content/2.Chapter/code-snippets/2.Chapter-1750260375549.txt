@@ -1,0 +1,10 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Concatenating two strings}
+{x }{{}{-}}{paste}{(}{"My favorite book"}{, }{"has many chapters"}{, }{sep =} {" "}{)}
+{x}
+{Highlighting}
+{Shaded}
+
+[1] "My favorite book has many chapters"

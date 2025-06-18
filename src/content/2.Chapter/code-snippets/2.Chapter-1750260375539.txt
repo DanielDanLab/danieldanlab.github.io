@@ -1,0 +1,12 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Create an empty character vector with a length of zero}
+{empty\_character }{{}{-}} {character}{(}{length =} {0}{)}
+
+{\# Display the content of {}empty\_character{}}
+{empty\_character}
+{Highlighting}
+{Shaded}
+
+character(0)

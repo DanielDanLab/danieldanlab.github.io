@@ -1,0 +1,27 @@
+Confusion Matrix and Statistics
+
+          Reference
+Prediction Apple Samsung
+   Apple     339      73
+   Samsung    33     292
+                                          
+               Accuracy : 0.8562          
+                 95% CI : (0.8287, 0.8807)
+    No Information Rate : 0.5047          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.712           
+                                          
+ Mcnemar's Test P-Value : 0.0001519       
+                                          
+            Sensitivity : 0.9113          
+            Specificity : 0.8000          
+         Pos Pred Value : 0.8228          
+         Neg Pred Value : 0.8985          
+             Prevalence : 0.5047          
+         Detection Rate : 0.4600          
+   Detection Prevalence : 0.5590          
+      Balanced Accuracy : 0.8556          
+                                          
+       'Positive' Class : Apple           
+                                          

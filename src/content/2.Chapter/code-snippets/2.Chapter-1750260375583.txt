@@ -1,0 +1,9 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Match {}p{} followed by {}r{} or {}u{} in {}prodtitle20{}}
+{grep}{(}{"p[ru]"}{, prodtitle20, }{value =} {TRUE}{)}
+{Highlighting}
+{Shaded}
+
+[1] "Love the product!" "Good purchase"    

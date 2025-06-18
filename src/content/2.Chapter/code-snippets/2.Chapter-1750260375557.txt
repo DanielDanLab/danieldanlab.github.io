@@ -1,0 +1,48 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Apply the {}abbreviate(){} function to the {}prodtitle20{} vector}
+{abbreviate}{(prodtitle20)}
+{Highlighting}
+{Shaded}
+
+                              Best tech toy of 2010-2011 
+                                                 "Btto2" 
+                                     Worked for one day! 
+                                                  "Wfod" 
+                                     Ignore the nonsense 
+                                                  "Igtn" 
+                                                Nonna162 
+                                                  "N162" 
+                       Obviously only for the Tech Savvy 
+                                                "OoftTS" 
+                                                    eh.. 
+                                                  "eh.." 
+                               Excellent for what it is! 
+                                                 "Efwii" 
+                                  Does not add up at all 
+                                                "Dnauaa" 
+                                       Love the product! 
+                                                  "Ltp!" 
+                                           Good purchase 
+                                                  "Gdpr" 
+                                            Great Tablet 
+                                                  "GrtT" 
+                                     Not what I expected 
+                                                  "NwIe" 
+                                  Less than satisfaction 
+                                                  "Lsts" 
+                                            Boss tablet. 
+                                                  "Btb." 
+                                     Sweet Little Tablet 
+                                                  "SwLT" 
+                               I have learned my lesson. 
+                                                 "Ihlml" 
+Lightweight 10-inch Android 2.3 tablet with so-so screen 
+                                              "L1A2twss" 
+                                                 Kindle? 
+                                                  "Knd?" 
+                 The Kindle Fire is a great first effort 
+                                              "TKFiagfe" 
+                 Wifi version inferior to the 3g version 
+                                               "Wvitt3v" 

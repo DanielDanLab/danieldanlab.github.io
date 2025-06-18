@@ -1,0 +1,27 @@
+
+{Shaded}
+{Highlighting}[]
+{\# URL of the file}
+{url }{{}{-}} {"https://danieldanlab.github.io/data/sample.csv"}
+
+{\# Read CSV into dataframe}
+{df }{{}{-}} {read.csv}{(url, }{header =} {TRUE}{)}
+
+{\# Check dataset in viewer, uncomment}
+{\# View(df)}
+
+{\# Keep only first 5 columns}
+{df }{{}{-}}{ df[, }{1}{:}{5}{]}
+
+{\# Display first 6 rows}
+{head}{(df)}
+{Highlighting}
+{Shaded}
+
+  X      Review_ID    Item_ID Base_item_ID Review_date
+1 1 R100E6MT94PK6L B0051VVOB2                 1/8/2012
+2 2 R100HU42LKLLD0 B0057O9O6K                4/10/2012
+3 3 R100PBXP49AU0B B0051VVOB2                3/26/2012
+4 4 R100U020EZR95F B0051VVOB2                6/14/2012
+5 5 R101ANBUYVZCUM B004U9USEA                5/21/2011
+6 6 R101MUGRC35UWS B001UHPRSW                1/29/2010

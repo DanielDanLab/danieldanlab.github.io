@@ -1,0 +1,25 @@
+
+APResult object
+
+Number of samples     =  79 
+Number of iterations  =  138 
+Input preference      =  -0.1390897 
+Sum of similarities   =  -2.322368 
+Sum of preferences    =  -0.417269 
+Net similarity        =  -2.739637 
+Number of clusters    =  3 
+
+Exemplars:
+   can cant think
+Clusters:
+   Cluster 1, exemplar can:
+      amazon bought can great love one reviews works
+   Cluster 2, exemplar cant:
+      cant doesnt good ipad like much price since work
+   Cluster 3, exemplar think:
+      able access also android anything app apps back battery better buy 
+      computer day device dont easy email even fire first get got internet ive 
+      just keep kindle little long looking many need never nice now product 
+      purchased read really received recommend screen see something still store 
+      support tablet take thing think time use used using want wanted way well 
+      wifi will youre

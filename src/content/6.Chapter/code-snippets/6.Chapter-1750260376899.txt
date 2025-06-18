@@ -1,0 +1,16 @@
+A glm ensemble of 3 base models: lda, knn, svmLinear
+
+Ensemble results:
+Generalized Linear Model 
+
+26451 samples
+    3 predictor
+    2 classes: 'Apple', 'Samsung' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 23806, 23806, 23806, 23806, 23805, 23806, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.7640567  0.5256692

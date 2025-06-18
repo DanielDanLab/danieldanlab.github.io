@@ -1,0 +1,23 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Create a data frame for six words and their frequencies in two documents}
+{words\_data }{{}{-}} {data.frame}{(}
+  {Word =} {c}{(}{"Word1"}{, }{"Word2"}{, }{"Word3"}{, }{"Word4"}{, }{"Word5"}{, }{"Word6"}{),}
+  {Document1 =} {c}{(}{40}{, }{22}{, }{35}{, }{26}{, }{8}{, }{45}{),}
+  {Document2 =} {c}{(}{53}{, }{38}{, }{32}{, }{19}{, }{41}{, }{30}{)}
+{)}
+
+{\# Calculate Euclidean distances}
+{dist\_matrix }{{}{-}} {dist}{(words\_data[, }{{-}}{1}{], }{method =} {"euclidean"}{)}
+{print}{(dist\_matrix)}
+
+{\# Plotting using ggplot2}
+{library}{(ggplot2)}
+{ggplot}{(words\_data, }{aes}{(}{x =}{ Document1, }{y =}{ Document2, }{label =}{ Word)) }{+} 
+  {geom\_point}{() }{+} 
+  {geom\_text}{(}{vjust =} {"inward"}{, }{hjust =} {"inward"}{) }{+}
+  {labs}{(}{x =} {"Frequency in Document 1"}{, }{y =} {"Frequency in Document 2"}{) }{+}
+  {theme\_minimal}{()}
+{Highlighting}
+{Shaded}

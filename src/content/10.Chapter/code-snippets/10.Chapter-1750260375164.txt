@@ -1,0 +1,7 @@
+$samsung
+    term1    term2 similarity rank
+1 samsung     asus  0.7393969    1
+2 samsung     acer  0.7289189    2
+3 samsung motorola  0.7063525    3
+4 samsung    nexus  0.7028567    4
+5 samsung    vizio  0.7005945    5

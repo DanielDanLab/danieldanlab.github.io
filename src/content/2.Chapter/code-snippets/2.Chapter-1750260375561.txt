@@ -1,0 +1,9 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Count total titles in {}prodtitle{}}
+{length}{(prodtitle)}
+{Highlighting}
+{Shaded}
+
+[1] 40741

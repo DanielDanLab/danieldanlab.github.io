@@ -1,0 +1,12 @@
+$ipad
+         term similarity rank
+1  economical  0.9407232    1
+2     ereader  0.9154697    2
+3         pad  0.9062951    3
+4   expensive  0.8988186    4
+5        imac  0.8940031    5
+6      iphone  0.8841532    6
+7      itouch  0.8775398    7
+8     elegant  0.8763888    8
+9       fluid  0.8541148    9
+10  efficient  0.8540065   10

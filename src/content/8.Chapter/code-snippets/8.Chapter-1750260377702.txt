@@ -1,0 +1,1 @@
+[1] "Total frequency of positive bigrams: 18693"

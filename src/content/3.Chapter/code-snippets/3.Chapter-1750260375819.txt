@@ -1,0 +1,37 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Load RSelenium}
+{library}{(RSelenium)}
+
+{\# Set URL}
+{url }{{}{-}} {"https://webscraper.io/test{-}sites/e{-}commerce/allinone"}
+
+{\# Initialize Selenium driver}
+{driver }{{}{-}} {rsDriver}{(}{verbose =} {FALSE}{)}
+
+{\# Create client}
+{remote\_driver }{{}{-}}{ driver}{$}{client}
+
+{\# Navigate to URL}
+{remote\_driver}{$}{navigate}{(url)}
+
+{\# Wait for page load}
+{Sys.sleep}{(}{2}{)}
+
+{\# Click element by XPath}
+{button\_element }{{}{-}}{ remote\_driver}{$}{findElement}{(}{using =} {"xpath"}{, }
+                    {value =} {{}//*[@id="side{-}menu"]/li[3]/a{}}{)}
+{button\_element}{$}{clickElement}{()}
+
+{\# Get and print new URL}
+{url1 }{{}{-}}{ remote\_driver}{$}{getCurrentUrl}{()}
+{print}{(url1)}
+
+{\# Scrape data (code for scraping goes here)}
+
+{\# Close driver and stop server}
+{remote\_driver}{$}{close}{()}
+{driver}{$}{server}{$}{stop}{()}
+{Highlighting}
+{Shaded}

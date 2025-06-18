@@ -1,0 +1,128 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Transform all the characters to lower case}
+{docs }{{}{-}} {tm\_map}{(docs, }{content\_transformer}{(tolower))}
+
+{\# Inspect the first document in the corpus}
+{inspect}{(docs[[}{1}{]])}
+{Highlighting}
+{Shaded}
+
+{}{} Metadata: 7 Content: chars: 1384
+
+i love my fire and highly recommend it to anyone who wants to watch
+videos (netflix, hulu, amazon), read ebooks (purchased or from the local
+library), surf the net and play games. i work in the tech field and i
+love apple entertainment products (i own many apple products and at work
+i work with several). i am very thrilled with my fire (i love it too!)
+because it works great as an entertainment product (and more affordable
+than my apple products). i also think the fire is a great product
+because of amazons clout and support. any tech product i buy needs to be
+useable for years and updateable during those years. the amazon market
+(still growing) is and will be getting better all the time. why? sheer
+number of devices sold by amazon equals a large potential population of
+people who will buy software equals software programmers wanting to be a
+part of that market. also in it the biggest frustration is having an
+older device and not being able to update it or not being able to use
+new software or technology because the manufacturer does not update
+their devices (software) or provide backwards support. i am not saying
+that amazon will continue to provide support (that remains to be seen),
+but the size, longevity, profitability and attitude of pro consumer of a
+company are determining factors and compared to other companies i would
+bet that amazon will not disappoint.
+
+{Program\ code\ ends}
+
+Observe that all the words are now lowercase. While
+this might not be the most reader-friendly format for us, it is
+effective for computer processing, and, anyway, we do not need to read
+the text.
+
+{Stop-word removal}{stop-words-removal}
+
+You should already be aware that the most frequent word in English
+texts, is the article {the}. Comparing the word frequencies of two different texts with
+different topics, we would notice that the first
+50 words would be likely to have similar frequencies. Such words that appear
+very frequently but are also uninformative, we repeat this again,
+are called stop words (Fox 1989). Once the {tm} library is loaded,
+a complete list of the stop words can be found by typing
+{stopwords()} in R's console. As you can notice, the list
+includes contracted form such as {isn't}. This tells us that we
+need to remove the stop words {before} eliminating the punctuation. To
+remove the stop words (and others if needed) from our text, we use the
+{removeWords()} function.
+
+{Program\ code\ starts}
+
+{Shaded}
+{Highlighting}[]
+{\# remove the stopwords and specify the language}
+{docs }{{}{-}} {tm\_map}{(docs, }{content\_transformer}{(removeWords), }{stopwords}{(}{"english"}{))}
+
+{\# Inspect the first document in the corpus}
+{inspect}{(docs[[}{1}{]])}
+{Highlighting}
+{Shaded}
+
+{}{} Metadata: 7 Content: chars: 1071
+
+love fire highly recommend anyone wants watch videos (netflix, hulu,
+amazon), read ebooks (purchased local library), surf net play games.
+work tech field love apple entertainment products ( many apple products
+work work several). thrilled fire ( love !) works great entertainment
+product ( affordable apple products). also think fire great product
+amazons clout support. tech product buy needs useable years updateable
+years. amazon market (still growing) will getting better time. ? sheer
+number devices sold amazon equals large potential population people will
+buy software equals software programmers wanting part market. also
+biggest frustration older device able update able use new software
+technology manufacturer update devices (software) provide backwards
+support. saying amazon will continue provide support ( remains seen),
+size, longevity, profitability attitude pro consumer company determining
+factors compared companies bet amazon will disappoint.
+
+{Program\ code\ ends}
+
+We notice that the stop words have vanished from our
+text, and the character count has reduced. Of course, the text becomes less
+and less understandable for us to read.
+
+{Removing other words}{own-dictionary-words-removal}
+
+Sometimes we might need to remove other additional words. This process
+is often accompanied by some trial and error, along with
+informed decision-making. In a dataset where a city name appears
+extensively, it becomes so prevalent in the corpus that we would like to
+remove it because it will not contribute any additional insights. The
+same {removeWords()} function can be used again. Suppose we
+decide to remove the word {will} from our text.
+
+
+{Shaded}
+{Highlighting}[]
+{\# Remove specific words from the corpus}
+{docs }{{}{-}} {tm\_map}{(docs, }{content\_transformer}{(removeWords), }{c}{(}{"will"}{))}
+
+{\# Inspect the first document in the corpus}
+{inspect}{(docs[[}{1}{]])}
+{Highlighting}
+{Shaded}
+
+{}{} Metadata: 7 Content: chars: 1055
+
+love fire highly recommend anyone wants watch videos (netflix, hulu,
+amazon), read ebooks (purchased local library), surf net play games.
+work tech field love apple entertainment products ( many apple products
+work work several). thrilled fire ( love !) works great entertainment
+product ( affordable apple products). also think fire great product
+amazons clout support. tech product buy needs useable years updateable
+years. amazon market (still growing) getting better time. ? sheer number
+devices sold amazon equals large potential population people buy
+software equals software programmers wanting part market. also biggest
+frustration older device able update able use new software technology
+manufacturer update devices (software) provide backwards support. saying
+amazon continue provide support ( remains seen), size, longevity,
+profitability attitude pro consumer company determining factors compared
+companies bet amazon disappoint.

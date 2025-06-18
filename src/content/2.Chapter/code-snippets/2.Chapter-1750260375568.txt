@@ -1,0 +1,9 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Identify indices of elements in vector {}strings{} that contain "xy"}
+{grep}{(}{"xy"}{, strings)}
+{Highlighting}
+{Shaded}
+
+[1] 2

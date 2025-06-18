@@ -1,0 +1,6 @@
+
+Call:
+textmodel_lda(x = dfmt, k = 5, auto_iter = TRUE, gamma = 0.5, 
+    batch_size = 0.01, verbose = FALSE)
+
+5 topics; 442,621 documents; 60,204 features.

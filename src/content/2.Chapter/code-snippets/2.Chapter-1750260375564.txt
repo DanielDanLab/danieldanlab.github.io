@@ -1,0 +1,24 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Plot a histogram of string lengths in {}prodtitle{}}
+{hist}{(}{nchar}{(prodtitle), }
+     {main =} {{}Histogram of Title Lengths{}}{,  }{\# Set the main title of the histogram}
+     {breaks =} {20}{,                          }{\# Specify the number of bins as 20}
+     {xlab =} {{}Number of Characters{}}{,        }{\# Label for the x{-}axis}
+     {ylab =} {{}Frequency of Titles{}}{)         }{\# Label for the y{-}axis}
+{Highlighting}
+{Shaded}
+
+{figure}[H]
+
+{
+
+{2.Chapter_files/figure-pdf/fig-title-length-plot-1.pdf}
+
+}
+
+{{fig-title-length-plot}Length of the titles in the
+Product Reviews dataset {} Authors' own figure}
+
+{figure}%

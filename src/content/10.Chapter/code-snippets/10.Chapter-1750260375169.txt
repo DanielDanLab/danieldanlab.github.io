@@ -1,0 +1,12 @@
+$kindle
+      term similarity rank
+1   kindle  0.9984323    1
+2   kindel  0.7714513    2
+3  kindles  0.7541807    3
+4    kidle  0.7478809    4
+5   kinkle  0.7471732    5
+6    kndle  0.7398569    6
+7   kindal  0.7393759    7
+8   kendle  0.7232242    8
+9    kinle  0.7011244    9
+10       k  0.6855328   10

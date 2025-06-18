@@ -1,0 +1,25 @@
+Topic 1 Top Words:
+     Highest Prob: amazon, kindl, problem, work, one, get, fire 
+     FREX: return, custom, credit, servic, call, password, told 
+     Lift: non, paperweight, spoke, worthless, refund, rep, south 
+     Score: non, custom, return, problem, credit, call, amazon 
+Topic 2 Top Words:
+     Highest Prob: app, devic, amazon, fire, use, screen, tablet 
+     FREX: browser, volum, cloud, button, content, googl, speaker 
+     Lift: clever, launcher, onboard, robust, wallpap, root, upsid 
+     Score: clever, android, app, devic, browser, button, volum 
+Topic 3 Top Words:
+     Highest Prob: love, great, use, can, one, game, get 
+     FREX: game, kid, play, daughter, wife, love, gift 
+     Lift: toss, hubbi, girl, bus, appoint, grandson, granddaught 
+     Score: love, toss, game, great, christma, play, gift 
+Topic 4 Top Words:
+     Highest Prob: ipad, tablet, appl, use, new, app, like 
+     FREX: appl, ipad, iphon, con, camera, itun, compar 
+     Lift: retina, con, lte, sim, facetim, dictat, imac 
+     Score: con, ipad, appl, retina, iphon, camera, tablet 
+Topic 5 Top Words:
+     Highest Prob: kindl, fire, book, read, love, use, purchas 
+     FREX: color, kindl, book, fire, librari, read, enjoy 
+     Lift: proud, sun, sunglass, anti-glar, paperback, lamp, beach 
+     Score: kindl, fire, book, proud, read, love, color 

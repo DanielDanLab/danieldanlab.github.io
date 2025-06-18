@@ -1,0 +1,48 @@
+
+{Shaded}
+{Highlighting}[]
+{\# Loading libraries}
+{library}{(factoextra)}
+{library}{(NbClust)}
+{library}{(proxy)}
+
+{\# Convert {}docs{} to matrix}
+{m }{{}{-}} {as.matrix}{(docs)}
+
+{\# Canberra distance matrix}
+{d }{{}{-}} {dist}{(m, }{method =} {"canberra"}{)}
+
+{\# Ward{}s method clustering}
+{hc }{{}{-}} {hclust}{(d, }{method =} {"ward.D"}{)}
+
+{\# Optimal cluster count}
+{nb }{{}{-}} {NbClust}{(m, }{distance =} {"canberra"}{, }{min.nc =} {2}{, }{max.nc =} {5}{, }
+              {method =} {"ward.D"}{, }{index =} {"all"}{)}
+{Highlighting}
+{Shaded}
+
+*** : The Hubert index is a graphical method of determining the number
+of clusters. In the plot of Hubert index, we seek a significant knee
+that corresponds to a significant increase of the value of the measure
+i.e the significant peak in Hubert index second differences plot.
+
+*** : The D index is a graphical method of determining the number of
+clusters. In the plot of D index, we seek a significant knee (the
+significant peak in Dindex second differences plot) that corresponds to
+a significant increase of the value of the measure.
+
+{center}{0.5}{0.5pt}{center}
+
+{itemize}
+
+  Among all indices:\\
+
+  6 proposed 2 as the best number of clusters
+
+  9 proposed 3 as the best number of clusters
+
+  1 proposed 4 as the best number of clusters
+
+  6 proposed 5 as the best number of clusters
+
+             ***** Conclusion *****                            
