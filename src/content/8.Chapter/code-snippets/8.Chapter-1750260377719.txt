@@ -1,5 +1,0 @@
-# A tibble: 2 x 2
-  Brand   total_profanity_count
-  <chr>                   <int>
-1 Apple                       6
-2 Samsung                     9

@@ -1,9 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Match one or more repetitions of {}ire{} in {}prodtitle20{}}
-{grep}{(}{"(ire)+"}{, prodtitle20, }{value =} {TRUE}{)}
-{Highlighting}
-{Shaded}
-
-[1] "The Kindle Fire is a great first effort"

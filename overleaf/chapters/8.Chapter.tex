@@ -7,90 +7,87 @@
 \begin{itemize}
 \tightlist
 \item
-  Understand what sentiment analysis is
+  Understanding what sentiment analysis is.
 \item
-  How to analyze sentiment analysis
+  Learning how to analyze sentiment analysis.
 \item
-  Learn how to understand sentiment over a timeline
+  Learning how to deal with sentiment over a timeline.
 \item
-  Understand what to do with the emojis
+  Understanding what to do with the emojis.
 \item
-  How to use bigrams to better understand polarities
+  Learning how to use bi-grams to better understand polarities.
 \item
-  How to use word networks to extract polarized information
+  Learning how to use word networks to extract polarized information.
 \item
-  Correlate sentiment score and user ratings
+  Correlating sentiment scores and user ratings.
 \item
-  Extract actionable information from topics, sentiment, and time
+  Extracting usable information from topics, sentiment, and time.
 \item
-  Classify emotions
+  Learning how to classify emotions.
 \item
-  Tackle prophanity in reviews
+  Tackling profanity in reviews.
 \end{itemize}
 
 \emph{Overview ends}
 
-\section{Meaning, Levels and Tasks of Sentiment
-Analysis}\label{meaning-levels-and-tasks-of-sentiment-analysis}
+\section{Meaning, levels and the tasks of sentiment
+analysis}\label{meaning-levels-and-tasks-of-sentiment-analysis}
 
 Sentiment analysis is a widely used technique in text analytics. The
-word ``sentiment'' is frequently interchanged with ``emotion,'' and it
-has developed meanings in several subjects, such as literature, visual
-arts, or psychology. Psychologists and philosophers often disagree about
-their meaning. The word sentiment originates from the French term
-``sentement'', and, as by the Oxford Dictionary, is ``What one feels
+word ``sentiment'' is often interchangeable with ``emotion,'' and it
+has specific meanings in disciplines, such as literature, the visual
+arts, or psychology, and psychologists and philosophers often disagree about
+its meaning. The word originates from the French term
+``sentement'', and, according to the Oxford Dictionary, is: ``What one feels
 with regard to something; mental attitude (of approval or disapproval,
-etc.); an opinion or view as to what is right or agreeable..'' In our
+etc.); an opinion or view as to what is right or agreeable''. In our
 context, sentiment is an opinion expressed in a text, be it a review or
-feedback that can be positive, negative, or neutral. Emotions may reveal
+feedback which can be positive, negative, or neutral. Emotions in text may reveal
 the expression of specific feelings such as happiness, joy, anger,
-disgust, or surprise, and can be detected. Another name for sentiment
+disgust, or surprise, and can be detected through analysis. And so another term for sentiment
 analysis is emotion detection in text corpora (Alslaity and Orji 2024).
 In this chapter, we will analyze both sentiment and emotion. Sentiment
-analysis is applied in several fields, such as finance Tirunillai and
-Tellis (2012) to predict stock movements and assess economic indicators,
-healthcare (Denecke and Deng 2015) to improve patient care, customer
-service (K. S. Kumar, Desai, and Majumdar 2016) to improve customer
-care, entertainment (Baid, Gupta, and Chaplot 2017) to understand
-reactions to movies or music shows, product development (Fang and Zhan
-2015) to improve product features, psychology (Xinyu Wang et al. 2013)
-to analyze emotional states, politics (Bakliwal et al. 2013) to
-understand opinion on policies or voter sentiments, social sciences
-(Pozzi et al. 2016) to understand societal trends, or marketing Berger
-et al. (2020) to analyze the valence of texts in social media posts,
-consumer reviews, and other customer and firm-generated content.
+analysis is applied to several fields, such as: finance (Tirunillai and
+Tellis 2012) to predict stock-market movements and assess economic indicators;
+healthcare (Denecke and Deng 2015) to improve patient care; customer
+service (Kumar, Desai, and Majumdar 2016) to improve customer
+care; entertainment (Baid, Gupta, and Chaplot 2017) to understand
+reactions to movies or concerts; product development (Fang and Zhan
+2015) to improve product features; psychology (Wang et al. 2013)
+to analyze emotional states; politics (Bakliwal et al. 2013) to
+understand opinions or voter sentiments; the social sciences in general
+(Pozzi et al. 2016) to understand societal trends; and, marketing (Berger
+et al. 2020) to analyze the valence of texts in social-media posts,
+consumer reviews, and other customer- and firm-generated content.
 
-In marketing, sentiment analysis can provide valuable insights into the
-disaggregated and aggregated opinion about products and services over a
-determined period of time on a specific topic or in comparison to
-competing brands (see, e.g., T. Y. Lee and Bradlow (2011)). Based on the
+In marketing, sentiment analysis can provide valuable insights into
+disaggregated and aggregated opinions about products and services over a specific period of time on a particular topic or in comparison with
+competing brands (see, e.g., Lee and Bradlow (2011)). Depending on the
 language used, customers also can be classified by gender and age,
 allowing for better market segmentation (see, e.g., Hartmann et al.
-(2019)).
+2019).
 
-The corpus to be analyzed can be decomposed into conceptual levels. We
-will use an example to understand better. Let us have a document, in our
+To carry out sentiment analysis, the corpus we want to analyze has to be decomposed into a number of conceptual levels. We
+will use an example to help us understand this better. Let us take a document, in our
 case a short review: ``I purchased this tablet for Christmas and have
 mixed feelings about it. The tablet quality was fantastic, but the WiFi
-connection was disappointing.'' The highest level is the document level,
+connection was disappointing''. The highest level is that of the document,
 where sentiment analysis can be performed on each document of a
 collection. In our review we have only one document. If the document is
-a chapter, a page or a paragraph, its polarity can be assessed as
-positive or negative. The next level is the sentence level. In some
-instances, it is much better to consider a document at the sentence
-level because the polarities of the sentences can be aggregated (see
-Büschken and Allenby (2016)). Then comes the phrase level. In the
-sentence, ``The tablet quality was fantastic, but the WiFi connection
-was disappointing.'', the first phrase, ``The tablet quality was
-fantastic,'' has a positive sentiment, while the second one, ``but the
-WiFi connection was disappointing,'' has a negative sentiment.
-Phrase-based sentiment analysis focuses on different parts of a
-sentence, in contrast with sentence-based which yields an averaged
-sentiment for the whole sentence. The last one is the aspect level.
-Sentiment analysis focuses on specific aspects (topics) within a phrase.
-For example, ``tablet quality'' (aspect) is associated with
-``fantastic,'' which has a positive sentiment, while ``WiFi connection''
-is associated with ``disappointing,'' which has a negative sentiment,
+a chapter, page, or paragraph, its polarity can be assessed as
+positive or negative. The next level is that of the sentence. In some
+instances, it is much better to examine a document at sentence
+level because the polarities of the sentences can be aggregated (see,
+Büschken and Allenby 2016). We then pass on to the phrase level. In the
+sentence, ``[t]he tablet quality was fantastic, but the WiFi connection
+was disappointing'', the first phrase, ``[t]he tablet quality was
+fantastic'', has a positive sentiment, while the second one, ``but the
+WiFi connection was disappointing'', has a negative sentiment.
+Instead of giving an averaged sentiment for the whole sentence, phrase-based sentiment analysis focuses instead on its component parts. The last one is the aspect level.
+Sentiment analysis focuses on specific aspects (topics) of a phrase.
+For example, ``tablet quality'' (the aspect) is associated with
+``fantastic'', which has a positive sentiment, while ``WiFi connection''
+is associated with ``disappointing'', which has a negative sentiment,
 see Figure~\ref{fig-salevels}.
 
 \begin{figure}
@@ -106,36 +103,35 @@ see Figure~\ref{fig-salevels}.
 
 \end{figure}%
 
-Information can be divided into facts and opinions. While facts are
-expressed objectively, opinions are often representative of people's
+In terms of sentiment analysis, information can be thought of as being divided into facts and opinions. We might think of facts as being statements which are
+expressed with the intention of being objective, while opinions are often representative of people's
 biases, emotions, state of mind, or interests (Liu et al. 2010) and are
-subjective. A document is deemed subjective if it contains adjectives,
-not all of them but a subset of them (Rittman et al. 2004). Opinion
-measurement is of great importance because it can influence companies'
-or other people's behavior in very unpredictable ways (Atwal, Bryson,
+subjective. A document is deemed to be subjective if it contains a significant number of adjectives (Rittman et al. 2004).
+The measuring of opinion is of great importance because it can influence companies'
+or people's behavior in unpredictable ways (Atwal, Bryson,
 and Kaiser 2022). Sentiment classification is one of the main tasks for
-categorizing text into positive or negative, and the most common one is
+categorizing text as being positive or negative, and the most common form is
 polarity detection (Cambria et al. 2015). Cross-lingual classification
 uses one language as training data to classify documents in another
 language (Olsson, Oard, and Hajič 2005). Cross-domain classification is
-similar, it uses a sentiment classifier trained on a source domain and
-used on a different domain (Bollegala, Mu, and Goulermas 2015). Both
-classifications are useful to cut annotation data costs. Deception
+similar, it uses a sentiment classifier trained on one source domain and
+used on another (Bollegala, Mu, and Goulermas 2015). Both
+classifications are useful to cut the costs of annotating data. Deception
 detection and opinion spam detection are processes focused on
-identifying and classifying intentionally designed fake reviews aimed to
-mislead and influence readers (Rosso and Cagnina 2017).\\
-Sentiments can be expressed either explicitly, ``slow and unresponsive
-touchscreen experience,'' or implicitly, ``I could use it for only 5
+identifying and classifying intentionally designed fake reviews aimed at
+misleading and influencing readers (Rosso and Cagnina 2017).\\
+Sentiments can be expressed either explicitly, e.g., a ``slow and unresponsive
+touchscreen experience''. or implicitly, e.g., ``I could use it for only 5
 minutes''. Both sentences are an expression of a negative sentiment, and
 there are several techniques such as subjectivity detection, polarity
-detection, and sentiment strength detection (Saad 2014) that accomplish
+detection, and sentiment strength detection (Saad 2014) which carry out this
 this task. Aspects, or topics, can be identified using LDA (see Chapter
-7); there are sentiment analysis aspect models that consider the
-sentiment towards a specific topic included in the topic model (Lu et
-al. 2011). There are several methods to accomplish this task, such as
+7); there are sentiment-analysis aspect models which consider the
+sentiment towards a specific topic to be included in the topic model (Lu et
+al. 2011). For this, we can use, for example,
 syntax-based, supervised, unsupervised, or hybrid machine learning
 (Schouten and Frasincar 2015). For a visual representation of the
-sentiment analysis tasks, see Figure~\ref{fig-satasks}.
+tasks involved in sentiment analysis, see Figure~\ref{fig-satasks}.
 
 \begin{figure}
 
@@ -150,36 +146,32 @@ own figure}
 
 \end{figure}%
 
-\section{Sentiment Analysis
-Methodology}\label{sentiment-analysis-methodology}
+\section{Sentiment-analysis
+methodology}\label{sentiment-analysis-methodology}
 
-Several methods are available to perform sentiment analysis:
-lexicon-based, machine learning-based, or hybrid approach Dhaoui,
-Webster, and Tan (2017). An extra approach can be considered, too, that
+Several methods are available for performing sentiment analysis:
+lexicon-based, machine learning-based, or hybrid approaches (Dhaoui,
+Webster, and Tan 2017). An extra method can also be considered which
 contains transfer learning and aspect-based approaches (Wankhade, Rao,
-and Kulkarni 2022). The lexicon-based approach is the most common one.
-It uses a dictionary and deals with assigning scores to words. This can
+and Kulkarni 2022). The lexicon-based approach is the most common.
+It uses a dictionary and assigns scores to words. This can
 be problematic, though, because, depending on the context, words can
 have a positive or negative polarity, so domain detection is important
-(H. Han et al. 2018). Such an algorithm takes a text, compares it
-against a dictionary that has scores annotated with a specific polarity
+(Han et al. 2018). Such an algorithm takes a text, compares it
+against a dictionary which has scores annotated with a specific polarity,
 and then aggregates them to form a final score (Taboada et al. 2011).
-Given that we have studied classification (see Chapter 6), there are
-several ways to accomplish text classification. What is needed is to
-assign a score to a text, something that we frequently see on opinion
-collections on the internet: a review connected to a score that ranges
-normally between 1 and 5 stars. A hybrid method is a corpus-based
-approach, which is a text classification problem that uses an annotated
-data set based on a lexicon (Abdulla et al. 2013). Here, we disagree
-with what is depicted in Figure~\ref{fig-saapproach} in (Wankhade, Rao,
-and Kulkarni 2022), and we edited their image considering our
-observations. Our figure presents various methods to perform sentiment
-analysis, which are categorized into several approaches. Most of them
-fall under the Machine Learning Approach, such as Linear Classifiers and
-K-Nearest Neighbor; we do not refer to all of them here as they were
-discussed in Chapter 6. Advanced techniques, such as Transformer-based
+Given that we have studied classification (see Chapter 6), we now have
+several ways of carrying out text classification. We need to
+assign a score to a text, something that is frequently seen on collections of opinions on the internet: i.e., a review connected to a score that normally has a range of between 1 and 5 stars. A hybrid method is corpus-based, a text-classification problem which uses an annotated
+data set based on a lexicon (Abdulla et al. 2013). We have amended Figure~\ref{fig-saapproach} from Wankhade, Rao,
+and Kulkarni (2022), bringing it into line with our own
+observations. Our version shows the various methods for performing sentiment
+analysis, categorized into a number of different approaches. Most
+fall under the category of machine learning, such as linear classifiers and
+K-nearest neighbor; note that we do not refer to all the approaches which were
+discussed in Chapter 6. Advanced techniques, such as transformer-based
 models, are discussed in Chapter 10, where the contextual relationships
-in text data are explored.
+in text data are explored more fully.
 
 \begin{figure}
 
@@ -193,56 +185,54 @@ in text data are explored.
 
 \end{figure}%
 
-\section{Performing Sentiment Analysis in
+\section{Performing sentiment analysis in
 R}\label{performing-sentiment-analysis-in-r}
 
-In R, several packages can be used to accomplish a sentiment analysis
-task. \texttt{sentiment} (T. W. Rinker 2021), \texttt{syuzhet} (Matthew
-L. Jockers 2015), and \texttt{SentimentAnalysis} (Proellochs and
-Feuerriegel 2023) use the lexicon-based approach. They employ
-dictionaries of words associated to a sentiment score.
-\texttt{sentimentr}, uses the Jockers Rinker Sentiment Lexicon, based on
+In R, several packages can be used to carry out sentiment analysis. \texttt{sentiment} (Rinker 2021), \texttt{syuzhet} (Jockers 2015), and \texttt{SentimentAnalysis} (Proellochs and
+Feuerriegel 2023) all use a lexicon-based approach, employing
+dictionaries of words associated with a sentiment score.
+\texttt{sentimentr} uses the Jockers-Rinker sentiment lexicon, based on
 a combination of several lexicons. It takes into account several
-interesting features, such as negators, amplifiers, and de-amplifiers,
+interesting elements, such as negators, amplifiers, and de-amplifiers, with which
 to fine-tune the sentiment scores. The result is an intensity polarity
-scale between very negative and very positive {[}-1,1{]}, passing
+scale with a range of very negative to very positive {[}-1,1{]}, passing
 through a neutral 0. \texttt{syuzhet} uses scores from different
-dictionaries, such as Bing (M. Hu and Liu 2004) that binarily classifies
-words as positive or negative without an intensity, the NRC emotion
-lexicon, Khoo and Johnkhan (2018), developed at the National Research
-Council of Canada (NRC), which associates words to eight basic emotions,
-such as anger, fear, anticipation, trust, surprise, joy and disgust, and
-Afinn (Aung and Myo 2017), which assignes integer scores to words, that
-discretely range from {[}-5, 5{]}. It also assigns positive or negative
-sentiment to the result. \texttt{SentimentAnalysis} supports several
-lexicons, such as the QDAP dictionary (T. Rinker, Rinker, and LazyData
+dictionaries, including: Bing (Hu and Liu 2004) to classify
+words as a positive or negative binary without an intensity; the NRC emotion
+lexicon (Khoo and Johnkhan 2018), developed at the National Research
+Council of Canada (NRC), which associates words with eight basic emotions,
+such as anger, fear, anticipation, trust, surprise, joy, and disgust; and
+Afinn (Aung and Myo 2017), which assigns integer scores to words, ranging
+discretely from {[}-5, 5{]}. It also assigns positive or negative
+sentiment to the results. \texttt{SentimentAnalysis} supports several
+lexicons, including the QDAP dictionary (Rinker, Rinker, and LazyData
 2018), the Harvard IV dictionary (Frankel, Jennings, and Lee 2022), and
-many more. \texttt{vader} (Roehrick 2020) implements the Valence Aware
-Dictionary for Sentiment Reasoning (VADER, Hutto and Gilbert (2014))
-which is a rule-based classifier. It uses a predefined dictionary and
+many others. \texttt{vader} (Roehrick 2020) takes the Valence Aware
+Dictionary for Sentiment Reasoning (VADER; Hutto and Gilbert 2014)
+as a rules-based classifier. It uses a predefined dictionary and
 considers the context of the words, being ``aware'' of the surrounding
 words and their impact on the sentiment of the target word. Sentiment
-scores are adjusted based on intensity modifiers, such as ``very'' or
-``extremely'' or punctuation and capitalization (``GREAT!!'' is more
+scores are adjusted according to intensity modifiers such as ``very'' or
+``extremely'', or punctuation and capitalization (``GREAT!!'' is considered to be more
 intense than ``great''), and negations are dealt with by flipping the
 sentiment score.
 
 The \texttt{sentiment.ai} package (Wiseman, Nydick, and Wisner 2022)
-uses deep learning to accurately perform sentiment analysis on text that
-is context-dependent. It uses transformer-based models, which are
-pre-trained on large data sets, to identify the context in which sarcasm
+uses deep learning to perform accurate sentiment analysis on text which
+is context-dependent. It uses transformer-based models,
+trained on large data sets, to identify the contexts in which sarcasm
 and ambiguous phrases appear. Its multi-language support is a plus.
-sentiment.ai seems to identify much better the negative context than
-other packages \footnote{https://github.com/BenWiseman/sentiment.ai} as
-by the authors' claims, being in disagreement with the lexicon-based
-packages, while on the positive side there is agreement between them.
+sentiment.ai seems to identify negative context more successfully than
+other packages, \footnote{https://github.com/BenWiseman/sentiment.ai} as
+claimed by the authors, who disagree with the use of lexicon-based
+packages.
 
 \subsection{Sentiment over a timeline}\label{sentiment-over-a-timeline}
 
-Let us work with an example to better understand the steps to perform
-sentiment analysis on a dataset. We use the same data we analyzed in the
+Let us work with an example to better understand the steps we need to take to perform
+sentiment analysis on a data set. Here we use the same data we analyzed in the
 previous chapters. Importing them into R and selecting the relevant
-columns and rows should be a breeze for you by now. We chose two brands
+columns and rows should be a breeze for you by now. We have chosen two brands,
 because comparison is crucial in marketing analysis.
 
 \begin{Shaded}
@@ -268,29 +258,25 @@ because comparison is crucial in marketing analysis.
 \end{Highlighting}
 \end{Shaded}
 
-After the dataset has been loaded, we must address an important detail:
-emojis and emoticons. Text can contain them, sometimes in abundance, and
-can influence the sentiment of the reviews and lead to better accuracy
-of the overall scoreThese influence the sentiment of the reviews and
-lead to better accuracy of the overall score, see Shelley Gupta, Singh,
-and Ranjan (2020). There are also cases in which text can be
-``emojified'', to better undertand feelings about certain products
-(Hotz-Behofsits, Wlömert, and Nabout 2025). From the mentioned packages,
-\texttt{vader} has a built-in lexicon that links emojis to sentiments.
-There are proposed methods, though, that calculate sentiment analysis
-from emojis by leveraging Tweets and GitHub posts containing emojis to
-better classify text containing them (Z. Chen et al. 2021). In R, one
-can use several packages to deal with emojis, such as \texttt{textclean}
+After the dataset has been loaded, we have to address an important detail:
+emojis and emoticons. Text can contain them, sometimes in abundance. They influence the sentiment of the reviews and taking them into account can
+lead to better accuracy of the overall score (see, Gupta, Singh,
+and Ranjan 2020). There are also cases in which text can be
+``emojified'', to better understand feelings about certain products
+(Hotz-Behofsits, Wlömert, and Nabout 2025). Of the packages mentioned above,
+\texttt{vader} has a built-in lexicon which links emojis to sentiments.
+Methods have been proposed, though, which calculate sentiment analysis
+from emojis by using tweets and GitHub posts containing emojis to
+better classify text containing them (Chen et al. 2021). In R, there are several packages to deal with emojis, such as \texttt{textclean}
 where functions like \texttt{replace\_emoji()} or
-\texttt{replace\_non\_ascii()}, transform emojis and emoticons into
-their descriptive text counterpart. It is good to use them both, they
-complete each other. Other such packages are \texttt{emoji}, or
-\texttt{tidyEmoji}. We can also apply straightforward approaches as
-follows: the identification of emojis and their transformation into text
-descriptions. Because our dataset does not have emojis, the final result
-will not be different from the initial text. The following
-implementation is provided for your convenience so that you can use it
-with your dataset.
+\texttt{replace\_non\_ascii()} transform emojis and emoticons into
+their descriptive text counterparts. It is good to use them both as they
+complement each other. Other such packages include \texttt{emoji}, or
+\texttt{tidyEmoji}. We can also apply straightforward approaches, e.g., the manual identification of emojis and their transformation into text
+descriptions. Because our data set does not have emojis, the final result
+will not differ from the initial text. The following
+example is provided so that you can use it
+with your own data set when necessary.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -304,12 +290,11 @@ with your dataset.
 \end{Highlighting}
 \end{Shaded}
 
-After this procedure, the text is ready for analysis. In the
-computation, we will include, several sentiment analysis packages, but
-we will mostly focus on \texttt{sentiment.ai} in this chapter. It seems
-that this package outperforms \texttt{sentimentAnalysis} or
-\texttt{sentimentr} as by their author's claims on their GitHub page. We
-keep the other results for comparison reasons.
+After this procedure, the text is ready for analysis. During the
+computations we will use, several sentiment analysis packages, but
+we will mostly focus on \texttt{sentiment.ai} in this chapter. This package seems to outperform \texttt{sentimentAnalysis} or
+\texttt{sentimentr} given the authors' claims on their GitHub page. We
+have kept the other results for comparison.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -355,11 +340,11 @@ keep the other results for comparison reasons.
 \end{Highlighting}
 \end{Shaded}
 
-We transform the Date to display data on a monthly base and we average
-\texttt{sentiment.ai} for each combiation of \texttt{Month} and
-\texttt{Brand}. We have also renamed the column \texttt{Content} into
+We have transformed the date to display data on a monthly base and averaged
+\texttt{sentiment.ai} for each combination of \texttt{Month} and
+\texttt{Brand}. We have also renamed the \texttt{Content} column as
 \texttt{target} for easier integration with other packages. The plot of
-the graph follows next.
+the graph is below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -399,28 +384,27 @@ Values Over Time for Each Brand \newline Authors' own image}
 
 \end{figure}%
 
-The graph in @fig-sacomparison1a shows, over a timeline, the monthly
-aggregated sentiment scores elaborated with \texttt{sentiment.ai} for
-the three selected brads: Amazon (represented mainly by Kindle Fire),
-Apple and Samsung. The lines were smoothed using the LOESS method and
+The graph in @fig-sacomparison1a shows the monthly
+aggregated sentiment scores over a timeline using \texttt{sentiment.ai} for
+the three brands: Amazon (represented mainly by the Kindle Fire),
+Apple, and Samsung. The lines were smoothed using the LOESS method and
 indicate a general sentiment over time. The Amazon line indicates a
-positive trend, Apple's line apparently seems flat but it is constantly
-increasing, with slight variations, while Samsung's trend line is more
+positive trend, Apple's line apparently seems flat but increases constantly with slight variations, while Samsung's line is more
 volatile, indicating sentiment fluctuations. The Kindle Fire was
-introduce later than its competitors, more precisely on November 15,
-2011, nicely marketed before the Christmas holidays, showing it was
-well-received by customers over time. Apple seems to have a stable and
-increasing customer satisfaction with its iPad's while Samsung's
+introduced later than its competitors, on November 15,
+2011, marketed before the Christmas holidays, showing it was
+well-received by customers over time. Apple seems to have stable and
+increasing customer satisfaction with its iPads, while Samsung's
 fluctuations in sentiment indicate mixed customer experiences, but the
-trend seems overall positive.
+trend seems positive overall.
 
 A different type of visualization is provided in @fig-sacomparison2 to
-show how sentiment towards the specified brands has evolved over time.
+show how sentiment towards the brands has evolved over time.
 It highlights differences in how customer perception is captured by the
-results of the ``sentiment.ai'' scores. This image provides more detail
-for a month-to-month sentiment comparison. Amazon shows mostly positive
-sentiment scores, hinting at generally favorable customer reception.
-Apple exhibits a positive sentiment distribution, indicating a steady
+results of the sentiment.ai scores. This image provides more detail
+to allow for a month-bt-month comparison. Amazon has mostly positive
+sentiment scores, hinting at a generally favorable customer reception.
+Apple has a positive sentiment distribution, indicating steady
 customer satisfaction. Samsung has fluctuations in sentiment scores but
 the overall sentiment, nevertheless, seems generally favorable.
 
@@ -458,16 +442,16 @@ for Each Brand \newline Authors' own figure}
 \subsection{Sentiment word networks}\label{sentiment-word-networks}
 
 Now, let us gain a better understanding of Samsung's positive and
-negative feedback through the use of bigrams and word networks. Before
-we dive into details, bigrams are pairs of consecutive words that
-represent common word associations used in context. Word networks
-represent the relationships between words represented as graphs. The
+negative feedback through the use of bi-grams and word networks. Before
+we dive into the details, to recap, bi-grams are pairs of consecutive words that
+represent common word associations when used in a particular context. Word networks
+are the relationships between words presented as graphs. The
 nodes correspond to words, the edges indicate their co-occurrence. Both
 make it easier to identify key themes or structures in textual data. To
-illustrate this process we select the Amazon value from the Brand column
-and separate them into strongly positive and negative groups, where the
+illustrate this process we have selected the Amazon values from the Brand column
+and separated them into strongly positive and negative groups, where the
 score is either more positive than 0.7, or more negative than -0.7. Then
-we do the preprocessing part, and we set up the dataset for
+we have pre-processed the information, and set up the data set to show
 visualizations.
 
 \begin{Shaded}
@@ -526,9 +510,9 @@ visualizations.
 \end{Highlighting}
 \end{Shaded}
 
-So far, only preprocessing has been done. What we are doing now is
-creating a function for presenting bigram word frequencies, the positive
-and negative ones, one on top of the other, so that we can compare them.
+So far, only pre-processing has been carried out. What we are about to do is
+create a function to allow us to present the bi-gram word frequencies, both positive
+and negative, one on top of the other, so that we can compare them.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -559,15 +543,12 @@ and negative ones, one on top of the other, so that we can compare them.
 
 \end{figure}%
 
-We can notice from the plots in Figure~\ref{fig-posneg2} containing the
-first 30 most frequent bigrams, positive and negative reviews contain
-``kindle fire'' but, after that, they start diverging. Positive reviews
-focus on customers' satisfaction with the product's features, such as
-ease of use, emotional attachment to it, and the suitability as a gift.
-Negative reviews unveil customer service issues, several technical
-problems, and dissatisfaction with some features or performance of the
-device. The comparison with iPad seems to be considered in negative
-reviews, perhaps, by considering Apple devices a better deal.
+We can notice from the plots in Figure~\ref{fig-posneg2} showing the 30 most frequent bi-grams, positive and negative reviews contain the bi-gram
+``kindle fire'' but, after that, they start to diverge. The positive reviews
+focus on the customers' satisfaction with the features of hte product, such as
+ease of use, their emotional attachment to it, and its suitability as a gift.
+Negative reviews reveal customer-service and technical problems, as well as dissatisfaction with the features orperformance of the
+device. The comparison with iPad seems to be negative, perhaps, by showing that Apple devices are better.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -593,9 +574,9 @@ reviews, perhaps, by considering Apple devices a better deal.
 [1] 1386
 \end{verbatim}
 
-In the above frequency count, we notice that the most frequent bigrams
-show about three times higher positive counts than the negative ones,
-but the situation changes for the total number of bigrams which we
+In the frequency count above, we can see that the most frequent bi-grams
+show about a three-times higher positive count than the negative ones,
+but the situation changes for the total number of bi-grams which we are going to
 retrieve next.
 
 \begin{Shaded}
@@ -622,11 +603,10 @@ retrieve next.
 [1] "Total frequency of negative bigrams: 12901"
 \end{verbatim}
 
-A word network would give further insight into their connection and
-frequency. Let us plot the positive terms and better understand the
-salient features that make customers happy about a brand. The creation
-of a function to be used in a versatile manner for both positive and
-negative reviews is a handy tool and it is presented in the code below.
+A word network would provide further insights into their connections and
+frequency. Let us plot the positive terms to better understand the
+salient features which make customers happy with a brand. A function which can be used in a versatile way for both positive and
+negative reviews is a handy tool and is presented in the code below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -657,30 +637,28 @@ negative reviews is a handy tool and it is presented in the code below.
 
 \includegraphics{8.Chapter_files/figure-pdf/posneg5-1.pdf}
 
-In the above coding example and the accompanying graph that results from
+In the coding example above, and the graph which results from
 it, Kindle Fire, or simply Fire, is the main product. The central node
-is ``kindle'' and is strongly connected to ``fire'', indicating this as
-the most frequently bigram in these reviews. This is as expected due to
-the product's name and so far no new information. But ``kindle'' is
-associated with other positive terms, which frequency are emphasized by
-a thicker connection line between them. Connections such as ``purchased
+is ``kindle'' and is strongly connected to ``fire'', indicating this is, unsurprisingly,
+the most frequent bi-gram in these reviews. This is as expected and is not new information. But ``kindle'' is
+associated with other positive terms, whose frequencies are emphasized by
+a thicker connecting line between them. Connections such as ``purchased
 kindle'', ``new kindle'', ``received kindle'', or ``bought kindle'',
-show that many reviewers talk about the buying experience. The user
+show that many reviewers write about the buying experience. The user
 experience expressed by terms such as ``easy use'', or ``set easy'',
-indicate the users find the item easy to use and set up. Positive
+indicate the users find the item easy to operate and set up. Positive
 sentiments are expressed through ``absolutely love'', ``really like'',
 and are strong selling points for the Amazon brand. Words like ``great
-product'' and ``works great'' indicate pleasance with the product's
-performance. Gift and holiday mentions, such as ``christmas gift,''best
-gift,``, and''present'', indicate that the tablets indicate a high
-propensity to sell these products around main holiday events. Multimedia
-capabilities are expressed through bigrams such as ``watch movies,'',
-``play/playing games.'' A good selling point is expressed by ``read(ing)
-books,'' and ``can read''. A positive brand association is done through
+product'' and ``works great'' indicate satisfaction with the product's
+performance. Mentions of gifts and holidays, such as ``christmas gift'',''best
+gift``, and ''present'', indicate that the tablets sell close to celebrations. Theultimedia
+elements of the tablet are expressed through bi-grams such as ``watch movies'' or
+``play/playing games''. A major selling point is expressed by ``read(ing)
+books'' and ``can read''. Positive brand association is seen in
 words like ``thank(s) amazon'', showing appreciation for the brand and
-the product. User friendliness, checking emails, product pricing and
-overall satisfaction are reflected through ``friendly user,'', ``email
-check,'', ``price product,'', or ``one best.'' But let us analyze the
+the product. User friendliness, checking emails, product pricing, and
+overall satisfaction are clear through bigrams such as ``friendly user'', ``email
+check'', ``price product,'', or ``one best'.' But let us analyze the
 negative reviews as well.
 
 \begin{Shaded}
@@ -692,37 +670,34 @@ negative reviews as well.
 
 \includegraphics{8.Chapter_files/figure-pdf/posneg6-1.pdf}
 
-Obviously, the central term is again ``kindle'', combined with ``fire'',
-which is the central focus of many negative reviews too. This is
-strongly connected to ``disappointed'', indicated a bad user experience.
-The purchase experience is discussed too, through terms like ``purchased
-kindle,'' ``new kindle,'' ``received kindle,'' ``bought kindle,'' this
-time in a negative context. A major dissatisfaction is given by the
-``customer service,'' or ``customer support''. Technical problems and
-malfunctionings are indicated through ``power button,'' ``stopped
-working,'', ``tech support,'', ``wifi connection,'', ``connect wifi,'',
-``screen touch,'', ``control volume,'', ``battery life,'' ``slow
-loading,'' or ``freezing''. Strong negative sentiments are expressed
-through harsh terms, such as ``junk piece,''piece crap,'' or with
-elements of frustration, ``waste money,'', ``every time,'', ``long
-time.'' A painful touch for a company is when their products are
-unfavorably compared to the competitors' products, considering them
-better, ``buy ipad'', ``got ipad'', expressing dissastifaction. Other
-important terms that reflect other issues, are ``credit card,'' ``called
-support,'' ``membership store,'' or ``outside us'', reflecting payment
+Obviously, the central term is, again, ``kindle'', combined with ``fire'',
+and is the central focus of many negative reviews too. This is
+strongly connected to ``disappointed'', and indicates a poor user experience.
+The purchasing experience is discussed too, through terms like ``purchased
+kindle'', ``new kindle'', ``received kindle'', and ``bought kindle'', although this
+time in a negative context. Major dissatisfaction can be seen for
+``customer service'' or ``customer support''. Technical problems and
+malfunctioning are indicated by ``power button'', ``stopped
+working'', ``tech support'', ``wifi connection'', ``connect wifi,',
+``screen touch'', ``control volume'', ``battery life,'' ``slow
+loading'', or ``freezing''. Strong negative sentiments are expressed
+through harsh terms, such as ``junk piece'',''piece crap'', or with
+elements of frustration, ``waste money'', ``every time'', ``long
+time''. A painful moment for a company is when their products are
+compared unfavorably to competitors' products, for example, ``buy ipad'' and ``got ipad'', expressing dissatisfaction with Amazon. Other
+important terms which bring to the fore other issues, include ``credit card'', ``called
+support'', ``membership store'', or ``outside us'', showing payment
 problems or regional restrictions. Interestingly, the network of
-negative reviews is much denser that the previously discussed network of
-positive reviews. Detecting and managing negative feedback is extremely
-important, if ignored, it can severely damage the brand's reputation as
-companies need to keep their customer base and/or trying to acquire new
+negative reviews is much denser that the network of
+positive reviews discussed above. Detecting and managing negative feedback is extremely
+important, if it is ignored, it can severely damage the brand's reputation as
+companies need to retain their customer base and to, or try to, acquire new
 customers.
 
-\subsection{Negative text sections
-detection}\label{negative-text-sections-detection}
+\subsection{Detecting negative sections of text}\label{negative-text-sections-detection}
 
-For a broader view and detecting exactly which sentences are negative in
-a review, there are several possibilities to implement that. A quick
-solution can be achieved with the help of the \texttt{sentiment.ai}
+There are several ways to get a broader view of reviews and to detect exactly which sentences are negative. A quick
+solution is given by the \texttt{sentiment.ai}
 package in conjunction with the \texttt{sentimentr} package.
 
 \begin{Shaded}
@@ -762,62 +737,44 @@ package in conjunction with the \texttt{sentimentr} package.
 
 \end{figure}%
 
-We select the rows by the \texttt{sentiment.ai} score because the
-algorithm performs better at the review level. We chose a higher
-negative intensity (-0.6), which means that we are first narrowing down
-heavily to reviews with an overall negative sentiment. A threshold of
--0.6 is a practical and empirical (rather than absolute) value chosen by
-us to keep a balance between ensuring that the most negative reviews are
-selected but at the same time we keep enough data for analysis.
-\texttt{sentimentr} performs at the sentence level. By using the
-\texttt{sentiment.ai} package at document level first, we select the
-strongly negative reviews, then, at the second step, we use
-\texttt{sentimentr} to identify specific sentences that drive that
-negativity. This example shows that by pinpointing the overall negative
-results, we might obtain more precise results when we act at the
-sentence level. Both reviews are randomly selected, but we control the
-randomness with the set.seed() function for reproducibility reasons. The
+We have selected the rows using the \texttt{sentiment.ai} score because the
+algorithm performs better at review level. We chose a higher
+negative intensity (-0.6), which means that we are focusing on reviews with an overall negative sentiment. A threshold of
+-0.6 is a practical and empirical (rather than absolute) value, chosen by
+us to maintain a balance between that the most negative reviews are
+selected, but at the same time ensuring we keep enough data for analysis.
+\texttt{sentimentr} performs at the sentence level, and by first using the
+\texttt{sentiment.ai} package at document level, we can select the
+strongly negative reviews, then, as the second step, we can use
+\texttt{sentimentr} to identify the sentences which drive that
+negativity. This example shows that by pinpointing the negative
+results overall, we might gain more precise results when we act at
+sentence level. Both reviews are randomly selected, but we can control the
+randomness with the set.seed() function for reasons of reproducibility. The
 first review is of an Apple product, and the second is a Samsung.
 
-\subsection{Sentiment Score and
-Ratings}\label{sentiment-score-and-ratings}
+\subsection{Sentiment score and
+ratings}\label{sentiment-score-and-ratings}
 
-It is extremely frequent to be asked to encode an opinion on a product
-or service into a numerical value, typically a ``star'' value between 1
-and 5, with one being the most negative and five the most positive. This
-representation is a quick snapshot of the overall satisfaction given by
+It is common to encode an opinion on a product
+or service as a numerical value, typically a ``star'' value between 1
+and 5, with one being the most negative and five the most positive. This is a quick snapshot of the overall satisfaction given by
 a customer, and it is a categorical variable (Al-Natour and Turetken
-2020). One can understand that this variable is not ordinal because the
-subjective opinion of each reviewer gives it, and, as such, the
-``distance'' between 1 star and 2 is not the same as the distance
-between 4 and 5. Is this reflected in the sentiment score, too?
-Sometimes yes, sometimes not. The emotions expressed in words can travel
-on a different path than what is given as a rating. Combining these two
-aspects, we might get a more comprehensive understanding of customer
-feedback. Is a sentiment score directly correlated to the rating given?
-Let us discover it with a scatter plot.
-
-In many marketing contexts, customers, when they write a review, also
-encode their opinion about a product or service into a numerical value,
-typically a ``star'' value between 1 and 5, with one being the most
-negative and five the most positive. This representation is a quick
-snapshot of the overall satisfaction given by a customer, and it is a
-categorical variable (Al-Natour and Turetken 2020). One can understand
-that this variable is not ordinal because the subjective interpretation
-of each reviewer of the ``distance'' between 1 star and 2 is not
-necessarily the same as the distance between 4 and 5. In fact, in
-real-world settings, the majority of customers typically contribute
-overly favorable ratings, leading on the aggregate to so-called J-shape
-distributions. Such rating distributions are extremely skewed with a
+2020). This variable is not ordinal because of the
+subjective opinion of each reviewer, and, as such, the
+``distance'' between 1 and 2 stars is not the same as the distance
+between 4 and 5. In fact, in
+real-world settings, the majority of customers typically give
+overly favorable ratings, leading on aggregate to so-called J-shape
+distributions. Such distributions are extremely skewed, with a
 mass at the positive end of the rating scale (e.g., Moe, Netzer, and
-Schweidel (2017)). Similarly, the emotions expressed in words can travel
-on a different path than what is given as a rating. The automatically
-calculated sentiment score, tries to reveal an emotional content that
-star ratings alone may not capture. Combining these two aspects, we
-might get a more comprehensive understanding of customer feedback. Is a
-sentiment score directly correlated to the rating given? The idea is to
+Schweidel 2017). Similarly, the emotions expressed in words can travel
+on a different path to that of a rating. The sentiment score tries to reveal an emotional content that
+star ratings alone may not capture. Combining these two, however, we
+might acquire a more comprehensive understanding of customer feedback. Is a
+sentiment score directly correlated to the rating? The idea is to
 compare these two metrics to see if meaningful differences emerge. Let
-us discover it with a scatter plot.
+us find out if so with a scatter plot.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -846,13 +803,12 @@ us discover it with a scatter plot.
 \end{figure}%
 
 In Figure~\ref{fig-sentrating1}, each box represents the distribution of
-sentiment scores for a given star rating. The horizontal line within
+sentiment scores for a star rating. The horizontal line within
 each box is the median sentiment score, and the upper and lower edges
-indicate the quartiles. Any dots outside the whiskers show outliers. It
-can be noticed that there are reviews with higher sentiment scores that
-occur at lower star ratings, highlighting that emotional content may not
-strictly align with the numeric rating. Higher sentiment scores
-generally correspond to higher ratings and the opposite for lower
+indicate the quartiles. Any dots outside the whiskers show the outliers. It
+is easy to see that there are reviews with higher sentiment scores with lower star ratings, showing that the emotional content may not
+align strictly with the numerical rating. But, in general, higher sentiment scores
+generally correspond to higher ratings, and the opposite for lower
 values. Is the correlation between these two values strong?
 
 \begin{Shaded}
@@ -909,8 +865,8 @@ Review\_id & target & sentiment.ai & Rating\\
 \bottomrule
 \end{longtable*}
 
-The table shows that whenever sentiment score is high, also the rating
-corresponds to it. This example should also be similar to negative
+The table shows that whenever the sentiment score is high, the rating
+also corresponds to it. This should also be similar for the negative
 reviews.
 
 \begin{Shaded}
@@ -950,8 +906,8 @@ Review\_id & target & sentiment.ai & Rating\\
 \bottomrule
 \end{longtable*}
 
-This example shows that there is also correspondence on the negative
-side. But at this point, can we think that there are reviews with a high
+This example shows that there is also a correspondence with the negative
+reviews. But at this point, can find reviews with a high
 sentiment score and a low rating?
 
 \begin{Shaded}
@@ -990,58 +946,54 @@ Review\_id & target & sentiment.ai & Rating\\
 \bottomrule
 \end{longtable*}
 
-Why does this happen? (Valdivia, Luzón, and Herrera 2017) observed that
-users sometimes write negative sentences on positive ratings and the
-opposite. Their suggestion is to avoid setting the user rate as a label
+Why does this happen? Valdivia, Luzón, and Herrera (2017) have observed that
+users sometimes write negative sentences but give positive ratings, and vice versa. Their suggestion is to avoid setting the user rate as a label
 for sentiment, meaning that if a rating is 1, it does not mean it is
-bad; if it is 5, it does not mean it is good. It is much better to check
-the negative opinions using sentiment analysis and, after that, compare
+bad; and if it is 5, it it does not mean it is good. It is much better to check
+the negative opinions using sentiment analysis first and, after that, compare
 them to the rating. However, the ratings may be influenced by other
-factors, such as J-shape distributions and underreporting of those with
+factors, such as J-shape distributions and the under-reporting of those with
 negative attitudes (Hydock, Chen, and Carlson 2020), asymmetric social
 ratings (Muchnik, Aral, and Taylor 2013), or higher attrition rates
 among customers with moderate brand experiences (Brandes, Godes, and
-Mayzlin 2022). While some researchers propose avoiding strict use of
-user ratings as sentiment labels, it must be considered that multiple
+Mayzlin 2022). While some researchers propose avoiding the strict use of
+user ratings as sentiment labels, multiple
 structural and behavioral biases could also explain why some highly
-negative reviews receive high ratings (and vice versa). We will not give
-an example with low sentiment.ai and high ratings, but we will let this
-be an exercise for you. Hint: Modify the previous code with
+negative reviews receive high ratings (and the opposite). We will not give
+an example of low sentiment.ai and high ratings, but will leave this for you to do on your own. Hint: Modify the previous code using
 \texttt{filter(sentiment.ai\ \textless{}\ -0.5,\ Rating\ ==\ 5)}.
 
-\subsection{Emotions Classification}\label{emotions-classification}
+\subsection{The classification of emotions}\label{emotions-classification}
 
-Emotion measurement relies on many hints. We may see expressions of
-subjective feelings in people's posture, gestures, and facial
-expressions, sometimes as a physiological response or an overt (or
+The measuring of emotions relies on many elements. We may see expressions of
+subjective feeling in people's posture, gestures, and facial
+expressions, or sometimes as a physiological response or an overt (or
 covert) action. In product reviews we are typically dealing with
-post-purchase behavior. It seems that ``frustration, anger,
+behavior which occurs after the purchase has taken place. It seems that ``frustration, anger,
 disappointment, alienation, disgust, anxiety, alarm, guilt, shame, joy,
 happiness, hope, pride, jubilation, excitement, relief, amusement, and
-pleasure'' are reactions that customers experience in various negative
+pleasure'' are the varying reactions that customers experience in both negative
 or positive circumstances (Bagozzi, Gopinath, and Nyer 1999).
 
-Let us consider the five main emotions, which are categorized as joy,
-sadness, anger, fear, and disgust. Each emotion can be defined by a set
+Let us consider five main emotions, joy,
+sadness, anger, fear, and disgust. Each of these can be defined by a set
 of words that are, in general, associated with that feeling. The 2015
-cartoon movie by Pixar, Inside Out, depicts these emotions with colors.
-Nevertheless, we could potentially could replace these colors with
-emojis to represent each emotion, as highlighted by the approach in
-(Hotz-Behofsits, Wlömert, and Nabout 2025). Here, we link the colors in
-the movie with the literature that describes these words. Joy is yellow
+cartoon movie by Pixar, \textit{Inside Out}, depicts these emotions with using.
+However, we could potentially could replace these colors with
+emojis to represent each emotion, as highlighted by the approach taken by
+Hotz-Behofsits, Wlömert, and Nabout (2025). Taking the first approach, let us link the colors used in
+the movie with the literature that describes these emotions. Joy is yellow
 and is characterized by words such as happy, cheer, content, excitement,
 pleasure, delight, or satisfaction (Tissari 2008). Sadness is blue,
 characterized by words like sad, unhappy, distress, upset, sorrow,
 grief, despair, or dismay (Wierzbicka 1992). Anger is red and
-characterized by anger, fury, enragement, mad, annoyance (W.-F. Chen,
+characterized by anger, fury, rage, mad, annoyance (Chen,
 Chen, and Ku 2015). Fear is violet, it is characterized by words like
 afraid, scared, frightened, petrified, horrified, terrified, dread,
 alarmed, panicked, anguished, anxious, worried, concerned, and
-apprehensive (Wierzbicka 1990), which is an interestingly long list.
-Disgust is green and is characterized by these words: disgust, repulse,
-nausea, distaste, dislike, loath, or revulse (Mizin et al. 2023). These
-words may not be complete, but they are sufficient for our example of
-classifying comments by emotions regarding a brand, for example,
+apprehensive (Wierzbicka 1990), an interestingly long list.
+Disgust is green and is characterized by the following: disgust, repulse,
+nausea, distaste, dislike, loath, or revulse (Mizin et al. 2023). This is not a complete list, but these words are sufficient for our attempt to classify comments by emotions relating to a brand and product, for example,
 Amazon's Kindle.
 
 \begin{Shaded}
@@ -1071,8 +1023,8 @@ Amazon's Kindle.
 \end{Highlighting}
 \end{Shaded}
 
-After completing the preprocessing step, it is time to understand the
-frequency of the prevalence of each emotion and by what words they are
+After completing the pre-processing, we can try to understand the
+frequency of the prevalence of each emotion and by which words they are
 characterized.
 
 \begin{Shaded}
@@ -1157,35 +1109,34 @@ The following object is masked from 'package:dplyr':
 }
 
 \caption{(Top) Frequency of each emotion \newline (Bottom) Word
-Distribution in Phrases by Emotion Class, \newline Authors' own image}
+distribution in phrases by the class of emotion, \newline Authors' own image}
 
 \end{figure}%
 
-Looking at the frequency distribution across emotions, we can see that
-Anger is the most frequent emotion, with about 10.000 occurrences while
-Fear is the least frequent one. Joy seems to be quite frequent, with
-about 5.000 occurrences, Fear and Sadness, both having approximately
-2.500 occurrences. In the breakdown part by emotion, we can notice that
-``fury'' is the most frequent one, followed by ``enragement,'',
-``annoyance,'', ``angry,'', and ``mad.'' Similarly words that define
+Looking at the frequency distribution across the emotions, we can see that
+anger is the most frequent, with about 10,000 occurrences, while
+fear is the least. Joy seems to be quite common, with
+about 5,000 appearances, Fear and sadness both occur approximately
+2,500 times. In the breakdown by emotion, we can see that, for anger,
+``fury'' is the most frequent, followed by ``enragement'',
+``annoyance'', ``angry'', and ``mad''. Similarly words that define
 other emotions, appear in descending order.
 
-\section{Evolution of topics and sentiments over
+\section{The change of topics and sentiments over
 time.}\label{evolution-of-topics-and-sentiments-over-time.}
 
 Understanding topic-sentiment evolution over a period of time enables
-marketers to track consumer sentiment on certain product aspects. This
-helps in the detection of signals of discontent, not for a product
-overall, but also on a specific topic and temporal dimension. Current
-topic models can unveil topic-sentiment pairs or how important a topic
+marketers to track consumer sentiment about certain aspects of a product. This
+helps detect signals of discontent, not necessarily for a product
+overall, but also for a specific topic and with a temporal duration. Current
+topic models can reveal topic-sentiment pairs or how important a topic
 is over time, but the dynamic interaction between topics and sentiments
-over time is limitedly researched (Dermouche et al. 2014). In this
-section, we propose such a tool because of its potential usefulness.
-This can be done with a comparison mechanism between brands, which
-further enriches this research.
+over time is under-researched (Dermouche et al. 2014). In this
+section, we introduce such a tool because of its potential usefulness and further enrichment of the research.
+This can be done by using a mechanism to compare brands.
 
-We take our dataset and add the Brand identifiers and the Review\_date
-columns to the review content. After the preprocessing part, we perform
+We have taken our data set and added Brand-identifiers and Review\_date
+columns to the content. After pre-processing part, we carried out
 topic discovery, see Chapter 7.
 
 \begin{Shaded}
@@ -1216,8 +1167,8 @@ topic discovery, see Chapter 7.
 \end{Highlighting}
 \end{Shaded}
 
-At this point, we focus on the sentiment analysis part. We use the
-\texttt{sentimentr}package and combine the topic probabilities with the
+At this point, we can focus on the sentiment analysis. We used the
+\texttt{sentimentr} package and combined the topic probabilities with the
 sentiment score.
 
 \begin{Shaded}
@@ -1235,10 +1186,9 @@ sentiment score.
 \end{Highlighting}
 \end{Shaded}
 
-Adding the temporal data is the next step, together with aggregating
-data on a monthly basis. For educational purposes, we select only two
-topics; in the exercise section we propose a series of tasks to be
-completed.
+The next step is to add the temporal data along with aggregating
+data on a monthly basis. For demonstration purposes, we have selected only two
+topics; in the exercise section we have proposed a series of tasks for you to complete.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1290,41 +1240,38 @@ Brand}
 
 \end{figure}%
 
-In the visualization of topic evolution across time (see
-Figure~\ref{fig-topicsentdate3}), we notice that the sentiment score
-associated with Topic 1 a gradually increases over time. Amazon, shows a
-rise in sentiment towards the end of the timeline because the product is
-delivered to the market in that period. Apple and Samsung show a
-relatively stable sentiment line, but with some fluctuations and it
-shows lower sentiment than Apple and Amazon. The sentiment scores for
-Topic 2 show more variation over time compared to Topic 1. Amazon shows
-a more pronounced fluctuation pattern, whereas Apple shows a steady
-increase and Samsung has a consistent sentiment score with noticeable
+In the visualization of the changes in the topic across time (see
+Figure~\ref{fig-topicsentdate3}), we can see that the sentiment score
+associated with Topic 1 gradually increases over time. Amazon, shows a
+rise in sentiment towards the end of the timeline because the product reaches the market during that period. Apple and Samsung show a
+relatively stable sentiment line, but with some fluctuations, showing lower levels of sentiment than for Apple and Amazon. The sentiment scores for
+Topic 2 show more variation over time compared to Topic 1. Amazon has
+a more pronounced fluctuation pattern, whereas Apple sees a steady
+increase, and Samsung has a consistent sentiment score with noticeable
 dips. The stacked area shows the cumulative sentiment for each brand
 over time, indicating which brand dominates the sentiment for each topic
 at a given point in time. Apple seems to have the most stable and
-positive sentiment across both topics, while the Amazon and Samsung
+positive sentiment across both topics, while Amazon and Samsung
 display more variability.
 
 \section{Vulgar words in negative
 reviews}\label{vulgar-words-in-negative-reviews}
 
-Profanity is referred to the use of vulgar words, considered
-unnacceptable, especially in formal contexts. Obviously, these terms are
+Profanity is the use of vulgar words which are considered
+socially unacceptable, especially in formal contexts. These terms are often
 an expression of extreme emotional arousal (Stephens and Zile 2017) and,
-in turn, will elicit emotions in the reader, considering the reviews
-with such words more credible (Rassin and Heijden 2005). Interestingly
-enough, such kind of language is positively related to honesty (Feldman
-et al. 2017). This information is not an incentive to make you swear, or
+in turn, will elicit emotions in the reader, who might consider reviews
+including such words to be more credible (Rassin and Heijden 2005). Interestingly
+enough, such language is positively related to honesty (Feldman
+et al. 2017). This information is not an incentive for you swear, or
 swear more. If you ever review this book and leave comments, we will
-appreciate your honesty anyway, so there is no need to use bad words.
-There are several effects of the use of vulgar words in online reviews.
-For example, one of them, is never to receive an answer back from the
-management (Dan 2023) of a hotel, a product line, or a customer service.
+appreciate your honesty anyway, so there is no need to use profanity.
+There are several effects of the use of vulgar words in online reviews, for example, never receiving an answer back from the
+management of a hotel (Dan 2023), a product line, or customer service.
 Profanity has an effect on the credibility on the usefulness of the
 review, and this has been researched (Hair and Ozcan 2018). Let us take
-two brands and check from the negative reviews which brand collects more
-``dirty'' words.
+two brands and check the negative reviews to see which brand accumulates more
+vulgar words.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1369,11 +1316,11 @@ two brands and check from the negative reviews which brand collects more
 \end{verbatim}
 
 It is your duty to understand better which brand collects more
-unacceptable but apparently honest words and to understand why this
-happens. To give you an example of such a review, we do not take any
-responsibility for the printed results because these words are not ours,
-but in a real-world scenario, you will encounter them online, too. We
-filter by a profanity count of at least one of such words.
+unacceptable but apparently honest words, and to understand why this
+is happening. In giving you an example of such a review, we do not take any
+responsibility for the text because these words are not ours,
+but in a real-world scenario you will encounter them online. Using a profanity count, we
+have filtered out at least one such word.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1402,53 +1349,50 @@ Apple & Spent 15 minutes in the store playing on this thing, trying to figure ou
 \bottomrule
 \end{longtable*}
 
-You may obtain different results, regarding the polarity of a sentence
-or review, depending on the package used, some of them missing the
+You may obtain different results regarding the polarity of a sentence
+or review depending on the package used, some of which miss the
 target completely. Nevertheless, \texttt{sentiment.ai} and
 \texttt{sentimentr} seem to deliver reliable results.
 
 \emph{Exercise starts}
 
 \textbf{Exercise 1}: Select several reviews and compare the sentiment
-scores obtained with different packages. What can you observe?
+scores obtained using different packages. What can you observe?
 
 \textbf{Exercise 2}: Use sentiment over a timeline, at sentence level.
 
 \textbf{Exercise 3}: Calculate how many reviews have a correct
-correlation between polarity scores and rating. How many of them are
-coherent in the datset?
+correlation between polarity scores and ratings. How many of them are
+coherent in the data set?
 
-\textbf{Exercise 4}. Use a topic modeling, with seeded words, at
-sentence level, to extract sentiment score over a timeline. Compare two
-brands of your choice with this information.
+\textbf{Exercise 4}. Use topic modeling, with seeded words, at
+sentence level, to extract a sentiment score over a timeline. Compare two
+brands of your choice using this information.
 
-\textbf{Exercise 5}. Create a new emotion category, for example
-``blame''. Find some related keywords and perform an emotion
+\textbf{Exercise 5}. Create a new category of emotion, for example
+``blame''. Find some related keywords and carry out an emotion
 classification, trying to understand how this concept is perceived.
 
 \emph{Exercise ends}
 
 \emph{Conclusion starts}
 
-The chapter begins with an introduction to sentiment analysis,
+The chapter began with an introduction to sentiment analysis,
 discussing the difference between fact and opinion in extracting
-information from reviews, outlining the methods used to perform it.
-Several packages were proposed to do sentiment analysis in R and a
-comparison between their results was explored. Sentiment trends over
+information from reviews, and outlining the methods used to perform it.
+We introduced several packages for sentiment analysis in R and the explored and compared their results. Sentiment trends over
 time were tackled to identify shifts in public opinion due to specific
-events. Emojis are part of any modern communication, so an overview was
-provided. Bigram pairs of consecutive words were analyzed to improve
-information extraction from word network graphs. We demonstrated the
+events. Emojis are part of modern communication, so we have provided an overview of these. Bi-gram pairs of consecutive words were analyzed to improve the extraction of
+information from word-network graphs. We demonstrated the
 process of correlating sentiment scores with user ratings, understanding
-the relationship between them, providing insights into customer
+the relationship between them, and providing insights into customer
 feedback. Topic modeling, sentiment analysis, brands, and time were
-considered together, to enrich our tooblox with a precious tool when it
+considered together, to enrich the tools at our disposal when it
 comes to multifaceted comparison. Sentiment is more nuanced when it is
-expressed as emotion, so extracting them makes the understanding of the
-text richer. Eventually, we addressed the delicate topic of profanity in
-reviews, handling this information effectively. This chapter has
-provided a detailed walk-through of sentiment analysis from different
-perspectives, allowing the marketing analyst to extract actionable
-information.
+expressed as emotion, so extracting the former makes our understanding of a
+text richer. Finally, we addressed the delicate topic of profanity in
+reviews and how to handle this information effectively. This chapter has
+provided a detailed walk-through of sentiment analysis from a number of perspectives, allowing the marketing analyst to extract
+information which can be used to inform future actions.
 
 \emph{Conclusion ends}

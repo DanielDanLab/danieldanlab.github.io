@@ -1,106 +1,101 @@
 \chapter{Classification}\label{sec-classification}
 
-The term `class' originates from the Latin `classis,' which was used in
-ancient Rome to categorize citizens within the centuriate assembly based
+The term `class' originates from the Latin \textit{classis}, which was used in
+ancient Rome to categorize citizens within the Centuriate Assembly based
 on wealth and property. This system, attributed to the reforms of
 Servius Tullius, the sixth king of Rome, divided society into several
-classes. The wealthiest in the upper classes were equipped for heavy
-infantry and granted significant political power. In contrast, the lower
-classes consisted of those with less wealth, serving as light infantry
-or not armed, with limited political influence. This classification
-primarily determined military duties and voting rights, reflecting an
+classes. The wealthiest in the upper classes received payments to equip themselves as members of the cavalry and were granted significant political power. In contrast, the lower
+classes consisted of those with less wealth, who had to arm themselves and with limited political influence. This classification
+primarily determined military duties and voting rights, reflecting the
 organization of society by economic status. Later, this classification
-of individual citizens was used for taxation purposes. The assignment of
-a citizen to one of the five existing classes involves several features,
-such as the armor type possessed, wealth, age, and a few others.
-Classification for taxation and not for military reasons was important
-because paying tributes was a constant need, while wars did not occur
-regularly (Cornell 2012).
+of individual citizens was used for taxation. The assignment of
+a citizen to one of the five existing classes took into account several factors,
+such as the type or armor they possessed, wealth, and age, among others.
+Classification for taxation rather than for military reasons was important
+because there was a constant need for revenue, whereas wars occurred less frequently (Cornell 2012).
 
-Some two thousand five hundred years fast forward, we have developed
-several ways to accomplish the task of classification, one of them is
-manual classification. Due to the incredible amount of data, it is very
-impractical for timely processing. In Chapter 5 we explored a method
+Some two thousand five hundred years later we have developed
+several methods of of classification, one of them being
+manual. Due to the incredible amount of data we deal with, however, this is very
+impractical for the processing of information. In Chapter 5 we explored a method
 known as clustering. Both classification and clustering aim to achieve
-the same goal, put data into categories through algorithms. Clustering
-uses Unsupervised Learning, where the algorithm, with the help of
+the same goal, that of putting data into categories using algorithms. Clustering
+uses unsupervised learning, where the algorithm, with the help of
 mathematical formulas, attempts to group elements with common
 characteristics without predefined categories. This means we interpret
 the categories after the algorithm has done its work.
 
-On the other hand, classification involves Supervised Learning. Here, we
+On the other hand, classification involves supervised learning. Here, we
 start with a training set, a collection of documents already categorized
-into classes or categories. The algorithm learns from this existing
-categorization to create a model, or a `modus operandi,' to categorize
-new data. This process is essential when data needs to be sorted
+into classes or categories. The algorithm learns from these existing
+categories to create a model, or a `modus operandi,' through which to categorize
+the new data. This process is essential when data needs to be sorted
 automatically to save time and achieve accurate results.
 
-For instance, a Customer Relationship Manager dealing with hundreds of
+For instance, a customer-relationship manager dealing with hundreds of
 incoming emails daily could use an automated system to sort these emails
-into the correct departments, such as : Refunds, Logistics, Complaints,
-and many more. Another classical application in the direct marketing
-context is RFM classification, which entails segmenting customers based
-on the Recency, the Frequency, and the Monetary value of their previous
-interactions with a focal firm (see, e.g., Bult and Wansbeek (1995),
-Gönül, Kim, and Shi (2000), Berry and Linoff (2009)). The applications
-of automatic classification are vast.
+into the correct departments, such as: Finance, Logistics, or Complaints. Another classic application in a direct marketing
+context is RFM classification, which involves segmenting customers based
+on the recency, the frequency, and monetary value of their previous
+interactions with a firm (see, e.g., Bult and Wansbeek 1995; Gönül, Kim, and Shi 2000; Berry and Linoff 2009). The application
+of automatic classification is many and varied.
 
-This chapter will focus on classification using the same tablet dataset
-we used in the previous chapters. Note that there is a `Brand' column at
+This chapter will focus on classification using the same tablet data set
+used in the previous chapters. Note that there is a `Brand' column at
 the end of the dataset, which we will use for classification. Each
-review in the dataset is associated with a brand. The goal is for every
-new review, which lacks a brand classification, to be processed by the
-model and assigned to the correct brand category.
+review in the data set is associated with a brand. The goal is for every
+new review which lacks a classification by brand, to be processed by the
+model and assigned to the correct category of brand.
 
-Regarding the types of classification algorithms, this chapter will
-cover Linear Discriminant Analysis, K-Nearest Neighbors, Support Vector
-Machines, and Neural Networks. To complete the chapter, we will use a
-library, FastText, used for efficient learning of word representations
+This chapter will
+cover the following types of classification algorithms: linear discriminant analysis, K-nearest neighbors, support vector
+machines, and neural networks. To complete the chapter, we will use a
+library, FastText, for the efficient learning of word representation
 and sentence classification. It is optimal for its speed of execution
 and accuracy, especially with large datasets.
 
-\section{Supervised Machine Learning Algorithm
-Models}\label{supervised-machine-learning-algorithm-models}
+\section{Supervised machine-learning-algorithm
+models}\label{supervised-machine-learning-algorithm-models}
 
-In this section, we will focus on employing Supervised Machine Learning
+In this section, we will focus on employing supervised machine-learning
 algorithms. Our primary elements are the text content of the review and
-its association with a specific brand. Utilizing these well-understood
-elements, the algorithm will generate a model. This model enables the
+its association with a specific brand. Using these well-understood
+elements, the algorithm will generate a model. This enables the
 classification of new, unlabeled content, ensuring that the correct
-brand label is accurately assigned.
+brand label is assigned accurately.
 
-The entire process is depicted in Figure~\ref{fig-ml}, illustrating a
-typical Machine Learning workflow applied to a corpus of documents. This
-procedure remains consistent across different types of datasets.
+The entire process is depicted in Figure~\ref{fig-ml}, showing a
+typical machine-learning workflow when applied to a corpus of documents. This
+procedure is consistent across different types of data sets.
 Initially (step I in Figure~\ref{fig-ml}), we provide the algorithm with
-a set of documents that have already been classified, each review tagged
-with a brand label. This dataset is known as the training dataset,
-offering the algorithm a comprehensive framework on how reviews
-correlate with brands. Through the analysis of this association and
-specific classification rules, the machine constructs a model based on
-the input data, particularly the words within each review.
+a set of documents which have already been classified, each review tagged
+with a brand label. This data set is known as the training set,
+offering the algorithm a comprehensive framework for how reviews
+correlate with brands. Through the analysis of these associations and
+specific rules governing classification, the machine constructs a model based on
+the data, particularly the words within each review.
 
-In the subsequent step II, we introduce a collection of unlabeled
-documents to the previously established model. The expectation is for
+In the subsequent step, II, we introduce a collection of unlabeled
+documents to the model already established. The expectation is for
 these documents to be accurately classified according to the model's
 guidelines. Computers excel when identifying regularities within data,
-leveraging these patterns for efficient and precise predictions.
-Essentially, this is a prediction task: given a set of reviews, the
-machine will, with a certain degree of probability, predict the
-appropriate brand assignment.
+using these patterns to make efficient and precise predictions.
+Essentially, this is a task of predicting: Given a set of reviews, the
+machine will, using a certain degree of probability, predict the
+appropriate assignment of the review to the brand.
 
 The algorithm's accuracy is evaluated using a testing set, typically
-comprising 20\% of the total dataset. As shown in Figure~\ref{fig-ml},
+comprising 20\% of the total data set. As shown in Figure~\ref{fig-ml},
 this evaluation is an integral part of the workflow. After the training
 phase (step I), the classification model is applied to the testing set
 (step II), which is processed by the model as if it were unlabeled. The
 outcomes of this classification are then compared against the actual
-labels (ground-truth values). While the train-test split is commonly
+labels (known as ground-truth values). While the train-test split is commonly
 80:20, other configurations are also possible, such as a training,
 validation, and test split (e.g., 80:10:10). In these setups, the
 validation set is used to fine-tune the model, while the test set is
 reserved exclusively for evaluating its performance. The higher the
-congruence between the algorithm's assignments and the original labels,
+congruence between how algorithm assigns the material and the original labels,
 the greater the algorithm's accuracy.
 
 \begin{figure}
@@ -115,42 +110,39 @@ the greater the algorithm's accuracy.
 
 \end{figure}%
 
-Can algorithms guarantee flawless performance? Not with the current
-state of technology. However, they are efficient enough to significantly
-reduce manual effort. When data are misclassified, human intervention
-becomes necessary for manual correction. A robust approach includes
-regularly updating the training dataset after correcting any errors.
+With the current state of technology it is not possible to guarantee that algorithms will perform flawlessly. However, they are efficient enough to
+reduce manual effort significantly. When data are misclassified, human intervention
+becomes necessary. A robust approach includes
+regularly updating the training data set after correcting any errors.
 This process not only introduces new vocabulary and scenarios to the
 model but also enhances the accuracy of its predictions.
 
 Classification algorithms vary in effectiveness, with some outperforming
 others based on the specific requirements of the data and the context of
-its application. Broadly, we can categorize these algorithms into two
+how it is applied. Broadly, we can categorize these algorithms into two
 types: linear and nonlinear. Linear classification uses a straight line
-(or hyperplane in higher dimensions) to divide data into distinct
-classes, which works well for linearly separable data. On the other
+(or a hyperplane in higher dimensions) to divide data into distinct
+classes, which, obviously, works well for linearly separable data. On the other
 hand, nonlinear classification employs more complex boundaries to
 separate classes, enabling it to handle data with intricate patterns or
 overlaps.
 
-\subsection{Dataset preparation}\label{dataset-preparation}
+\subsection{Data-set preparation}\label{dataset-preparation}
 
 As discussed in previous chapters, text data must be converted into a
 vectorized format and organized into a matrix or, more simply, a table.
 This format allows the computer to process the numerical data
-efficiently. The process begins by importing the dataset into the R
-programming environment from a local source or the internet. If one
-needs to familiarize with this step, refer to the introductory sections
-of this book for detailed guidance. Next, we focus on a subset of the
+efficiently. The process begins by importing the data set into the R
+programming environment from a local source or the internet. (If you
+needs to re-familiarize yourself with this step, re-read the introductory sections
+of this book for detailed guidance.) Next, we focus on a subset of the
 data by selecting two brands for analysis, such as Apple and Samsung,
-though one is free to choose any brands featured in the dataset that is
-of interest. This selection effectively narrows down the dataset
-horizontally. We then refine the dataset further by retaining only the
-columns essential for the classification task, namely, `Content' and
-`Brand.' This step involves a vertical slicing of the dataset, ensuring
-we have a focused and manageable data set for our analysis.
-
-We load the necessary libraries and the dataset.
+though you could choose any brands featured in the data set which are
+of interest. This selection effectively narrows down the data set
+horizontally. We then refine the data set further by retaining only the
+columns essential for classification, namely, `Content' and
+`Brand'. This involves slicing the data set vertically, ensuring
+we have a focused and manageable data set for our analysis. But first we need to load the necessary libraries and the data set.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -173,19 +165,18 @@ We load the necessary libraries and the dataset.
 \end{Highlighting}
 \end{Shaded}
 
-With a dataset comprising two columns, one of which identifies two
-brands, we establish a division: one segment will serve as the training
+With a data set comprising two columns, one of which identifies two
+brands, we have established a division: One segment will serve as the training
 set, and the other as the test set. The test set allows us to simulate a
 scenario where the test portion is unlabeled to evaluate the algorithm's
 performance. By applying the model to the test set, we can compare its
-predictions against the known classifications. By now, preprocessing the
-dataset should be familiar to you. Certain commands, initially commented
-out, are provided for your exploration during learning sessions. Using
-the \texttt{\%\textgreater{}\%} operator, preprocessing and other
-related tasks are seamlessly integrated to construct a Document Term
-Matrix, specifically, one for the training set and another for the test
+predictions against the known classifications. By now, preparing the
+dataset should be familiar to you and certain commands are provided for you to explore during the training sessions. Using
+the \texttt{\%\textgreater{}\%} operator, pre-processing and other
+related tasks are integrated seamlessly within a document term
+matrix, one for the training set and another for the test
 set. We encourage you to read the comments embedded in the code to
-understand each step better. You can also comment and uncomment the
+understand each step better. You can also comment and remove the comments from the
 functions and check the results.
 
 \begin{Shaded}
@@ -209,8 +200,8 @@ functions and check the results.
   Samsung  365  1419
 \end{verbatim}
 
-We can notice the distribution of the brands, the number of the reviews
-for both brands is fairly similar.
+We see notice the distribution of the brands, with the number of reviews
+for both brands being fairly similar.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -250,45 +241,42 @@ for both brands is fairly similar.
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Linear Discriminant
-Analysis}\label{linear-discriminant-analysis}
+\subsection{Linear discriminant
+analysis}\label{linear-discriminant-analysis}
 
 Linear Discriminant Analysis (LDA) is a robust algorithm for
-classification tasks, especially when distinguishing between more than
+classifying, especially when distinguishing between more than
 two classes. While logistic regression, which is another algorithm, is
 widely used for binary classification (Komarek 2004), it faces
-challenges with multiclass scenarios, where Multinomial Logistic
-Regression or LDA become more suitable (Torkkola 2001). In marketing,
-both techniques are standard when the task is to (post-hoc) describe
-previously derived market segments (which are built by using some type
-of clustering method); for an overview we refer to Wedel and Kamakura
+challenges with dealing with multiclass scenarios, where multinomial logistic
+regression or LDA is more suitable (Torkkola 2001). In marketing,
+both techniques are standard when the task is to describe market segments which have been derived previously (and which are built by using a clustering method); for an overview refer to Wedel and Kamakura
 (2000) or Reutterer and Dan (2021). The word ``discriminate'' means to
-separate and LDA utilizes a linear discriminant function to separate
+separate and LDA uses a linear discrimination function to separate
 classes, addressing some of the limitations of logistic regression, such
-as instability in cases of well-separated classes or small datasets. It
-is important to distinguish LDA from another, non-related
-soft-clustering algorithm called Latent Dirichlet Allocation despite
-sharing the same abbreviation. We will discuss this one in the next
-chapter. Classification LDA assumes that the variables follow a Normal
+as instability in cases of well-separated classes or small datas ets. It
+is important to distinguish LDA from another, non-related,
+soft-clustering algorithm called latent Dirichlet allocation despite
+sharing the same abbreviation. We will discuss the latter in the next
+chapter. Classification LDA assumes that the variables follow a normal
 distribution and that variances are equal across groups
 (homoscedasticity), making outliers a potential issue, as with many
 models (Balakrishnama and Ganapathiraju 1998).
 
-Several algorithms extend LDA's principles, including Quadratic
-Discriminant Analysis (Tharwat 2016), Flexible Discriminant Analysis
-(Hastie, Tibshirani, and Buja 1994), and Regularized Discriminant
-Analysis (Friedman 1989). In machine learning, model parameters are
+Several algorithms can extend LDA's principles, including quadratic
+discriminant analysis (Tharwat 2016), flexible discriminant analysis
+(Hastie, Tibshirani, and Buja 1994), and regularized discriminant
+analysis (Friedman 1989). In machine learning, model parameters are
 estimated from training data to make predictions. The caret package in
-R, standing for \textbf{C}lassification \textbf{A}nd \textbf{RE}gression
-\textbf{T}raining, facilitates this process with functions for data
-splitting, preprocessing, feature selection, model tuning through
-cross-validation, resampling, and estimating variable importance (Kuhn,
-Johnson, et al. 2013). For model tuning, caret's \texttt{trainControl()}
-function is versatile, allowing for various validation techniques,
-including K-fold cross-validation, a method we explore in the context of
+R, standing for \textbf{c}lassification \textbf{a}nd \textbf{re}gression
+\textbf{t}raining, facilitates this process with functions for data
+splitting, pre-processing, feature selection, model tuning through
+cross-validation, resampling, and estimating the importance of variables (Kuhn et al. 2013). For model tuning, caret's \texttt{trainControl()}
+function is versatile, allowing the use of various validation techniques,
+including K-fold cross-validation, a method we explore within the context of
 LDA. Cross-validation divides the training set into K segments, or
-folds, typically between 5 and 10, to iteratively train and validate the
-model, enhancing its reliability and performance (Forman and Scholz
+folds, typically between 5 and 10, to train and validate the
+model iteratively, enhancing its reliability and performance (Forman and Scholz
 2010).
 
 \begin{figure}
@@ -304,38 +292,38 @@ model, enhancing its reliability and performance (Forman and Scholz
 
 \end{figure}%
 
-Figure~\ref{fig-cv} illustrates the cross-validation process using a
+Figure~\ref{fig-cv} shows the cross-validation process using a
 5-fold example. This means there are five iterations, each incorporating
 a unique combination of folds. In every iteration, a model is trained on
-the training set and then applied to the validation set for
-prediction. The discrepancy between the model's prediction
+the training set and then applied to the validation set to make
+predictions. The discrepancy between the model's predictions
 and the ground-truth labels of the validation fold is measured as
-misclassification. The overall error rate \textbf{E} is calculated as
+mis-classification. The overall error rate \textbf{E} is calculated as
 the average of the errors from each iteration \emph{i}. A common
 misunderstanding is the belief that the best-performing model from these
 iterations is selected for future classification tasks. However, this
-approach does not fully align with best practices. Cross-validation
+approach does not fully align with best practice. Cross-validation
 serves as a method to estimate how well the algorithm is likely to
 perform on unseen data. It provides a measure of the model's
-generalizability rather than selecting a specific model for use. It is
+generalizability rather than of selecting a specific model for use. It is
 also important to note that the test set remains untouched during
 cross-validation and is reserved exclusively for final evaluation.
 
 The final model, intended for operational use, is trained on the entire
-training dataset without folding using the hyper-parameters chosen (or validated) during cross-validation. Once this model is developed, it can
-then be evaluated on the test set, with performance metrics providing
-insight into its effectiveness with the help of a confusion matrix. A
-confusion matrix is represented in tabular form and used to evaluate the
+training data set without folding, using the hyper-parameters chosen (or validated) during cross-validation. Once this model has been developed, it can
+then be evaluated using the test set, with performance metrics providing
+insights into its effectiveness with the help of a confusion matrix. A
+confusion matrix is shown in tabular form and used to evaluate the
 performance of classification models. It categorizes predictions into
 four categories: true positives (correct positive predictions), false
 positives (incorrectly predicted as positive), false negatives
 (incorrectly predicted as negative), and true negatives (correct
-negative predictions). When class distribution is imbalanced, it is common to complement overall accuracy with metrics such as precision, recall, and F1-score.
+negative predictions). When the class distribution is imbalanced, it is common to improve the overall accuracy with metrics such as precision, recall, and an F1-score.
 
-To understand better how cross-validation works, let us mentally link
+To understand better how cross-validation works, let us link
 image Figure~\ref{fig-cv} with table Table~\ref{tbl-cvtable} to pass
-from the abstract concept in the image to a simple application in the
-table. We will consider an example of a dataset containing 10 documents. Before folding, the documents are usually shuffled at random to avoid any order-related bias.
+from the abstract concept from the image to a simple application in the from of a
+table. We will use an example of a data set containing 10 documents. Before folding, the documents are usually shuffled at random to avoid any order-related bias.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1067}}
@@ -373,37 +361,33 @@ Fold 5 & Doc9, Doc10 & Doc1, Doc2, Doc3, Doc4, Doc5, Doc6, Doc7, Doc8 \\
 \end{longtable}
 
 Table Table~\ref{tbl-cvtable} corresponds to the left portion of
-Figure~\ref{fig-cv}, showcasing the 80\% of the dataset designated as
-the Training Set. In machine learning, ``training'' refers to the
+Figure~\ref{fig-cv}, showing the 80\% of the data set designated as
+the training set. In machine learning, ``training'' refers to the
 process of teaching an algorithm to recognize patterns, relationships,
 and features that lead to specific outcomes. For example, when applying
 classification LDA to textual data, such as a document term matrix
 (DTM), the predictors are the text features extracted from the reviews,
-such as word frequencies or other linguistic properties. These features
-help the algorithm identify which are most discriminant between the two
-focal brands, revealing patterns that distinguish the brands in terms of
+such as the frequencies of words or other linguistic properties. These features
+help the algorithm identify which discriminate most between the two brands, revealing patterns that distinguish the brands in terms of
 language, word usage, or specific terms.
 
-This training process enables the development of models in \(K\)
+This training process enables the development of models in \(K\) with
 different configurations through \(K\)-fold cross-validation, where the
-dataset is divided into folds for sequential validation. Each fold
+data set is divided into folds for sequential validation. Each fold
 serves as a validation set while the remaining folds are used for
-training. In our dataset, cross-validation involves identifying the
-conditions or features that distinguish between Product A and Product B
-and testing the model's ability to generalize.
+training. In our data set, cross-validation involves identifying the
+conditions or features that distinguish between products A and B, as well as testing the model's ability to generalize.
 
 But how effective is this model at predicting the classification of an
-unseen review? Consider a simplified dataset comprising only 5 reviews
-for illustration. With \(K\)=5 , a 5-fold validation is effectively equivalent to leave-one-out cross-validation (LOOCV) in this toy case: it sequentially uses each review as a validation point—first, the first
+unseen review? For illustration, consider a simplified dataset comprising only 5 reviews. With \(K\)=5 , a 5-fold validation is effectively equivalent to leave-one-out cross-validation (LOOCV) in this case: It  uses each review sequentially as a validation point, initially, the first
 review, then the second, and so on until the fifth. A unique model is
 trained during each iteration, excluding the validation review from the
 training process. The errors from each model are averaged to determine
-the overall performance, with the algorithm optimizing to minimize this
+the overall performance, with the algorithm optimizing itself to minimize this
 error.
 
 Subsequently, the model's ability to generalize is assessed by
-evaluating its accuracy, or other relevant metrics, on the test dataset,
-which was initially set aside,ensuring that it provides a final,
+evaluating its accuracy, or using other relevant metrics, for the test dataset. This was initially set aside, ensuring that it can provide a final,
 unbiased evaluation of the model's performance.
 
 \begin{Shaded}
@@ -438,21 +422,21 @@ Resampling results:
   0.7727195  0.5429092
 \end{verbatim}
 
-The results from the model training can be summarized by entering the
-variable name where the model is stored. This summary includes the
+The results from training the model can be summarized by entering the
+variable name of where the model is stored. This summary includes the
 number of classes, number of samples, predictor variables (the terms
-from the Document Term Matrix after preprocessing), the type of
-cross-validation used, and the evaluation metrics: Accuracy and Kappa.
+from the document term matrix after the pre-processing), the type of
+cross-validation used, and the evaluation metrics: accuracy and kappa.
 Accuracy is particularly relevant for binary classification tasks,
-especially if the dataset is balanced (Koyejo et al. 2014), while Kappa,
-or Cohen's Kappa, is more informative in scenarios with class imbalance,
+especially if the data set is balanced (Koyejo et al. 2014), while kappa,
+or Cohen's kappa, is more informative in scenarios where there is a class imbalance,
 as it accounts for the possibility of the agreement occurring by chance
-(J. Wang, Yang, and Xia 2019).
+(Wang, Yang, and Xia 2019).
 
-To apply the trained model to the test dataset, we use the
+To apply the trained model to the test data set, we use the
 \texttt{predict()} function. This not only classifies the new data but
-can also provide probabilities for each class assignment, offering
-deeper insight into the model's confidence in its predictions.
+can also provide probabilities for the assigning of each class, offering
+deeper insights into the model's confidence in its predictions.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -462,17 +446,17 @@ deeper insight into the model's confidence in its predictions.
 \end{Shaded}
 
 Now let us generate a confusion matrix by comparing the predictions made
-by a classification model against the actual, true labels of the data.
-This matrix helps in evaluating the model's performance by showing the
+by the classification model against the real, true labels of the data.
+This matrix helps us to evaluate the model's performance by showing the
 true positives, false positives, false negatives, and true negatives.
 There are multiple metrics to assess how well a model fit can be
-evaluated through measures such as Accuracy and Error Rate and some
-Class-Specific Measures, which evaluate performance for individual
-classes rather than the overall dataset, such as Precision, Recall and
-F-Measures (Anandarajan et al. 2019).
+evaluated, through measures such as accuracy and error rate, as well as some
+class-specific measures which evaluate its performance for the individual
+classes rather than the overall data set, such as precision, recall, and
+F-measures (Anandarajan et al. 2019).
 
 The \texttt{caret} package in R provides comprehensive support for these
-metrics, to thoroughly evaluate a model's performance.
+metrics for evaluating a model's performance thoroughly.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -532,37 +516,37 @@ Prediction Apple Samsung
 20 98.90    1.10
 \end{verbatim}
 
-Examining the probabilities with which a model assigns texts to specific
+Examining the probabilities which a model uses to assign texts to specific
 brands can provide deeper insights into the algorithm's confidence in
 classifying objects. This analysis helps us understand that
-misclassifications may arise from ambiguities and similarities in the
+inaccurate classification may arise from ambiguities and similarities in the
 language used to describe different brands. In the following section, we
 will explore a different classification algorithm and compare its
-performance with Linear Discriminant Analysis (LDA).
+performance with linear discriminant analysis (LDA).
 
-Accuracy calculated on the test set and rounded to four decimals is
-0.7897\% and quantifies the proportion of correct predictions out of the
+The accuracy of the test set and rounded to four decimals is
+0.7897\% and quantifies the proportion of correct predictions of the
 total predictions made by a model. Conversely, the error rate measures
 the proportion of incorrect predictions, essentially serving as the
-inverse of accuracy, calculated as Error rate = 1 - Accuracy. We
-investigate metrics that assess how accurately individual classes are
-predicted when evaluating class-specific performance. Precision measures
-the proportion of correct predictions for a specific class out of all
+inverse of accuracy, calculated as Error rate = 1 - Accuracy. Here we
+investigating metrics which assess how accurately individual classes are
+predicted when evaluating class-specific performance. \textbf{Precision} measures
+the proportion of correct predictions for a specific class out of all the
 predictions made for that class, highlighting the model's accuracy in
 identifying that class among all classes it attempts to identify.
-Recall, on the other hand, focuses on the proportion of correct
-predictions for a specific class out of all actual instances of that
-class, indicating the model's ability to capture all relevant instances.
-The F-measure, or F1 score, harmonizes precision and recall into a
+\textbf{Recall}, on the other hand, focuses on the proportion of correct
+predictions for a specific class out of all the actual instances of that
+class, indicating the model's ability to capture all the instances.
+The \textbf{F-measure}, or F1 score, harmonizes precision and recall into a
 single metric, calculated as
 \(F_{i}=2 \times \frac{precision\times recall}{precision+recall}\) where
 \(i\) represents the class. This balance makes the F-measure a valuable
 tool for assessing a model's overall effectiveness in class-specific
-predictions, especially in imbalanced datasets.
+predictions, especially when using data sets which are imbalanced.
 
-Taking into consideration the confusion matrix, which assesses which
-products were actual Apple or Samsung and were classified correctly (or.
-not). We can calculate all the measures previously mentioned, check
+Using the confusion matrix, which assesses which
+products were actual Apple or Samsung and were classified correctly (or
+not), we can calculate all the measures mentioned above. See
 Table~\ref{tbl-cfmtable} for better guidance.
 
 \begin{longtable}[t]{>{}l|rr|>{}r}
@@ -583,63 +567,61 @@ Table~\ref{tbl-cfmtable} for better guidance.
 
 \end{longtable}
 
-With the numbers we obtained, let us calculate the Accuracy:
+With the numbers we obtained, let us calculate the accuracy:
 \(\frac{325 + 257}{737}=0.7897\). The error rate is \(1-0.7897=0.2103\).
 Precision for the Apple tablets is \(\frac{325}{372}=0,8737\) and
-Precision for the Samsung tablets is \(\frac{257}{365}=0.7041\). Recall
+precision for the Samsung tablets is \(\frac{257}{365}=0.7041\). Recall
 for the Apple products is \(\frac{325}{433}=0.7506\) while for the
-Samsung products is \(\frac{108}{304}=0.3553\). Calculating the
-F-measure is straightforward by applying the formula given in the
-previous paragraph.
+Samsung products it is \(\frac{108}{304}=0.3553\). Calculating the
+F-measure is straightforward by using the formula given in the paragraph above.
 
-\subsubsection{A word about Accuracy}\label{a-word-about-accuracy}
+\subsubsection{A word about accuracy}\label{a-word-about-accuracy}
 
 Assessing what constitutes ``good'' accuracy in machine learning is
-nuanced, influenced by factors such as the application's specifics,
-problem complexity, and class distribution within the dataset. A
+nuanced, influenced by factors such as the specifics of the application,
+the complexity of the problem, and class distribution within the data set. A
 fundamental measure, baseline accuracy, represents the success rate of
 the most naive model that always predicts the most frequent class. For a
 model to be considered effective, its accuracy must substantially exceed
 this baseline, indicating genuine learning rather than mere replication
 of existing class distributions. Simple, well-defined problems might
 warrant accuracies approaching perfection, whereas the messiness of
-real-world data, characterized by noise and class overlap, stops these
-expectations for more complex issues. The presence of imbalanced classes
-further complicates matters, rendering high overall accuracy potentially
+real-world data, characterized by noise and class overlap, means that for more complex issues accuracy will not meet the same level. The presence of imbalanced classes
+further complicates matters, making high overall accuracy potentially
 deceptive. Here, metrics such as precision, recall, and the F1 score,
-particularly in relation to minority class performance, offer a better
+particularly in relation to the performance of minority classes, offer a better
 assessment of a model's efficacy. Moreover, the benchmark for ``good''
 accuracy is not universal but varies across domains. For example, the
 thresholds for acceptability in spam detection versus medical
-diagnostics diverge significantly due to the differing consequences of
+diagnostics diverge significantly due to the difference in consequences resulting from
 errors.
 
 In the following section, we will explore a different classification
-algorithm and compare its performance with Linear Discriminant Analysis
+algorithm and compare its performance with linear discriminant analysis
 (LDA).
 
-\subsection{K-Nearest Neighbors (KNN)
+\subsection{K-nearest neighbors (KNN)
 classification}\label{k-nearest-neighbors-knn-classification}
 
-The K-Nearest Neighbors (KNN) algorithm is simple and effective in both
-classification and regression tasks. Classification with KNN aims to
+The K-nearest neighbors (KNN) algorithm is simple and effective for tasks involving
+classification and regression. Classification using KNN aims to
 assign entities to predefined categories, whereas regression predicts a
-numerical value. Our focus here will be on its application in
+numerical value. Our focus here will be on its use in
 classification.
 
-A unique classification of KNN is its operational mechanism, nothing is
-pretrained before the model is used. This means that, unlike algorithms
-that learn parameters to make predictions for classification, KNN relies
-on the dataset itself, identifying the \(K\) most similar instances (or
-``neighbors'') to a given query point to make a prediction. New data are
-evaluated during the runtime against the pre-existing data. The concept
+A unique element of KNN classficiation is that nothing is
+ordained before the model is used. This means that, unlike algorithms
+which learn parameters to make predictions for classification, KNN relies
+on the data set itself, identifying the \(K\)'s most similar instances (or
+``neighbors'') to a given point to make a prediction. New data are
+evaluated during the running time against pre-existing data. The concept
 of ``similarity'' is quantified through distance metrics, making KNN a
-distance-based algorithm, and the Euclidean distance is an excellent
-candidate.
+distance-based algorithm, and Euclidean distance is an excellent
+candidate for this.
 
-When the algorithm needs to make a prediction for a new instance, KNN
-searches through the training dataset (i.e., the pre-existing data) to
-find the \(K\) nearest instances (neighbors) to the new data instance.
+When the algorithm needs to make a prediction, it
+searches through the training data set (i.e., the pre-existing data) to
+find the instances (neighbors) nearest to \(K\).
 The prediction is then made by assigning the new instance to one of the
 predefined categories, based on the majority class among its nearest
 neighbors.
@@ -647,19 +629,17 @@ neighbors.
 Determining the optimal number of neighbors, \(K\), is essential for the
 algorithm's performance, with the best value typically identified
 through experimentation and validation techniques. KNN's principle is
-straightforward: classify an entity based on the majority vote of the
-classes or average outcome of the target values of its \(K\) nearest
-neighbors (Brownlee 2016). This vote or outcome is based on the
-similarity calculations between the new instance and its neighbors.
-Notice that in order to derive an unanimous assignment decision, the
-value for \(K\) must always be odd. In case of even values, the
+straightforward: to classify an entity based on the majority vote of the
+classes or average outcome of the target values of its \(K\)-nearest
+neighbors (Brownlee 2016). This vote, or outcome, is based on the calculation of similarity between the new instance and its neighbors.
+Note that in order to derive an unanimous decision of assignment, the
+value for \(K\) must always be odd. With even values, the
 algorithm would not know to which class the new element should be
-assigned. While KNN is known for its ease of understanding and
-implementation, especially in scenarios with a small number of
-predictors, its efficiency diminishes as the dimensionality of the
-dataset increases, a phenomenon known as the ``curse of
-dimensionality.'' Further reading is recommended for a more detailed
-exploration of KNN and its applications (e.g., Tan 2006).
+assigned. While KNN is known for its ease of use and understanding, especially in scenarios with a small number of
+predictors, its efficiency diminishes as the dimensions of the
+data set increases, a phenomenon known as the ``curse of
+dimensionality''. Further reading is recommended for a more detailed
+exploration of KNN and its use (e.g., Tan 2006).
 
 \begin{figure}[H]
 
@@ -671,11 +651,11 @@ exploration of KNN and its applications (e.g., Tan 2006).
 
 \end{figure}%
 
-In our running example, we use exactly the same dataset we prepared for
-the LDA classification analysis. The training and testing datasets are
-just to be reused here so the application of KNN is immediate. In this
-analysis, we take the DTM to detect which textual features are
-predictive of the two brands under study, focusing on how KNN identifies
+In our example, we use exactly the same data set we prepared for
+the LDA classification analysis. The training and testing data sets are
+reused here, so the application of KNN classification is immediate. In this
+analysis, we use the DTM to detect which textual features are
+predictive of the two brands under study, focusing on how KNN classification identifies
 patterns in the data.
 
 \begin{Shaded}
@@ -715,18 +695,17 @@ Accuracy was used to select the optimal model using the largest value.
 The final value used for the model was k = 5.
 \end{verbatim}
 
-The system identified the optimal performance at \(k\)=5, where the
+The system identified the optimal performance as \(k\)=5, where the
 model's predictive accuracy reached 79.8569\%. It is important to note
-that variations in dataset size and diversity could lead to improved
-accuracy. Moreover, the preprocessing approach significantly influences
-the results. In this analysis, employing a Bag-of-Words model (see
-Section~\ref{sec-vsm-bow}) alongside Lemmatization (see
+that variations in the size and diversity of the data set could lead to improved
+accuracy. Moreover, the pre-processing significantly influences
+the results. In this analysis, employing a bag-of-words model (see
+Section~\ref{sec-vsm-bow}) alongside lemmatization (see
 Section~\ref{sec-reduction-of-inflectional-forms}) yielded the highest
-accuracy. For a comprehensive comparison of results under various
-preprocessing conditions, see Table~\ref{tbl-knntable}. This discussion
-presents the best-case scenario based on the current dataset and
-preprocessing methods. You are encouraged to experiment with different
-preprocessing options to potentially enhance the model's performance.
+accuracy. For a comprehensive comparison of the results under various conditions, see Table~\ref{tbl-knntable}. This discussion
+presents the best-case scenario based on the current data set and
+pre-processing methods. You are encouraged to experiment with different
+pre-processing options to try and enhance the model's performance.
 
 \begin{longtable}[]{@{}llll@{}}
 \caption{KNN, various preprocessing
@@ -747,7 +726,7 @@ k & Model & Word Root & Accuracy \\
 5 & TF-IDF & Lem & 0.6250 \\
 \end{longtable}
 
-We can also visualize the predictive performance with varying \(K\)
+We can also visualize the predictive performance with a varying \(K\)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -759,8 +738,8 @@ We can also visualize the predictive performance with varying \(K\)
 \includegraphics{6.Chapter_files/figure-pdf/knn_plot-1.pdf}
 
 The process for making predictions (or classifications) mirrors that of
-the earlier example. To evaluate the algorithm's performance on the test
-dataset, we utilize a confusion matrix.
+the earlier example. To evaluate the algorithm's performance for the test
+data set, we have used a confusion matrix.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -772,27 +751,27 @@ dataset, we utilize a confusion matrix.
 \end{Highlighting}
 \end{Shaded}
 
-In this case the accuracy on the testing set is calculated to 77.3406\%,
-which is slightly worse as compared to the classification LDA case, but
+In this case the accuracy for the testing set is 77.3406\%,
+which is slightly worse than the LDA classification, but
 otherwise more or less equivalent.
 
-\subsection{Support Vector Machines
+\subsection{Support-vector-machine
 classification}\label{support-vector-machines-classification}
 
-Support Vector Machines (SVM) is a well-known and used classification
-procedure that performs well for binary classification and in
-multi-class classification scenarios (D. Cui and Curry 2005). It is
-known to need little tuning in creating a model. We need to introduce
-the concept of Maximal-Margin Classifier here to explain the internals
-of SVM. Usually we have \(n\) input variables, such as the words in a
+Support-vector-machine (SVM) classification is a well-known and widely used
+procedure that performs well in binary classification and
+multi-class classification (D. Cui and Curry 2005). It is
+known to need little tuning when creating a model. We need to introduce
+the concept of the maximal-margin classifier here to explain the internal workings
+of SVM classification. Usually we have \(n\) input variables, such as the words in a
 vocabulary. Classification means separation and is done through a
 hyperplane. For example, in a 3-dimensional space, a hyperplane will
-have 2 dimensions while in a a 2-dimensional space the hyperplane has
-1-dimension which is basically a line. For simplicity let us take a two
-dimensional space. In Figure~\ref{fig-svm}, we can notice the optimal
+have 2 dimensions while in a 2-dimensional space the hyperplane has
+1-dimension, basically a line. For simplicity let us take a two
+dimensional space. In Figure~\ref{fig-svm}, we can see the optimal
 solution SVM finds for the position of the separation line for
-distinguishing two classes out of an infinity of possible solutions the
-line can pass through.
+distinguishing two classes out of an infinity of possible solutions through which the
+line can pass.
 
 \begin{figure}
 
@@ -807,74 +786,74 @@ line can pass through.
 
 \end{figure}%
 
-The prediction model classifies new elements based on their position
-relative to the decision boundary: elements on one side of the line
-(where the line model equation yields a value greater than zero) are
+The model classifies new elements based on their position
+relative to the decision boundary: Elements on one side of the line
+(where the line-model equation yields a value greater than zero) are
 assigned to one class, while those on the other side (with values less
-than zero) are classified into the opposite class. Classification
+than zero) are classified as part of the opposite class. Classification
 becomes challenging for values that lie close to the decision boundary.
 At the heart of this model is the distance between the decision boundary
-and the nearest points on either side, belonging to both classes. The
-optimal decision boundary, known as the Maximal-Margin hyperplane, is
+and the nearest points on either side of it which belong to both classes. The
+optimal decision boundary, known as the maximal-margin hyperplane, is
 the one that maximizes this distance, ensuring the most precise
 separation between (in our case: two) classes. The points nearest to
 this hyperplane are called support vectors, as they ``support'' the
 positioning of the hyperplane, playing an essential role in defining a
 robust separator. During training, the model aims to identify this
-optimal hyperplane that maximizes the margin for a given dataset
+optimal hyperplane, maximizing the margin for a given data set
 (Brownlee 2016).
 
-In scenarios where perfect separation is not feasible, the Soft Margin
-Classifier offers a more flexible solution. It introduces a parameter,
+In scenarios where perfect separation is not feasible, the soft-margin
+classifier offers a more flexible solution. It introduces a parameter,
 denoted as C (for ``cost''), which adjusts the model's tolerance for
-misclassification. Tuning the C parameter allows for some points to
+misclassifications. Tuning the C parameter allows for some points to
 cross the boundary, effectively balancing the trade-off between a strict
-separation and allowing for misclassification. A higher C value tends to
-reduce misclassification by enforcing stricter margins.
+separation and allowing for misclassifications. A higher C value tends to
+reduce misclassifications by enforcing stricter margins.
 
-The construction of the hyperplane in SVM is achieved through linear
+The construction of the hyperplane for SVM is achieved through linear
 algebra operations known as the dot product, also referred to as the
 inner product. For instance, consider two vectors represented by {[}1,
 2{]} and {[}3, 4{]}; their inner product is calculated as the sum of the
-products of their corresponding elements, \(1\times 3 + 2\times 4\). In
-SVM, the classification prediction involves an equation that utilizes
-the inner product between the input feature values \((x)\) and the
-support vector values \((x_i)\),
+products of their corresponding elements: \(1\times 3 + 2\times 4\).
+Prediction using SVM classification involves an equation that uses
+the inner product between the input-feature values \((x)\) and the
+support-vector values \((x_i)\),
 
 \[f(x)=b_0 + \sum(w_i*(x,x_i))\]
 
 while \(b_0\) and \(w_i\) are coefficients estimated from the model.
 
-The prediction for a new data point involves the dot product between the
+The prediction for a new data point involves using the dot product between the
 input features and the support vectors. This operation, known as the
-Kernel Function, essentially measures similarity, or from another
+kernel function, essentially measures similarity, or from another
 perspective, the distance between data points.
 
 When dealing with a linear combination of input features, we employ a
 linear kernel. However, to facilitate classification in scenarios where
-the data are not linearly separable, inputs can be transformed into
-higher dimensions using Polynomial or Radial Kernel. This technique
-allows for complex separations with curved lines. We will explore the
+the data are not separable by a line, inputs can be transformed into
+higher dimensions using polynomial or radial kernel techniques. These
+allow for complex separations with curved lines. We will explore the
 performance of these various kernels to determine which offers the best
 separation.
 
 \subsubsection{Linear SVM.}\label{linear-svm.}
 
-The linear SVM kernel is the simplest among the various types of kernels
+The linear SVM kernel is the simplest of various types of kernels
 used in SVM models. It excels in scenarios with many features, making it
-particularly well-suited for text classification tasks. Literature Gao
-and Sun (2010) suggests that linear kernels are efficient and performant
-for such high-dimensional data like texts due to their straightforward
+particularly well-suited for text classification. Gao
+and Sun (2010) suggest that linear kernels are efficient and perform well
+for high-dimensional data such as texts due to their straightforward
 computation. Compared to more complex kernels, linear kernels are
-faster, owing to their less computationally intensive nature. The
+faster, as they are less computationally intensive. The
 formula for the linear kernel is:
 
 \[K(x, x_i)=\sum(x*x_i)\] This equation represents the dot product of
 the input vector \(x\) and a support vector \(x_i\), effectively
 measuring the distance between new data points and the support vectors.
 The training process for a model using a linear kernel typically
-involves cross-validation, thing that you have seen before, to ensure
-the model generalizes well to unseen data.
+involves cross-validation, something you have seen before, to ensure
+the model generalizes well for unseen data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -925,38 +904,36 @@ Prediction Apple Samsung
                                           
 \end{verbatim}
 
-Results can be significantly improved by thoughtfully adjusting
-parameters. However, this has a trade-off, meaning that more extensive
-parameter tuning may lead to increased training times but yield superior
+Results can be significantly improved by adjusting
+the parameters. However, this has a trade-off, meaning that more extensive tuning may lead to increased training times but can yield superior
 outcomes. To assess the effectiveness of the tuned parameters, results
-can be compared to those obtained with other models, such as LDA and
+can be compared with those obtained using other models, such as LDA and
 KNN, discussed earlier in this chapter. Metrics like accuracy,
-precision, and F1-score provide a basis for evaluating whether parameter
-tuning leads to meaningful improvements relative to these models.
+precision, and the F1-score provide a basis for evaluating whether
+tuning the parameters leads to meaningful improvements compared to other models.
 
-\subsubsection{SVM Radial}\label{svm-radial}
+\subsubsection{SVM radial}\label{svm-radial}
 
-In the context of SVM, particularly when employing the Radial Basis
-Function (RBF) kernel, two critical parameters are introduced: the cost
+In the context of SVM, particularly when employing the radial-basis-function (RBF) kernel, two critical parameters are introduced: the cost
 parameter (C) and the gamma parameter \(\gamma\) (sometimes referred to
 as \(\sigma\)). The cost parameter C addresses the trade-off between
-minimizing training error and ensuring model simplicity for better
+minimizing training errors and ensuring simplicity of the model for better
 generalization, essentially controlling how much misclassification is
 tolerated. On the other hand, the gamma parameter \(\gamma\) influences
 the decision boundary's shape; lower values of \(\gamma\) may result in
 more linear decision boundaries, while higher values allow for more
 complex, curved boundaries that can closely fit the training data. The
-influence of \(\gamma\) is captured in the RBF kernel formula::
+influence of \(\gamma\) is captured by the RBF kernel formula:
 
-\[K(x, x_i)=e^{-\gamma*\sum((x-x_i)^2)}\] This formula illustrates how
+\[K(x, x_i)=e^{-\gamma*\sum((x-x_i)^2)}\] This formula shows how
 the similarity between any two data points \(x\) and \(x_i\) is
 calculated, with \(\gamma\) modulating the impact of the distance
 between these points on their calculated similarity. The values for
 \(\gamma\) typically range from \(0<\gamma<1\) allowing for a wide
-spectrum of decision boundary complexities. The radial kernel, with its
-ability to create complex polygons of separation, proves to be a
-powerful method, especially for datasets that are not linearly
-separable, enabling the model to capture intricate patterns within the
+spectrum of decision-boundary complexity. The radial kernel, with its
+ability to create complex polygons of separation, is a
+powerful method, especially for data sets that are not
+separable linearly, enabling the model to capture intricate patterns within the
 data. The default value for \(\gamma\) is \(0.1\).
 
 \begin{Shaded}
@@ -1005,18 +982,18 @@ Prediction Apple Samsung
                                           
 \end{verbatim}
 
-The observed accuracy shows minimal difference compared to the linear
+The accuracy shows minimal difference when compared to the linear
 case. Fine-tuning the parameters could potentially enhance the results
-marginally. However, this increased flexibility comes at a cost: it may
-lead to overfitting, where the model performs well on the training data
-but struggles to generalize to unseen data.
+marginally. However, this increased flexibility comes at a cost: It may
+lead to overfitting, where the model performs well using the training data
+but struggles to generalize unseen data.
 
-\subsubsection{Polynomial Kernel SVM}\label{polynomial-kernel-svm}
+\subsubsection{Polynomial kernel SVM}\label{polynomial-kernel-svm}
 
 The polynomial kernel extends the concept of the linear kernel, allowing
 for more complex, non-linear decision boundaries. While it sometimes may
-be less accurate or efficient compared to its linear counterpart, it
-offers the flexibility to capture more complex patterns within the data.
+be less accurate or efficient than its linear counterpart, it
+offers flexibility in capturing more complex patterns within the data.
 The polynomial kernel is defined as:
 
 \[K(x, x_i)=1+\sum(x*x_i)^d \] Here, \(d\) represents the degree of the
@@ -1025,10 +1002,10 @@ non-linear properties. When \(d\) = 1, the polynomial kernel simplifies
 to the linear kernel. The term `polynomial' suggests the ability to
 model curved lines, enabling the separation of classes through curved
 boundaries rather than straight lines. Obviously choosing different
-values for \(d\), can lead to more complex decision boundaries and might
-better fit the training data but this will increase the risk of
-overfitting. Also, a higher \(d\) will result in an increased
-computational complexity that affects training time and needs more
+values for \(d\) can lead to more complex decision boundaries and might
+better fit the training data, but this will increase the risk of
+overfitting. Also, a higher \(d\) will result in increased
+computational complexity affecting training time and requiring more
 computer resources.
 
 \begin{Shaded}
@@ -1077,17 +1054,17 @@ Prediction Apple Samsung
                                           
 \end{verbatim}
 
-Presenting the three SVM options together helps making decisions and
-allows for quick comparison of the relative performance. The graphical
+Presenting the three SVM options together helps us to make decisions about their use and
+allows us to compare their relative performance quickly. Graphical
 representation is usually a necessary aid in such cases. Presenting the
-three SVM options together helps in making decisions of which one to
-choose and allows for quick comparison of the relative performance. For
+three SVM options together also helps us to decide which to
+choose and allows for a quick comparison of their relative performance. For
 instance, the polynomial kernel often performs well in scenarios with
 non-linear relationships, but its effectiveness depends heavily on the
 choice of degree and regularization parameters. Compared to the linear
 kernel, it may offer more flexibility at the cost of increased
 computation time and a higher risk of overfitting. The radial kernel can
-model more complex patterns but requires careful tuning of parameters
+model more complex patterns, but requires the careful tuning of parameters
 like gamma to avoid underfitting or overfitting.
 
 \begin{Shaded}
@@ -1138,60 +1115,57 @@ Model3 0.6506361 0.6739805 0.7061855 0.7088224 0.7305667 0.8019880    0
 
 \end{figure}%
 
-Several observations emerge when comparing these models based on
+Several observations emerge when comparing these models using
 performance metrics such as accuracy, precision, recall, and the F1
 scores. RBF and polynomial kernels often, but not consistently,
-outperform the linear kernel in accuracy on non-linear datasets due to
-their ability to fit more complex patterns. This increased flexibility
+outperform the linear kernel in accuracy for non-linear data sets due to
+their ability to deal with more complex patterns. This increased flexibility
 can sometimes lead to a trade-off between precision and recall, with the
-RBF kernel generally providing a good balance between the two in diverse
-datasets. The F1 score, which combines precision and recall, tends to be
-higher for models using RBF and polynomial kernels in non-linear
-settings, reflecting a greater adaptability.
+RBF kernel generally providing a good balance between the two for diverse
+data sets. The F1 score, which combines precision and recall, tends to be
+better for models using RBF and polynomial kernels in non-linear
+settings, reflecting its greater adaptability.
 
-In the above plot and output derived from the codings, these
-observations are evident. For example, the RBF kernel shows improved F1
+These
+observations are evident in the plot and output derived from the coding above. . For example, the RBF kernel shows improved F1
 scores and a better balance of precision and recall compared to the
-linear kernel. The polynomial kernel exhibits higher accuracy in
-scenarios where non-linear relationships dominate, as seen in the
-results. The computational trade-offs and increased risk of overfitting
+linear kernel. The polynomial kernel has a higher degree of accuracy in
+scenarios where non-linear relationships dominate. The computational trade-offs and increased risk of overfitting
 with more complex kernels, such as RBF and polynomial, are also
-reflected in the outputs, leading us to the necessity of performing
-parameter tuning and cross-validation to optimize performance.
+reflected in the results, requiring us to tune the performing
+parameter and cross-validation for better performance.
 
-The decision on which kernel to use should consider the dataset's
-specific characteristics, available computational resources, and the
-desired balance between model complexity and interpretability.
+The decision on which kernel to use should take into account the data set's characteristics, the computational resources available, and the balance required between interpreting the model and its complexity.
 Experimentation and cross-validation remain essential for determining
-the optimal kernel and parameter settings for any given classification
+the optimal kernel and parameter settings for any classification
 task, ensuring the model is accurate and generalizable.
 
-\subsection{Ensemble Learning}\label{ensemble-learning}
+\subsection{Ensemble learning}\label{ensemble-learning}
 
-What if you could put together more than one model to obtain better
-prediction accuracy and an overall higher performance? A technique that
-can assist in such a situation is called Ensemble learning. As per
-Oxford's dictionary definition, the word ensemble means: ``a small group
-of musicians, dancers or actors who perform together.'' We can consider
+What if you could put more than one model together to obtain better
+prediction accuracy and higher overall performance? A technique that
+can assist in such a situation is called ensemble learning. The
+Oxford's dictionary gives a definition of the word ensemble as: ``a small group
+of musicians, dancers or actors who perform together''. We can think of
 our system as an orchestra. Each machine learning model is a musician,
-and each of them does its best so that all of them contribute to a
-harmonious performance that outshines individual efforts.
+and each does its best so that they all contribute to a
+collective performance which is more than the sum of its parts.
 
-Ensemble algorithms can be categorized into three types: Bagging,
-Boosting, and Stacking. Bagging involves training multiple models on
-different subsamples of the training dataset, allowing for parallel
+Ensemble algorithms can be categorized into three types: bagging,
+Bboosting, and stacking. Bagging involves training multiple models on
+different sub-samples of a training data set, allowing for parallel
 processing and reducing variance. Boosting, on the other hand,
-sequentially (like in a chain) trains models, with each one focusing on
+trains models sequentially (in a chain), with each focusing on
 correcting its predecessor's errors, effectively reducing bias. Unlike
-the first two, Stacking combines predictions from diverse models, using
+the first two, stacking combines predictions from diverse models, using
 an additional model (often called a meta-model) to determine the best
-way to combine these predictions, similarly to how an orchestra's
-conductor ensures harmony.
+way to combine these predictions, in a similar to how an orchestra's
+conductor ensures the musicians play together.
 
-Each ensemble method has its pros and cons, and the choice among them
-depends on the specific challenge at hand. For further insights into
-these methods, refer to (Tattar 2018). Our focus here will be on
-Stacking, see an example in Figure~\ref{fig-ensemble}.
+Each method has its pros and cons, and choosing between them
+is determined by the challenge at hand. For further insights into
+these methods, see Tattar (2018). Our focus here will be on
+stacking. See the example in Figure~\ref{fig-ensemble}.
 
 \begin{figure}
 
@@ -1209,15 +1183,14 @@ Stacking, see an example in Figure~\ref{fig-ensemble}.
 Utilizing the \texttt{caret} package, we can assemble various models
 under a meta-model that optimizes the combination of their predictions
 for the best outcome. Following the setup of control attributes for
-training previously explored, we compile a list of machine learning
-algorithms, such as LDA, KNN, and linear SVM. Through the
-\texttt{caretList()} function, these models are trained, and their
-prediction accuracy is collectively assessed, demonstrating the power of
+training, we then compile a list of machine-learning
+algorithms, such as LDA, KNN, and linear SVM. Using the
+\texttt{caretList()} function, these models are trained, and the accuracy of their predictions is assessed collectively, showing the power of
 ensemble learning in achieving optimal results. This is accomplished by
 specifying resampling methods, such as cross-validation, using the
-\texttt{resamples()} function in the \texttt{caret} package. This allows
-comparison of model performance and enhances the reliability of
-stacking.
+\texttt{resamples()} function from the \texttt{caret} package. This allows
+for comparison of the performance of the models and enhances the reliability of
+the stacking.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1262,13 +1235,12 @@ knn       0.2567923 0.4135803 0.4418663 0.4262784 0.4670586 0.5308638    0
 svmLinear 0.3434394 0.3676854 0.3986043 0.4233009 0.4407455 0.6735033    0
 \end{verbatim}
 
-The model comparison can be represented in a graph. One can clearly
-identify the best model among the three chosen. Be aware, that the lines
-represent an interval, given by the accuracy on the 10 folds. The mean
-is represented by the dot and it is the value to be considered as the
-one to be used. Note that in our application case the KNN algorithm
-performs slightly better than the SVM with a linear Kernel function and
-the Accuracy is 0.7181979.
+The comparison of models can be represented by a graph. You can clearly
+see the best model of the three. Be aware, that the lines
+represent an interval, given by the accuracy of the 10 folds. The mean
+is represented by the dot and it is the value to be used. Note that in our application, the KNN algorithm
+performs slightly better than the SVM with a linear-kernel function, and
+the accuracy is 0.7181979.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1287,10 +1259,10 @@ the Accuracy is 0.7181979.
 
 \end{figure}%
 
-Now, leveraging the models previously trained as the base layer, we
-employ a Generalized Linear Model (GLM) as the meta-learner. This GLM
+Now, used the models trained previously as the base layer, we
+can employ a generalized linear model (GLM) as the meta-learner. The GLM
 serves as a highly efficient prediction model, synthesizing the base
-models' outputs to enhance overall predictive performance.
+models' outputs to enhance the overall performance.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1324,28 +1296,27 @@ Resampling results:
   0.7640567  0.5256692
 \end{verbatim}
 
-The analysis demonstrates that the ensemble system, specifically through
-Stacking, has enhanced the predictive accuracy, elevating it from
+The analysis demonstrates that the ensemble system, using
+stacking, has enhanced the predictive accuracy, elevating it from
 0.7181979 to 0.7640567. This improvement underscores the efficacy of
-integrating diverse models to achieve superior performance.
+bringing together diverse models to achieve a superior performance.
 
 Stacking, can lead to better accuracy, provided these models exhibit low
-correlation in their predictions. The underlying rationale is that each
-constituent model brings unique insights or captures different patterns
+correlation in their predictions. The underlying rationale is that each model brings unique insights or captures different patterns
 within the data, thereby complementing each other. When models generate
 largely uncorrelated predictions, it indicates that they excel in
-distinct aspects of the prediction task. This diversity enables the
+different elements of the task. This diversity enables the
 meta-learner, or the classifier that integrates these predictions, to
-discern the most effective way to amalgamate the strengths of each
+discern the most effective way of amalgamating the strengths of each
 model, thereby optimizing the overall predictive performance. However,
 if the predictions from the sub-models are highly correlated (with
-correlation coefficients exceeding 0.75), it implies that the models are
-likely capturing similar patterns and making analogous predictions. In
+correlation coefficients exceeding 0.75), this implies that the models are
+likely to be capturing similar patterns and making analogous predictions. In
 such scenarios, the advantage of ensemble learning diminishes, as the
 aggregation of predictions offers little incremental value over the
 individual predictions. But this is not the case here, since the
-correlations are modest The incremental increase in accuracy to r
-stack.glm\(error\)Accuracy, though modest, signifies the advantage of
+correlations are modest. The incremental increase in accuracy to r
+stack.glm\(error\) The accuracy, although modest, signifies the advantage of
 employing a stacked ensemble over relying solely on a single SVM model.
 
 \begin{Shaded}
@@ -1379,35 +1350,31 @@ svmLinear  NA 0.2160285 1.0000000
 
 \end{figure}%
 
-The NA result correlations between LDA and the other two models (kNN and
-svmLinear) suggest that the value was either not calculated or it is not
-applicable. Although moderate, the positive correlation between kNN and
+The NA correlations between LDA and the other two models (knn and
+svmLinear) suggest that the value was either not calculated, or is not
+applicable. Although moderate, the positive correlation between knn and
 svmLinear indicates some level of agreement in their predictions,
-suggesting they might be recognizing similar patterns in the data to
-some extent.
+suggesting they might be recognizing similar patterns in the data.
 
-\section{Neural Networks}\label{neural-networks}
+\section{Neural networks}\label{neural-networks}
 
-The fascination of how our brain thinks and what can be done in computer
-terms in order to mimic and outperform our reasoning found a lot of
-support in the academic media. The fascination with understanding how
-our brain processes information and the quest to replicate and surpass
-this capability through technology has gained significant attention. The
-evolution from the biological neural cells of the Natural Neural Network
-to the algorithmic constructs of an Artificial Neural Network (ANN) is
-remarkable. ANNs, a specialized subset of machine learning algorithms,
-employ interconnected nodes across various layers to process data,
+The fascination with understanding how our brain thinks and what can be done in computer
+terms in order to mimic and outperform our reasoning has received a lot of attention in the academic literature. The
+move from understanding the biological neural cells of the natural neural network
+to the algorithmic constructs of an artificial neural network (ANN) is
+remarkable. ANNs, a subset of machine-learning algorithms,
+employ interconnected nodes across a number of layers to process data,
 emulating the human brain's intricate network of neurons and synapses.
 While these algorithms have proven incredibly potent, they are not
-universally the optimal solution for every problem. Their performance
+always the optimal solution for every problem. Their performance
 can vary based on several factors, including the task's complexity, the
-dataset's size, and the available computational resources. Despite these
-considerations, ANNs have achieved remarkable success in a wide range of
+size of the data set, and the computational resources available. Despite these
+limitations, ANNs have achieved remarkable success across a wide range of
 applications, from image recognition (Quraishi, Choudhury, and De 2012),
-fraud detection (Krambia-Kapardis, Christodoulou, and Agathocleous 2010;
-Asha and KR 2021), medical diagnosis (Yen and Tsao 2024), and
-classification of natural language patterns (Goldberg 2017), which is
-our interest here.
+to fraud detection (Krambia-Kapardis, Christodoulou, and Agathocleous 2010;
+Asha and KR 2021), to medical diagnoses (Yen and Tsao 2024), to the
+classification of natural-language patterns (Goldberg 2017), which is
+our area of interest.
 
 \begin{figure}[H]
 
@@ -1415,18 +1382,18 @@ our interest here.
 
 }
 
-\caption{Neural Networks}
+\caption{Neural networks}
 
 \end{figure}%
 
-In the following example, we will employ the R package \texttt{nnet}.
-\texttt{caret} can interface with it to train neural network models,
-allowing users to leverage caret's convenient functions such as model
-training and parameter tuning, while using the neural network algorithms
+In the following example, we will turn to the R package \texttt{nnet}.
+\texttt{caret} can interface with it to train neural-network models,
+allowing users to use \texttt{caret}'s convenient functions such as model
+training and parameter tuning, while using the neural-network algorithms
 provided by \texttt{nnet}. Despite the seemingly mystical aura
-surrounding neural networks, the core steps in leveraging them for
+surrounding neural networks, the core steps in use them for
 classification remain straightforward and familiar: data preparation,
-model setup, network training, and performance evaluation.
+setting up the model, network training, and performance evaluation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1493,39 +1460,36 @@ Prediction Apple Samsung
 \end{verbatim}
 
 The accuracy achieved with this model surpasses previous results,
-underscoring neural networks' potential to enhance predictive
-performance. However, this improvement comes at a cost, notably in the
-form of significantly extended training durations. This trade-off
-between accuracy and computational efficiency is critical in the model
-selection process.
+underscoring neural networks' potential for enhancing our ability to predict classifications. However, this improvement comes at a cost, notably in the
+form of the significantly extended duration for training. Knowledge of this trade-off
+between accuracy and computational efficiency is critical in when selecting a model.
 
 \section{Fasttext}\label{fasttext}
 
 FastText (Bhattacharjee 2018) is a powerful library developed by
-Facebook's AI Research team and designed for efficient text
-classification and word embeddings (more about this topic in
-Chapter~\ref{sec-extracting-information-from-embeddings}). In its
-training process, it stands out by incorporating subword information,
+Facebook's AI research team and designed for efficient text
+classification and embedding words (more on this topic can be found in
+Chapter~\ref{sec-extracting-information-from-embeddings}). During its
+training process, it stands out by using sub-word information,
 such as character n-grams, alongside whole words. This approach enables
-FastText to effectively handle texts with rare words or misspellings,
-capturing their meanings based on subword patterns. In R, the
-\texttt{fastTextR} package serves as an interface to this library,
-offering functions for training text classification models, generating
-word embeddings, and conducting nearest neighbor searches within the
+FastText to handle texts with rare words or misspelling effectively,
+capturing their meanings based on sub-word patterns. In R, the
+\texttt{fastTextR} package serves as an interface with this library,
+offering training for text classification models, generating
+word embedding, and conducting nearest-neighbor searches within the
 embedding space. FastText's efficiency is particularly notable when
-working with large datasets, allowing for rapid model training without
-compromising accuracy. Another of FastText's key strengths is its
+working with large data sets, allowing for the rapid training of models without
+compromising their accuracy. Another of FastText's key strengths is its
 support for multiple languages, making it an excellent tool for
-multilingual text analysis. FastText can be applied in various NLP
-tasks, including sentiment analysis, where it helps identify emotional
+multilingual text analysis. FastText can be used for various NLP
+tasks, including: sentiment analysis, where it helps identify emotional
 tones in product reviews; language modeling, enhancing the performance
-of predictive text systems; and named entity recognition, where it aids
-in classifying names of people, organizations, and locations in
+of predictive-text systems; and named-entity recognition, where it helps to classify the names of people, organizations, and locations in
 unstructured text, which is an exciting feature for any marketing
 analyst looking for brands or brand names in text. In the following
 chapters, we will tackle all these topics. Meanwhile, here is an example
-of how FastText can be applied to classification tasks using our tablet
-dataset.
+of how FastText can be used for classification tasks using our tablet
+data set.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1584,74 +1548,71 @@ Truth              __label__apple __label__samsung
 [1] "Accuracy: 0.9253"
 \end{verbatim}
 
-Compared to our previous findings, the Accuracy seems to be
+Compared to our previous results, the accuracy seems to be
 exceptionally high, and this shows the model's power in classifying
 documents quickly and efficiently.
 
 There are other tools to classify text, such as Keras (Ramasubramanian
-et al. 2019). It is a comprehensive neural networks library for both R
-and Python. It is extensively used in building and training advanced
-deep learning models for text classification, supporting complex
-architectures like Convolutional Neural Networks (CNNs) and Recursive
-Neural Networks (RNNs), applicable to textual data too.
+et al. 2019). It is a comprehensive neural-network library for both R
+and Python. It is used extensively in building and training advanced
+deep-learning models for text classification, supporting complex
+architectures such as convolutional neural networks (CNNs) and recursive
+neural networks (RNNs), although it can also be applied to textual data.
 
-\section{Classification and Its Role in Marketing
-Analytics}\label{classification-and-its-role-in-marketing-analytics}
+\section{Classification and its role in marketing
+analytics}\label{classification-and-its-role-in-marketing-analytics}
 
-Machine learning classification techniques are useful in modern
-marketing analytics, offering new tools to understand and predict
+Machine-learning classification techniques are useful in modern
+marketing analytics, offering new tools to help understand and predict
 consumer behavior (Ali Hakami and Hosni Mahmoud 2022). There is an
-abundance of textual data generated by users in reviews, social media,
+abundance of textual data generated by users from reviews, social media,
 and surveys. Classifiers can understand patterns and trends that unveil
-customer preferences and brand perception. Through algorithms presented
+customer preferences and preceptions of brands. Through the algorithms presented
 in this chapter, an analyst can categorize customer feedback, supporting
-customer service and product development, see (Noori 2021), with an eye
-on classifying sentiment in reviews. This topic will be tackled in depth
+customer service and product development, see Noori (2021), and also classify sentiment in reviews. This topic will be tackled in depth
 in Chapter~\ref{sec-sentiment-analysis}.
 
 For example, methods like the ones we have described in this chapter can
-categorize customer feedback to identify common themes or pain points
-associated with a product, paving the way to binary separations into
-good/bad, or more nuanced, like classification on a Likert scale.
-Another potential application could be in classifying feedback of new
-brands to understand to which known brands they are perceived as being
-similar to.
+categorize customer feedback, identifying common themes or pain points
+associated with a product, paving the way for binary separations into
+good/bad, or more nuanced understanding, such as classification using a Likert scale.
+Another potential application could be in classifying the feedback for new
+brands to understand which existing brands customers perceive as being similar.
 
 \emph{Exercise starts}
 
 \textbf{Exercise 1}: Naive Bayes Brand Classification. Use the tablets
-dataset to classify brands with a Naive Bayes model. Evaluate accuracy
+data set to classify brands with a naive Bayes model. Evaluate the accuracy
 and generate a confusion matrix.
 
-\textbf{Exercise 2}: Tablet Categorization with Keras. Implement a Keras
-model to categorize tablets from their descriptions. Focus on model
-architecture and performance evaluation.
+\textbf{Exercise 2}: Tablet Categorization with Keras. Use a Keras
+model to categorize tablets from their descriptions. Focus on the model
+architecture and the evaluation of performance.
 
 \textbf{Exercise 3}: FastText vs.~Naive Bayes. Select a dataset,
-classify it with FastText, and compare performance and training time
-against a Naive Bayes model.
+classify it with FastText, then compare its performance and training time
+against a naive Bayes model.
 
-\textbf{Exercise 4}: SVM Customer Feedback Categorization. Use SVM to
-categorize customer feedback. Preprocess data, train the SVM, and assess
-accuracy.
+\textbf{Exercise 4}: SVM Customer-Feedback Categorization. Use SVM to
+categorize customer feedback. Pre-process the data, train the SVM, and assess
+the accuracy.
 
 \textbf{Exercise 5}: Ensemble Learning for Feedback Classification.
-Apply ensemble learning to classify feedback. Experiment with different
-algorithms, noting training time and accuracy. \emph{Exercise ends}
+Use ensemble learning to classify feedback. Experiment with different
+algorithms, noting the training time and accuracy. \emph{Exercise ends}
 
 \textbf{Conclusion}
 
-\emph{Conclusion starts} This chapter explored various facets of text
-classification using different machine learning models and tools such as
-LDA, KNN, SVM, ensemble learning techniques, and FastText. Some other
-tools were briefly mentioned. We implemented these models in R,
-emphasizing the importance of preprocessing text data, choosing the
-right model architecture, and evaluating model performance through
-metrics like accuracy, precision, recall, and the F1 score. The
-discussion highlighted the nuanced considerations in determining
+\emph{Conclusion starts} This chapter has explored various facets of text
+classification using different machine-learning models and tools such as
+LDA, KNN, SVM, ensemble-learning techniques, and FastText, as well as a few other tools. We used these models in R,
+emphasizing the importance of pre-processing text, choosing the
+right model architecture, and evaluating the performance of the model through
+metrics such as accuracy, precision, recall, and the F1 score. The
+discussion highlighted the nuanced considerations involved in determining
 ``good'' accuracy, factoring in baseline accuracy, problem complexity,
 class distribution, domain-specific benchmarks, and the cost of
-misclassification. Specific exercises were proposed to apply these
-concepts, ranging from brand classification and tablet categorization to
+misclassifying. Specific exercises have applied these
+concepts, ranging from brand classification and tablet categorization, to
 comparing model efficiencies and execution times. \emph{Conclusion ends}
 

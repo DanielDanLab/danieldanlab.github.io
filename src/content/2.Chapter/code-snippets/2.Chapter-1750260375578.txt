@@ -1,9 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Find elements in {}prodtitle20{} starting with "Ki"}
-{grep}{(}{"\^{}Ki"}{, prodtitle20, }{value =} {TRUE}{)}
-{Highlighting}
-{Shaded}
-
-[1] "Kindle?"

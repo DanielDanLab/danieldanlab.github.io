@@ -7,114 +7,111 @@
 \begin{itemize}
 \tightlist
 \item
-  Understand what is a topic model
+  Understanding what a topic model is.
 \item
-  Understand the internals of topic modeling Latent Dirichlet Allocation
-  (LDA)
+  Understanding the workings of latent Dirichlet allocation
+  (LDA) topic modeling.
 \item
-  Learn how to apply LDA topic modeling
+  Learning how to apply LDA topic modeling.
 \item
-  Understand what a structural topic model (STM) is
+  Understanding what a structural topic model (STM) is.
 \item
-  Extract information from STMs
+  Extracting information from STMs.
 \end{itemize}
 
 \emph{Overview ends}
 
-\section{Identifying Latent Themes in Text
-Data}\label{identifying-latent-themes-in-text-data}
+\section{Identifying latent themes in text
+data}\label{identifying-latent-themes-in-text-data}
 
 According to the Oxford Dictionary, a topic is ``a subject that you
-talk, write, or learn about.'' In simpler terms, it can be understood as
-a theme. For instance, a newspaper may cover several topics such as
-politics, crime, lifestyle, economy, and sports. Each of these topics is
-characterized by (combinations of) specific words, a fact that readers
-intuitively recognize. Regarding our tablet dataset and the marketing
-perspective, topics can represent certain product characteristics, brand
-comparisons, evaluative aspects and sentiments about products and
-services (such as, value for the money, product quality, or customer
-service), to name a few.
+talk, write, or learn about''. Or in other terms, it can be understood as
+a theme. For instance, a newspaper may cover several topics, such as
+politics, crime, lifestyle, the economy, and sport. Each of these topics is
+characterized by (combinations of) specific words, something that readers
+recognize intuitively. For our tablet dataset and marketing, topics could be the characteristics of certain products,
+comparisons of brands, evaluations of and sentiments about products and
+services (such as, value for money, product quality, or customer
+service), to name but a few.
 
-But what exactly constitutes a model? Depending on the field of
-expertise, it can refer to many things, but modern marketing is linked
-with a lot of other disciplines such as data science and statistics. The
-latter is related to data-driven models such as linear regression, which
-summarize or describe datasets, ultimately aiming to predict new data
+But what exactly constitutes a model? Depending on the field, it could refer to many elements of an area of research, however, the idea of a model for marketing is linked
+with disciplines such as data science and statistics. The
+latter deals with data-driven models such as linear regression, which
+summarize or describe data sets, ultimately aiming to predict new data
 points. Statistical models try to explain an idealized and simplified
-reality through mathematical representations (Micceri 1989). In
-statistics, mathematical formulas can be represented with beautiful
-graphs and curves that are extremely precise, but real data are
-approximations of those shapes. Complex realities are thus transformed
+reality through mathematics (Micceri 1989). In
+statistics, mathematical formulas can be represented by beautiful
+graphs and curves that are extremely precise, but real data do not correspond to those shapes. Complex realities are thus transformed
 into idealized, simplified mathematical representations. Perfect
-straight lines or circles will never perfectly describe real data; these
-shapes do not exist in nature. However, the closer the representations
+straight lines or circles will never describe real data exactly; these
+shapes do not exist in the real world. However, the closer the representations
 are to a mathematical model, the better we can compare different
-datasets. We do this because we need benchmarking terms for comparison.
-Comparison is not just a theoretical exercise but a practical tool for
-decision-making, enabling marketers to evaluate strategies, forecast
+data sets. We do this because we need to establish benchmarks for comparison.
+Comparison is not just a theoretical exercise, but a practical tool enabling
+decision-making, helping marketers to evaluate strategies, forecast
 trends, and understand customer behaviors more effectively.
 
-The generic and pompous definition for topic modeling, is that it is an
-unsupervised statistical model used in text analytics, that clusters
+The generic and somewhat pompous definition of topic modeling, is that it is an
+unsupervised statistical model used in text analytics which clusters
 words into topics without predefined classes, revealing latent themes
 within large text corpora. This technique is essential for analyzing
-customer reviews or social media discourse, enabling the detection of
-trends, sentiments, and emerging issues without manually reviewing each
-single document. Typical applications in marketing comprise the analysis
-of social media postings or online product reviews (e.g., Tirunillai and
-Tellis (2014), Büschken and Allenby (2016)), but also purchase records
-(e.g., Jacobs, Donkers, and Fok (2016)) of online browsing behavior
-(e.g., Schröder et al. (2019); Trusov, Ma, and Jamal (2016)). For an
-extensive overview of topic modeling applications in marketing see
+customer reviews or social-media discourses, helping us to detect
+trends, sentiments, and emerging issues without reviewing each
+single document manually. Typical applications in marketing include, the analysis
+of social-media posts or online product reviews (e.g., Tirunillai and
+Tellis 2014; Büschken and Allenby 2016), but also purchasing histories
+(e.g., Jacobs, Donkers, and Fok 2016), or online browsing
+(e.g., Schröder et al. 2019; Trusov, Ma, and Jamal 2016). For an
+extensive overview of the application of topic modeling in marketing see
 Reisenbichler and Reutterer (2019). From a practical perspective, topic
-modeling can inform marketing strategies by identifying what aspects
-customers focus on, such as product features or service quality. For
-instance, in a dataset of online hotel reviews, topics like
-`Cleanliness' or `Service' can emerge and be further analyzed for
-sentiment, frequency, and trend over time, providing actionable insights
-for addressing customer concerns. Determining the optimal number of
+modeling can inform marketing strategies by identifying the focus of
+customers, such as the features of products or service quality. For
+instance, in a data set of online hotel reviews, topics such as
+`cleanliness' or `service' can be found and further analyzed for
+sentiment, frequency, and trends over time, providing insights to help address
+the concerns of customer. Determining the optimal number of
 topics (K) is a critical step in topic modeling. It is often approached
-through educated guesses informed by domain knowledge or systematic
+using educated guesses informed by existing knowledge or systematic
 methods like coherence scores. Choosing the right (K), alongside the
-interpretation of the words that characterize topics, lead to a blend
-between art and science.
+interpretation of the words that characterize topics, should, if the practitioners are skilled enough, lead to a blend
+of art and science.
 
-Some commonly used topic modelling techniques used in marketing are
-Latent Dirichlet Allocation (LDA) (D. M. Blei, Ng, and Jordan 2003),
-Structured Topic Modeling (STM) (Roberts, Stewart, and Airoldi 2016),
-Correlated Topic Modeling (CTM) (D. Blei and Lafferty 2006),
-Non-negative Matrix Factorization (NMF) (Lee and Seung 2000), Latent
-Semantic Analysis (LSA)(Landauer, Foltz, and Laham 1998), or Dynamic
-Topic Models (DTM) (D. M. Blei and Lafferty 2006). For a more complete
-list, check (Jelodar et al. 2019), but in this chapter we will focus on
-topic modeling with LDA and STM.
+Some commonly used topic-modelling techniques used in marketing are the
+latent Dirichlet allocation (LDA; Blei, Ng, and Jordan 2003),
+structured topic modeling (STM; Roberts, Stewart, and Airoldi 2016),
+correlated topic modeling (CTM; Blei and Lafferty 2006),
+non-negative matrix factorization (NMF; Lee and Seung 2000), latent
+semantic analysis (LSA; Landauer, Foltz, and Laham 1998), or dynamic
+topic models (DTM; Blei and Lafferty 2006). For a more complete
+list, see Jelodar et al. (2019), but in this chapter we will focus on
+topic modeling using LDA and STM.
 
-\section{Latent Dirichlet Allocation}\label{latent-dirichlet-allocation}
+\section{Latent Dirichlet allocation}\label{latent-dirichlet-allocation}
 
-One of the most studied topic modelling algorithms is LDA. The algorithm
+One of the most studied topic-modeling algorithms is the LDA. The algorithm
 aggregates words into topics based on their distribution across
 documents, uncovering the `hidden' topics that characterize the corpus.
-In practice, we have a set of documents that contains topics
-characterized by specific words. The topic is something more at a
-conceptual level, like a \# (hashtag) that describes the content of a
-tweet message or an Instagram image. The intuition behind LDA as a
+In practice, we have a set of documents which contain topics
+characterized by specific words. The topic exists at a
+conceptual level, like a \# (hashtag) which describes the content of a
+tweet or an Instagram image. The intuition behind LDA as a
 generative model is that writing a document or a review of a product is
-driven by some themes one wishes to share and adds this to that
-document. In our dataset containing tablets, one would think of the
-characteristics of such a device: for example the screen. Is it bright?
-Is it responsive? What about the connectivity? Is it fast? 5G, bluetooth
-or WiFi? Connectivity and screen are themes or topics. These topics are
-described by specific words, but also by words that are shared between
-multiple topics. In a review, as well as in any written document, some
+driven by themes someone wants to share adds them to the
+document. In our data set concerning tablets, one obvious topic might be that of the
+characteristics of a device, for example, the screen. Is it bright?
+Is it responsive? Or we might consider the connectivity. Is it fast? 5G, Bluetooth
+or WiFi? Screen and connectivity are themes or topics. These are
+identified by words that are specific to the topic, but also by words which are shared by
+multiple topics. In a review, as in any written document, some
 themes will be more prevalent than others. If the customer service fell
-short of the client's expectations, the theme will emerge. And the words
-that characterize it would be more prevalent for this one than for other
-topics. Let us consider a review that talks about \textbf{connectivity},
-(in \(15\%\) of the words contained in the document), about
+short of a person's expectations, the theme will emerge. And the words
+which characterize it would be more prevalent for this than for other
+topics. Let us consider a review which talks about \textbf{connectivity},
+(in \(15\%\) of the words contained in the document), about the
 \textbf{screen}, (\(25\%\)), \textbf{customer service} (\(50\%\)), and
-\textbf{value for the money} (\(10\%\)). To represent this as a
-probability distribution over the review, it would look like a vector
-{[}0.15, 0.25, 0.50, 0.1{]}. Note that their sum of the topics must be
+\textbf{value for money} (\(10\%\)). If we represent this as a
+probability distribution over the review, it looks like a vector
+{[}0.15, 0.25, 0.50, 0.1{]}. Note that the sum of the topics must be
 \(1\).
 
 \begin{verbatim}
@@ -140,32 +137,29 @@ The following object is masked from 'package:NLP':
 
 \end{figure}%
 
-Each review will have a unique distribution of topics, but this is not
-all. Each topic is characterized by words, for example, the customer
-service topic would contain words with their proportions like: bad
+Each review has a unique distribution of topics, but this is not
+all. Each topic is characterized by words, for example, customer
+service contains words with the following proportions: bad
 (\(0.03\%\)), back (\(0.02\%\)), never (\(0,015\%\)), and so on. Each of
-these words in the vocabulary, i.e.~the whole words used in the tablet
-reviews corpus, would appear distributed with a certain relative
-frequency over that specific topic {[}\ldots, 0.02, \ldots, 0.03,
-\ldots, 0.015, \ldots{]}. This expected proportion is the same, within
-the scope of that topic, no matter which review you consider from the
-corpus. So, there are two distributions: a mixture of topics over
-documents, and a mixture words over topics. Because all these are
-probabilities, we have a probabilistic model here. The previously
-described single vectors are characteristic for realizations of a
-multinomial distribution, but the concept of a conjugate prior
-distribution over multinomial distributions is characteristic for the
+these words in the vocabulary, i.e.,~the whole words used in the tablet-review corpus, is distributed with a relative
+frequency over that topic {[}\ldots, 0.02, \ldots, 0.03,
+\ldots, 0.015, \ldots{]}. This proportion is the same within
+the scope of that topic, no matter which review you take from the
+corpus. So, there are two distributions: a mixture of topics from
+documents, and a mixture of words from topics. Because these are
+all probabilities, we have a probabilistic model here. The single vectors described in previous chapters are characteristic of a
+multinomial distribution, but a conjugate prior
+distribution over a multinomial distribution is characteristic of the
 Dirichlet distribution, hence the name of the algorithm.
 
-To summarize, the LDA model is based on two essential assumptions: \(K\)
+To summarize, the LDA model is based on two assumptions: \(K\)
 hidden topics are distributed across the entire collection of reviews,
 and each review can be represented as a probabilistic distribution of
 these topics. Each topic is, in turn, a probabilistic distribution of
-words from the dataset's vocabulary.
+words from the data set's vocabulary.
 
-Let us demystify this algorithm and understand its functioning. As
-reference of how LDA is implemented, check Figure~\ref{fig-lda} (Image
-produced by the authors, inspired from (D. M. Blei, Ng, and Jordan
+Let us demystify this algorithm further and understand how it functions. To see how LDA is implemented, look at Figure~\ref{fig-lda} (Image
+produced by the authors, inspired by Blei, Ng, and Jordan
 2003).
 
 \begin{figure}
@@ -180,22 +174,21 @@ produced by the authors, inspired from (D. M. Blei, Ng, and Jordan
 
 \end{figure}%
 
-Let us give the definitions of the terms that appear in the image, then
+Let us define the terms that appear in the image, then
 detail how the algorithm works.
 
 \(M\) is the fixed total number of documents. In a specific corpus
-\(D\), documents will be indexed by \(i \in \{1,...,M\}\)
+\(D\), documents are indexed by \(i \in \{1,...,M\}\)
 
 \(N\) is the number of words in a given document \(i\). \(N_i\)
-represents how many words document \(i\) holds, i.e.~the length of the
+represents how many words document \(i\) holds, i.e., it is~the length of the
 document.
 
-\(\alpha\) is the (hyper)parameter of the Dirichlet prior on the
-per-document topic distributions. This describes, how topics are
+\(\alpha\) is the (hyper)parameter of the Dirichlet prior to the distribution of topics by document. This describes how topics are
 distributed in each document.
 
-\(\beta\) beta is the (hyper)parameter of the Dirichlet prior on the
-per-topic word distribution. This describes how words are distributed
+\(\beta\) is the (hyper)parameter of the Dirichlet prior to the
+word distribution by topic. This describes how words are distributed
 inside each topic.
 
 \(\theta_i\) the topic distribution for document \(i\), modeled as a
@@ -206,81 +199,79 @@ random variable characterized by a Dirichlet distribution
 \(k \in \{1,...,K\}\), modeled as a random variable characterized by a
 Dirichlet distribution \(\phi_k \sim \mathcal{D}(\beta)\)
 
-\(z_{ij}\) is the topic for the \(j^{th}\) word in \(i^{th}\) document.
-The topic \(z_{i,j} \sim Multinomial(\theta_{i})\).
+\(z_{ij}\) is the topic for the \(j^{th}\) word in the \(i^{th}\) document.
+The topic is \(z_{i,j} \sim Multinomial(\theta_{i})\).
 
-\(w_{ij}\) is a specific word, \(j\), in document \(i\). The words
+\(w_{ij}\) is a specific word, \(j\), in document \(i\). The words are
 \(w_{i,j} \sim Multinomial(\phi_{z_{i,j}})\)
 
-Known as the categorical distribution, here we deal with a multinomial
-distribution with one trial.
+A multinomial
+distribution with one trial is known as a categorial distribution.
 
-The algorithm is characterized by a two-step process. The first is
-called the Generative Model (GM) which describes how documents are
-created from a set of latent topics. The second step is called Inference
-or Estimation Procedure (EP) and involves estimating the parameters of
-the GM, for example the topic distributions for each document and the
-word distributions for each topic from the documents provided. It is
-that we ``learn'' the hidden topic structure.
+The algorithm has a two-step process. The first part is
+called the generative model (GM), which describes how documents are
+created from a set of latent topics. The second step is called the inference
+or estimation procedure (EP) and involves estimating the parameters of
+the GM, for example, the topic distributions for each document and the
+word distributions for each topic from the documents. It is through this
+that we ``learn'' the hidden structure of the topic.
 
 The first step describes how LDA assumes the data are generated and
-consists of 5 layers. At (I), a Dirichlet distribution characterized by
+consist of 5 layers. In layer I in Figure 7.2, a Dirichlet distribution characterized by
 parameter \(\alpha\) is used to create the distribution of topics over
 each document. If \(\alpha <1\), each document will tend to contain a
 few dominant topics (i.e., the distribution is sparse). If
-\(\alpha > 1\), the document will tend to contain topics distributed
-more evenly (Hagg et al. 2022). At (II), parameter \(\theta\) of a
+\(\alpha > 1\), the document will tend to contain topics which are distributed
+more evenly (Hagg et al. 2022). In layer II, parameter \(\theta\) of a
 multinomial distribution, determines the shape of the distribution of
 topics over each document. In other words, \(\alpha\) shapes the
 multinomial \(\theta\), so each \(\theta_d\) will be different from
-document to document, as shown at step (III). At (IV) we have another
+document to document, as shown in layer III. In IV we have another
 Dirichlet distribution with parameter \(\beta\), this time for all the
-words in the vocabulary. If \(\beta<1\), a topic will tend to be
+words of the vocabulary. If \(\beta<1\), a topic will tend to be
 dominated by a smaller set of characteristic words. Starting with the
 first word of the first document, to the last word in the last document,
-the algorithm will randomly conceptually ``assign'' each word to a
-topic, based on \(\theta_d\). (V). The topic's word distribution
+the algorithm will randomly ``assign'' each word to a
+topic, based on \(\theta_d\). In layer V, the topic's word distribution
 \(\phi_k\) is shared across documents, but be aware that each document's
 topic mixture \(\theta_d\) is different. Because each topic \(k\) has a
-separate \(\phi_k\), it defines its own ``theme'' characterized by
+separate \(\phi_k\), it defines its own ``theme'',characterized by
 specific words.
 
 The second step (EP) uses methods such as Gibbs sampling (our focus
-here) or Variational Inference (VI) to estimate \(\theta_d\) for each
-document and \(\phi_k\) for each topic from the corpus provided. We do
+here) or variational inference (VI) to estimate \(\theta_d\) for each
+document and \(\phi_k\) for each topic from the corpus. We do
 not know the true value of these parameters, and we can only observe the
 words in each document, but we aim to infer the latent topic assignments
 and distributions. In Gibbs sampling, each word's topic assignment is
-re-sampled based on the current assignment of all the other words, until
-a stable words over topics posterior distribution is reached. Over many
-repetitions, the estimates for the \(\phi_k\) and the \(\theta_d\)
-converge to a stable state. In this context, ``converge'', means that
+re-sampled, based on the current assignment of all the other words, until
+a stable words-over-topics posterior distribution is reached. Over many
+repetitions, the estimates for \(\phi_k\) and \(\theta_d\)
+converge to reach a stable state. In this context, ``converge'' means that
 the model parameters (\(\phi_k\) and \(\theta_d\)) reach a point where
 their distribution stops changing significantly. When Gibbs converges,
-we have an estimate for each document mixes topics \(\theta_d\) and how
-words are distributed in each topic \(\phi_k\).
+we have an estimate for each document's mix of topics \(\theta_d\) and how
+the words are distributed within each topic \(\phi_k\).
 
 It is important to use a practical example to understand the underlying
-mechanism of the Gibbs sampling, then we will provide the mathematical
-formulas. Let us have a very simplified corpus made of 4 documents that
-resemble the dataset in this book:
+mechanism of Gibbs sampling, once we have looked at that we will provide the mathematical
+formulas. Let us use a simplified corpus made up of 4 documents that
+resemble the data set in this book:
 
 \(Doc_1\): This tablet has a bright screen.\\
 \(Doc_2\): The RAM memory of the tablet is sufficient.\\
 \(Doc_3\): The tablet connects to WiFi.\\
 \(Doc_4\): The tablet connects to WiFi and has a superb screen.
 
-To further simplify, we assume to have only two topics, \(T_1\) and
-\(T_2\) that could represent two themes, ``hardware'' for \(T_1\) and
+To further simplify this, we assume to have only two topics, \(T_1\) and
+\(T_2\) which represent two themes, ``hardware'' for \(T_1\) and
 ``connectivity'' for \(T_2\). LDA does not assign labels to topics,
-assigns only generic names such as \(Topic_1\), \(Topic_2\), and so on.
-We have to figure out a topic name based on the words assigned. Whenever
-we apply LDA, we must preprocess the dataset, like we did in the
-previous chapters with the bag-of-words approach, such as punctuation
-removal, stop words removal, or lowercase. This way, our preprocessed
-vocabulary, in alphabetic order, becomes: \{bright, connects, screen,
-sufficient, superb, memory, tablet, wifi\}. Initially, LDA
-\textbf{randomly} assigns the words to one of the two topics.
+and gives them only generic names such as \(Topic_1\), \(Topic_2\), and so on.
+We have to figure out the topic name based on the words assigned to it. Whenever
+we apply LDA, we must pre-process the dataset, as we did in the
+previous chapters for the bag-of-words approach, such as removing punctuation and stop words, or making all words lowercase. This way, our
+vocabulary, in alphabetical order, becomes: \{bright, connects,  memory, screen, sufficient, superb, tablet, wifi\}. Initially, LDA assigns the words
+\textbf{randomly} to one of the two topics.
 
 \(Doc_1\): tablet(\(T_1\)), bright (\(T_1\)), screen(\(T_2\))\\
 \(Doc_2\): tablet(\(T_2\)), memory(\(T_1\)), sufficient(\(T_2\))\\
@@ -288,8 +279,8 @@ sufficient, superb, memory, tablet, wifi\}. Initially, LDA
 \(Doc_4\): tablet(\(T_2\)), connect(\(T_1\)), wifi(\(T_2\)),
 superb(\(T_1\)), screen(\(T_2\))
 
-Based on these assignments, we can create a table to count the
-occurrences of each word in each topic, see Table~\ref{tbl-tab}. Add reference here
+Based on these, we can create a table to count the
+number of occurrences of each word in each topic, see Table~\ref{tbl-tab}. Add reference here
 
 \begin{longtable}[]{@{}lll@{}}
 \caption{Term-Topic matrix}\label{tbl-tab}\tabularnewline
@@ -313,7 +304,7 @@ wifi & 1 & 1 \\
 superb & 1 & 0 \\
 \end{longtable}
 
-Now we need a Document-Topic contingency table
+Now we need a document-topic contingency table
 (Table~\ref{tbl-documenttopiccounts}), showing the number of words in
 each topic assigned to each document.
 
@@ -343,20 +334,18 @@ superb (1) = 7 words\\
 \(T_2\): tablet (2) + screen (2) + sufficient (1) + connect (1) + wifi
 (1) = 7 words
 
-The vocabulary size \(V\) is made of 8 terms: tablet, bright, screen,
+The vocabulary size \(V\) is made up of 8 terms: tablet, bright, screen,
 memory, sufficient, connects, wifi, superb.
 
-Now we are in the second step of the algorithm. After the initial random
-assignment done in the first step, Gibbs sampling is used to reassign
-the words to the existing topics until we obtain convergence, i.e.~until
+Now we have arrived at the second step of the algorithm. Following the initial random
+assignment, Gibbs sampling is now used to reassign
+the words to the existing topics until we obtain convergence, i.e.,~until
 the algorithm does not reassign these words to topics anymore. Let us
-update the topic assignment for the term ``screen'' initially assigned
-to Document 1. We must (temporarily) remove one instance of ``screen''
-occurrence from its current assignment \(T_2\), adjust the counts, and
+update the topic assignment for the term ``screen'', which was initially assigned
+to Document 1. We must (temporarily) remove one instance of ``screen'' from its current assignment \(T_2\), adjust the counts, and
 calculate the conditional probability for each topic. The adjusted count
 for \(T_1\) is unchanged, it holds 7 terms while the adjusted count for
-\(T_2\) holds 6 terms, you will see a (\(-1\)) in the formula. It is as
-if this temporarily removed a term which needs to be freshly assigned to
+\(T_2\) holds 6 terms, you will see a (\(-1\)) in the formula. The result is that we have temporarily removed a term which needs to be freshly assigned to
 a topic.
 
 To calculate the conditional probabilities of topic \(k\) given word
@@ -370,10 +359,10 @@ P(T_k|w_d) \propto \left(\frac{n_{k,w}+\beta}{\sum_{w'}(n_{k,w'}+V\beta)} \right
 \tightlist
 \item
   \(n_{k,w}\) is the count of word \(w\) assigned to topic \(k\),
-  excluding current instance.
+  excluding the current instance.
 \item
   \(n_{d,k}\) is the count of all words in document \(d\) assigned to
-  topic \(k\), excluding current instance.
+  topic \(k\), excluding the current instance.
 \item
   \(\sum_{w'}(n_{k,w'}+\beta)\) is the total count of all words assigned
   to topic \(k\) plus \(\beta\) for each word in the vocabulary.
@@ -386,21 +375,21 @@ P(T_k|w_d) \propto \left(\frac{n_{k,w}+\beta}{\sum_{w'}(n_{k,w'}+V\beta)} \right
   \(K\) is the number of topics.
 \end{itemize}
 
-Be aware that this formula may appear in other books or scientific
-articles under similar shapes, each of them trying to obtain similar
-outcomes.
+Be aware that this formula may appear in other books or
+articles in a different but similar form, each of them after a similar
+outcome.
 
 Assuming hyperparameters \(\alpha = 0.1\) (for document-topic
-distributions) and add reference here \(\beta = 0.01\) (for topic-term distributions) we
+distributions) and add reference here \(\beta = 0.01\) (for topic-term distributions) we can
 calculate the probability of the term ``screen'' to see if it belongs to
 \(T_1\) or to \(T_2\).
 
 \(P(T_1 |\text{screen})\) is proportional to:
 
-Term-Topic part:
+Term-Topic:
 \[\frac{(n_{T_1,\text{screen}} +\beta)}{\text{Total words in} T_1 + V\times \beta} = \frac{0+0.01}{7+8\times 0.01} \]
 
-Document-Topic part:
+Document-Topic:
 \[\frac{(n_{Doc_1,T_1} +\alpha)}{\text{Total words in }Doc_1 + 2 \times \alpha} = \frac{2+0.1}{3+2\times 0.1} \]
 
 Combined probability for \(T_1\) proportional to:
@@ -408,48 +397,46 @@ Combined probability for \(T_1\) proportional to:
 
 \(P(T_2 |\text{screen})\) is proportional to:
 
-Term-Topic part:
+Term-Topic:
 \[\frac{(n_{T_2, \text{screen}} +\beta -1)}{\text{Total words in } T_2 + V\times \beta -1} = \frac{2+0.01-1}{7+8\times 0.01-1} \]
 
-Document-Topic part:
+Document-Topic:
 \[\frac{(n_{Doc_1,T_2}, +\alpha)}{\text{Total words in }Doc_1 + 2 \times \alpha} = \frac{1+0.1}{3+2\times 0.1} \]
 
 Combined probability for \(T_2\) proportional to:
 \(\frac{1.01}{6.08}\times\frac{1.1}{3.2}=0.0571\)
 
 After the calculations, we need to compare the results and check where
-``screen'' is more likely to belong. We notice that ``screen'' has a
+``screen'' is most likely to belong. We notice that ``screen'' has a
 higher chance of being assigned to \(T_2\), because
 \(0.0571 > 0.001608\) but the final outcome depends on the many
-iterations of assigning and reassigning of the word to a topic. This
-procedure is done for each word in each document. In the end, what
+iterations assigning and reassigning the word to a topic. This is done for each word in each document. In the end, what
 changes from the initial random assignment of word to topics, is the
-distribution of words depicted in layer (IV). Those shapes you see in
-Figure~\ref{fig-lda} will change. This example simplified many steps,
+distribution of words depicted in layer IV. The shapes you see in
+Figure~\ref{fig-lda} will change. This example has simplified many of the steps,
 but it shows the core process of LDA using Gibbs sampling.
 
-\subsection{Apply simple LDA}\label{apply-simple-lda}
+\subsection{Applying simple LDA}\label{apply-simple-lda}
 
-To put into practice what has been illustrated we will employ our
-tablets dataset and apply simple LDA with the default values, so no
-fine-tuning here, at least at the beginning. For this example, although
-there are many R packages that accomplish the LDA task, we will be using
-\texttt{seededlda}(Watanabe, Xuan-Hieu, and Watanabe 2022). We will
-unveil later on why the package has this name and the choice of it.
+To put into practice what has been illustrated, we will use our
+tablets data set and apply simple LDA with the default values, so no
+fine-tuning will be required, at least at the beginning. For this example, although
+there are many R packages which carry out LDA, we will be using
+\texttt{seededlda} (Watanabe, Xuan-Hieu, and Watanabe 2022). We will
+show later on why the package has this name and why we have chosen it.
 Although the computer we used for running the code is capable of
-multi-threading, for reproducibility reasons, we must use a single
-thread. This is because the \texttt{set.seed()} at least while working
+multi-threading, for reproducibility reasons, we have to use a single
+thread. This is because the \texttt{set.seed()}, at least while working
 with this package, can only ensure reproducibility for random functions
-when operating with one thread. If you enable multi-threading, results may vary slightly across runs despite set.seed().
-The dataset is the one we already used
-in previous chapters of this book. The data pre-processing is performed
-accordingly to the package's specifications.
+when operating with one thread. If you use multi-threading, the results may vary slightly across runs despite set.seed().
+The data set is the one we have already used
+in previous chapters of this book. The data pre-processing was performed
+according to the package's specifications.
 
-At this point we try to find 5 topics, (\(K=5\)) and display the most
+At this point we are trying to find 5 topics, (\(K=5\)) and display the most
 frequent terms associated with each topic. Previously, we have seen how
-each topic is described by a word distribution \(\phi_k\), and each
-document is characterized by a topic distribution \(\theta_d\). For
-interpretability, we show only the top 10 words in each \(\phi_k\), but
+each topic is described by a word distribution, \(\phi_k\), and each
+document is characterized by a topic distribution, \(\theta_d\). To help us interpret the results, here we show only the top 10 words in each \(\phi_k\), but
 bear in mind that each topic has probabilities for every term in the
 vocabulary.
 
@@ -479,9 +466,9 @@ vocabulary.
 
 The words might give us some indication of the interpretation of the
 topics. For example, \texttt{topic\ 4} is related to Christmas gifts,
-and \texttt{topic\ 5} to customer service and can be labeled by us in
+and \texttt{topic\ 5} to customer service, and so can be labeled by us as
 \texttt{gifts} and \texttt{customer\_service}. We can check and see with
-which document represented by a title, a date, a topic is associated. By
+which document, represented by a title and a date, a topic is associated. By
 examining \(\theta_d\) we know how topics are distributed over each
 document. However, the top words give us a hint of how to label and
 interpret each topic based on the \(\phi_k\) values.
@@ -511,16 +498,16 @@ interpret each topic based on the \(\phi_k\) values.
 10   6/21/2011 topic2                              A little disappointment
 \end{verbatim}
 
-In the above output, a row corresponds to a document (review), the
+In the output above, a row corresponds to a document (i.e., a review), the
 \texttt{Topic} column shows the most probable topic assigned to that
 document. The other two columns, \texttt{Review\_date} and
-\texttt{Title} help us identify documents and we can check how the model
-has clustered them by topic. We know that each document has a topic
-distribution \(\theta_d\), but for clarity we display the
-hightest-probability topic among them all.
+\texttt{Title}, help us identify documents and we can check how the model
+has clustered them by topic. We know that each document has the topic
+distribution \(\theta_d\), but for clarity we display only the
+topic with the highest probability.
 
-One could increase and decrease the number of topics to understand
-better what themes can be found in the text. To speed up the execution
+It is possible to increase and decrease the number of topics to understand
+better which themes can be found in the text. To speed up the execution
 time one can parallelize \texttt{seededlda} by adding a
 \texttt{batch\_size} option and enable convergence
 \texttt{auto\_iter=TRUE}, for example:
@@ -528,20 +515,19 @@ time one can parallelize \texttt{seededlda} by adding a
 
 \subsection{Seeded LDA.}\label{seeded-lda.}
 
-Let us assume that you as an analyst already know the topics (e.g., from
-a previous study on a different, but related text corpus), but you want
+Let us assume that you, as an analyst, already know the topics (e.g., from
+a previous study on a different, but related corpus of text), but you want
 LDA to group the words in the topics with increased precision. Seeded
-LDA allows for semi-supervised topic modeling acknowledging that you
+LDA allows for semi-supervised topic modeling, acknowledging that you
 might have prior knowledge of your dataset and you can provide a
-dictionary that links already labeled topics to corresponding words.
+dictionary that links words to topics which have already been labeled.
 These ``seeded'' words provide a starting point for the algorithm,
-meaning that the random assignment, as it is done in the first step when
-classic LDA is performed, becomes ``informed'' by the dictionary. In
+meaning that the random assignment, as in the first step of the LDA above, becomes ``informed'' by the dictionary. In
 order to perform this we need a dictionary function and an \texttt{yml}
-file to store the information. Each line defines a topic lable such as
+file to store the information. Each line defines a topic's label, such as
 ``hardware'' or ``functionality'', and associates it with a list of
 ``seed words'' which are strongly related to that topic. The structure
-of the file, \texttt{dictionary.yml} looks like this.
+of the file, \texttt{dictionary.yml}, looks like this.
 
 hardware: {[}ram, gb, storage, slot, external, camera, power, wifi,
 battery, button{]}
@@ -557,13 +543,12 @@ experience: {[}screen*, display, resolution, glass*, touch, thin,
 light{]}
 
 where the * represents a placeholder that captures plurals or other
-inflectional forms. For example video* could match video, videos, and
-*books can capture works like books, songbooks or notebooks.
+inflectional forms. For example, video* could match video or videos, and
+*books can capture terms like books, songbooks, or notebooks.
 
 When we employ Seeded LDA, the algorithm uses the seeded words to
-initialize (guide) the topic assignments so that the model places them
-(and similar words) in the corresponding topic. With respect to the
-classical LDA, the random assignment step is replaced with an
+initialize (guide) the assignments so that the model places them
+(and similar words) in the right topic. Compared to the LDA described above, the random-assignment step is replaced with an
 ``informed'' assignment based on domain knowledge.
 
 \begin{Shaded}
@@ -594,19 +579,17 @@ classical LDA, the random assignment step is replaced with an
 [10,] "windows"  "cloud"       "problems"       "transformer" "watch"     
 \end{verbatim}
 
-Notice that all the previously defined label topics are described nicely
-by the seeded words, grouping other pertinent words to those specific
+Notice that all the topic labels are described nicely
+by the seeded words, grouping other pertinent words to those
 topics. We might notice that some words in the dictionary file do not
-appear as the top words in the results. This might be due to the fact
-that those words, although they belong to that topic, might not be so
+appear as the top words in the results. This might be because those words, although they belong to that topic, might not be so
 prevalent in the corpus. You can list more than 10 terms using the
-function \texttt{terms(lda\_seed,\ 20)} for example. Let us assume that
-you are aware of the above 5 topics being represented in your dataset
-(e.g., based on previous studies or observations from other review data)
-but you have a hunch, that there may be more topics that you might want
-to get a hold of. In this case, you can use seeded LDA with residual
-topics, which is a combination of seeded and unseeded options. We
-demonstrate this next.
+function \texttt{terms(lda\_seed,\ 20)}, for example. Let us assume that
+you are aware of the 5 topics above are represented in your data set
+(e.g., based on previous studies or observations of other review data)
+but you have a hunch, that there may be more topics that might be useful. In this case, you can use seeded LDA with residual
+topics, which is a combination of both the seeded and unseeded options. We
+demonstrate this below.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -644,36 +627,33 @@ demonstrate this next.
 [10,] "prime"     "buying"  
 \end{verbatim}
 
-Note that the two extra detected topics, called \texttt{other1} and
-\texttt{other2}, represent new information. The first one seems to talk
-about tablets as excellent gifts around Christmas and the second seems
-to be a comparison to laptops or computers. From the marketing point of
-view, the appearance of topic \texttt{other1} might be interesting to
-understand when (and where) such a product can be advertised and the
-other topic reveals competition with other product categories.
+Note that the two extra topics, called \texttt{other1} and
+\texttt{other2}, represent new information. The first one seems to refer to tablets as gifts for Christmas, and the second seems
+to be a comparison between tablets and laptops or computers. From a marketing point of
+view, the appearance of \texttt{other1} might be interesting for
+understanding when (and where) such a product can be advertised, and the
+other topic reveals competition with other categories of product.
 
-\subsection{Apply Sequential LDA sentence based, with seeded
+\subsection{Applying sequential sentence-based LDA with seeded
 words}\label{apply-sequential-lda-sentence-based-with-seeded-words}
 
-Sentence-based LDA (see, e.g. Büschken and Allenby (2016)) is an
-interesting way to tokenize a corpus into documents as sentences. So
-each sentence in a review represents a document. Several studies pointed
-out that when people leave a review, topics are expressed in a
-sentence-based manner, rarely two or more topics in a single sentence.
-The technicalities to accomplish this task are solved through the
+Sentence-based LDA (see, e.g., Büschken and Allenby 2016) is an
+interesting way to tokenize a corpus into documents as sentences. In this,
+each sentence in a review represents a document. Several studies have pointed
+out that when people leave a review, topics are expressed in
+sentences, and rarely with two or more topics in a single sentence.
+Achieving this is solved using the
 \texttt{corpus\_reshape()} function. In this case we will consider the
 corpus as a merged list of sentences. Let us apply sequential LDA and
-check the results. The result of the Document-Feature Matrix (DFM),
-which is the equivalent of the Document-Term Matrix, will show as many
-documents as the number of sentences (documents) and the sparsity of
-such a matrix is very high, use \texttt{print(dfmt)} to print it. The
+check the results. The result of the document-feature matrix (DFM),
+which is the equivalent of the document-term matrix, will show as many
+documents as the number of sentences (i.e., documents), and the sparsity of
+such a matrix is very high. Use \texttt{print(dfmt)} to print it out. The
 sequential LDA algorithm incorporates the topics discovered for the
 previous sentence when modeling the next one, effectively acknowledging
-that neighboring sentences in a review often share related subjects. To
-clarify this step, the previous sentence does not force a topic into th
-current one, but influences the model's estimate. In this case, each
-sentence's topic distribution is ``guided'' but not determined by what
-was found in the preceding one, because it has this bias for continuity.
+that neighboring sentences in a review often share related subjects. The previous sentence does not force a topic into the
+following one, but influences the model's estimation of whether it belongs there. In this case, each
+sentence's topic distribution is ``guided'' but not determined by the preceding one, showing a bias towards continuity.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -710,12 +690,11 @@ textmodel_lda(x = dfmt, k = 5, auto_iter = TRUE, gamma = 0.5,
 5 topics; 442,621 documents; 60,204 features.
 \end{verbatim}
 
-After running the \texttt{textmodel\_lda()} function, we obtain the
-discovered topics which are displayed in
+After running the \texttt{textmodel\_lda()} function, we obtain the topics which are displayed in
 Table~\ref{tbl-sentence_based_lda2}. Each column represents the words
-that the model thinks that are most characteristic for that specific
-topic. By examining these terms, we can analyze what concept each topic
-is capturing in a sentence-by-sentence manner.
+that the model thinks that are most characteristic of that
+topic. By examining these terms, we can analyze, sentence-by-sentence, which concept each topic
+encapsulates.
 
 \begin{longtable}[]{@{}lllll@{}}
 \caption{Top Terms for Each Topic (Sentence-Based
@@ -742,15 +721,14 @@ like & great & now & great & market \\
 user & reading & android & usb & great \\
 \end{longtable}
 
-\subsection{Topics visualization}\label{topics-visualization}
+\subsection{Topic visualization}\label{topics-visualization}
 
-Topics and how they are related to each other can be visualized with the
-package LDAVis (Sievert and Shirley 2014). This R package is an
-interactive web-based tool designed for visualizing the output of LDA
-produced topic models. The produced plots show the relationships between
+Topics, and how they are related to each other, can be visualized with the use of the
+LDAVis package (Sievert and Shirley 2014). This R package is an
+interactive web-based tool designed for visualizing the output of LDA topic models. The plots show the relationships between
 topics, emphasize the importance of each topic, and the top terms
 associated with each topic. The tool is mostly self-explanatory and
-enhances the interpretability of the topic modeling results.
+helps us to interpret the results.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -782,62 +760,53 @@ enhances the interpretability of the topic modeling results.
 
 \end{figure}%
 
-Figure~\ref{fig-ldavis2} represents a static visualization of the topics
-generated using LDA. On the left-hand side, we see a map displaying
-inter-topic distances. This distance that can be interpreted as
-similarity between topics. When topics are close to each other or
+Figure~\ref{fig-ldavis2} is a static visualization of the topics
+generated using LDA. On the left-hand side, we can see a map displaying
+the distances between topics. These can be interpreted as their degree of
+similarity. When topics are close to each other or
 overlapping, they share more terms. The map is generated using
-multidimensional scaling which is a technique that projects
-high-dimensional data into a two-dimensional plane swhile preserving
-pairwise distances as much as possible. Each of the 5 topics is
-represented by a circle (the marginal topic distribution) which size is
-proportional to the prevalence of the topic in the dataset. We notice
+multidimensional scaling, a technique which projects
+high-dimensional data into a two-dimensional plane while preserving distances between pairs as much as possible. Each of the 5 topics is
+represented by a circle (the marginal topic distribution) whose size is
+proportional to the prevalence of the topic in the data set. We can see
 that the sizes are similar. The navigation between topics to get more
-detail, can be done through the controls such as ``Selected Topic''. The
+detail can be done through the controls such as ``Selected Topic'', while
 ``Top-30 Most Salient Terms'' ranks the words based on a combination
-between term frequency and relevance to the topic. This can be adjusted
-through the parameter \(\lambda\) which controls the balance bwtween
-relevance and exclusivity of terms. When \(\lambda=0\), the focus is on
-the terms that are unique to the topic, unveiling its exclusivity, while
-when \(\lambda=1\), the ranking unvelis the frequent terms within the
+of their frequency and relevance to the topic. The latter can be adjusted
+through the parameter \(\lambda\) which controls the balance between
+the relevance and exclusivity of terms. When \(\lambda=0\), the focus is on
+the terms which are unique to the topic, showing their exclusivity, while
+when \(\lambda=1\), the ranking unveils the most frequent terms within the
 topic, even if they are common across the whole corpus. \(\lambda\)
-allows to space between specificity and generality of the terms. It
-gives the ratio of a terms' probability within a topic to its marginal
-probability across the corpus. The visual representation allows for a
-quick exploration of which terms are combined into what topics.
+allows to us to see the space between the specificity and generality of the terms. It
+gives the ratio between the probability of a term occurring within a topic and its marginal
+probability across the corpus. The visual representation allows see which terms are combined with which topics quickly.
 
-\section{Structural Topic Models}\label{structural-topic-models}
+\section{Structural topic models}\label{structural-topic-models}
 
-A Structural Topic Model (STM; Roberts et al. (2013), Roberts et al.
-(2014)) was created keeping in mind classical topic models (i.e., LDA)
-(D. M. Blei, Ng, and Jordan 2003) and Correlated Topic Modelling (CTM)
-(D. M. Blei and Lafferty 2007). While LDA assumes that topics are
+A structural topic model (STM; Roberts et al. 2013, 2014) was created with existing topic models in mind (i.e., LDA; Blei, Ng, and Jordan 2003) as well as correlated topic modelling (CTM; Blei and Lafferty 2007). While LDA assumes that topics are
 independent, CTM relaxes this assumption by allowing topics to be
 correlated. This approach can be suitable for the cases where certain
-topics have the tendency to co-occur. The particularity of STM is that
-it allows users to add extra information about each document to be
-analyzed with the topic modeling framework. This is known as metadata
-addition. This procedure helps the marketer discover topics and link
-them to covariates represented by the related document metadata because
-topical prevalence and topical content can be a function of them
-(Roberts, Stewart, and Tingley 2019). Technically, metadata that
-influences the popularity of topics is referred to as topical prevalence
-covariates, and variables (words) that define the theme of topics are
+topics have the tendency to occur at the same time. STM complements to this by allowing users to add extra information, known as metadata addition, about each document to be
+analyzed within the topic modeling framework. This procedure helps marketers discover topics and link
+them to covariates represented by the related document metadata, because
+topical prevalence and topical content can be a function of these
+(Roberts, Stewart, and Tingley 2019). Technically, metadata which
+influence the popularity of topics are referred to as topical prevalence
+covariates, and variables (words) which define the themes of topics are
 called topical content covariates.
 
-In this section we will use the R package \texttt{stm} (Roberts,
-Stewart, and Tingley 2019). The idea is to use the functions in the
-package, on the textual data and the associated metadata. In our case,
-it can be the review as the text, the associated brand, the review's
-date, and it's rating, as metadata. We can use the \texttt{quanteda}
-package to import text and metadata, pre-process and transform the
+In this section we will use the R \texttt{stm} package (Roberts,
+Stewart, and Tingley 2019) and its functions for textual data and their associated metadata. In our case,
+this can be the review, as the text, the associated brand, the review's
+date, and it's rating are metadata. We can use the \texttt{quanteda}
+package to import the text and metadata, and then pre-process and transform the
 document into a document-term matrix. From the \texttt{prodreviews}
-variable that contains the dataset, we select the Content, Brand,
+variable, which contains the data set, we can select the Content, Brand,
 Review\_date, and Rating columns. The function \texttt{prepDocuments()}
-uses the package \texttt{tm}to pre-process data.
+uses the package \texttt{tm} to pre-process the data.
 
-The workflow and some of the most important \texttt{stm} package
-features are illustrated in Figure~\ref{fig-stmheuristic}.
+The workflow and some of the most important features of the \texttt{stm} package are illustrated in Figure~\ref{fig-stmheuristic}.
 
 \begin{figure}
 
@@ -852,9 +821,9 @@ features, Figure from\ldots{} (Roberts, Stewart, and Tingley 2019)}
 
 \end{figure}%
 
-Notice that in the data ingestion part, the dataset is loaded into R's
+Notice that during the data-ingestion stage, the data set is loaded into R's
 memory. Then, the relevant columns are selected, and the text, together
-with the metadata are preprocessed. An important part is the selection
+with the metadata, is pre-processed. An important part is the selection
 of the brands we want to focus on. We will use Amazon and Apple and aim
 to extract background information regarding them.
 
@@ -894,16 +863,16 @@ to extract background information regarding them.
 \end{Highlighting}
 \end{Shaded}
 
-After this pre-processing we need to prepare the corpus by linking text
+After this, we need to prepare the corpus by linking the text
 with metadata using the \texttt{prepDocuments()} utility function. In
 building the model, we can set a threshold (e.g., through the option
 \texttt{lower.thresh}) for the minimum number of documents in which a
-word must appear and this has an influence on the rare words. The
-threshold helsp reduce the noise by exluding terms that are infrequent
-and might not contribute to topic modeling. After we choose a desired
+word must appear. Note this has an influence on the rare words. The
+threshold helps to reduce noise by excluding terms that are occur infrequently
+and might not be helpful for the topic modeling. After we have chosen a
 threshold, we can also extract some important variables, such as the
 documents, as a large list in \texttt{docs}, the vocabulary as a
-character vector in \texttt{vocab}, and metadata, as a table, in
+character vector in \texttt{vocab}, and the metadata, as a table, in
 \texttt{meta}.
 
 \begin{Shaded}
@@ -932,14 +901,14 @@ Your corpus now has 10235 documents, 2191 terms and 450044 tokens.
 
 Next we can estimate a topic STM model by passing the output to the
 \texttt{stm()} function. \texttt{K} represents the number of topics we
-want to model. The \texttt{prevalence} option, refers to how topic
-proportions vary across documents. The covariates can be encoded through
-a formula that accommodates multiple covariates and variables that can
-be factorial or continuous. In this example let prevalence be a function
-of the \texttt{Brand} variable, which generally encompasses many brands,
+want to model. The \texttt{prevalence} option, refers to how the proportions of topics
+vary across the documents. The covariates can be encoded through
+a formula which accommodates multiple covariates and variables that can
+be factorial or continuous. In this example, prevalence is a function
+of the \texttt{Brand} variable, which generally includes many brands,
 but in our case only two. In the model you can set the maximum number of
-iterations through the option \texttt{max.em.its}. Spectral
-initialization is a great optimization method for getting the same
+iterations through the \texttt{max.em.its} option. Spectral
+initialization is a great optimization tool for getting the same
 results each time we apply the \texttt{stm()} function (Roberts,
 Stewart, and Airoldi 2016). Be aware, that this might terminate the
 model before convergence is reached. Check the package's manual for more
@@ -955,26 +924,25 @@ options (Roberts, Stewart, and Tingley 2019).
 \end{Highlighting}
 \end{Shaded}
 
-Now we try to understand and interpret the model estimates, and use the
-specifically provided functions. \texttt{labelTopics()} will display the
-most likely words associated with the specific topics. By default, it
+Now we can try to understand and interpret the model estimates, and use the functions. \texttt{labelTopics()} will display the
+most likely words associated with the topics. By default, it
 uses multiple methods to identify representative words for each topic
-(Highest Prob, FREX, Lift, and Score). In the example below, the output
-from \texttt{labelTopics()} shows results for all four methods that you
-can see under each Topic's Top Words. and allows you to compare the
-different ways topics are represented. The labeled words for each topic
-vary depending on the method used. To clarify the efects of using this
-methods, \textbf{Highest Prob} lists the most frequent words within each
+(highest prob, FREX, lift, and ccore). In the example below, the output
+from \texttt{labelTopics()} shows the results for all the four methods you
+can see under ''Topic's Top Words'', and allows you to compare the
+different ways topics are represented. The words for each topic
+vary depending on the method used. To clarify the effects of using this
+methods, \textbf{highest prob} lists the most frequent words within each
 topic and also some common words, reducing specificity.
 \textbf{FREX}(\textbf{FR}equency and \textbf{EX}clusivity) identifies
-word that are both frequent and exclusive to a topic, making them more
-distinctive. The words that rank high in FREX are frequent in the topic
-and unique to it, similar to the TF-IDF approach. \textbf{Lift}
-identifies words that are specifically common to one topic compared to
-the entire corpus, it can highlight unique terms for smaller topics.
-\textbf{Score} uses a combination of log frequency inside one topic and
-penalizes the word's log frequency across all topics; the goal is to
-find words that are common in a specific topic but uncommon elsewhere.
+words which are both frequent and exclusive to a topic, making them more
+distinctive. The words that rank highly in FREX occur frequently in the topic
+and are unique to it, in a similar way to TF-IDF \textbf{Lift}
+identifies words which are common within and specific to one topic, compared to those which can be found across
+the entire corpus. It can be helpful in highlighting unique terms for smaller topics.
+\textbf{Score} uses a combination of the log frequency inside one topic and the
+penalizing of the word's log frequency across all topics; the goal is to
+find words which are common in a specific topic but uncommon elsewhere.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1013,7 +981,7 @@ Topic 5 Top Words:
 
 Let us better understand the model's results by using visualizations. We
 can explore the words associated with each topic by plotting them. The
-top three words in the Highest Prob method associated with the list
+top three words associated with the list from the highest prob method 
 appear in Figure~\ref{fig-stm4}.
 
 \begin{Shaded}
@@ -1035,20 +1003,18 @@ appear in Figure~\ref{fig-stm4}.
 \end{figure}%
 
 According to the plot displayed in Figure~\ref{fig-stm4}, topic 3
-(characterized by words like love, great, and use) represents a major
-topic, followed by 5, 1 and 2. A relatively minor topic is represented
-by Topic 4.
+(characterized by words like ''love'', ''great'', and ''use'') represents a major
+topic, followed by 5, 1, and 2. Topic 4 is a relatively minor topic.
 
-In case we want to examine which documents are associated with which
-topics we can use the function \texttt{findThoughts()}. It retrieves the
-most representative documents for a chosen topi, based on their topic
-proportion in the STM model. By peeking into these documents, we have
-the chance to better understand what a specific topic could be about. We
-shorten the documents to 200 characters for dimensionality reduction,
-and check the documents associated with topics 4 and 5. The documents
-selectd for each topic are the ones that are most strongly aligned with
-that topic. The example code below refers to the \texttt{labelTopics()}
-function and helps us explore which documents are strongly associated
+In case we want to see which documents are associated with which
+topics we can use the \texttt{findThoughts()} function. This retrieves the
+most representative documents for a topic, based on their
+proportion in the STM model. By examiningthese documents, we have
+the chance to better understand the content of a topic. We have
+shortened the documents to 200 characters as a dimensionality reduction,
+and checked the documents associated with topics 4 and 5. The documents
+selected for each topic are the ones which are most strongly aligned with it. The example code below uses  the \texttt{labelTopics()}
+function, which helps us explore the documents strongly associated
 with the words identified by the various labeling methods.
 
 \begin{Shaded}
@@ -1079,38 +1045,37 @@ with the words identified by the various labeling methods.
 
 }
 
-\caption{\label{fig-stm5}Topic Representative Document Excerpts}
+\caption{\label{fig-stm5}Topic representative document excerpts}
 
 \end{figure}%
 
-As it results from Figure~\ref{fig-stm5}, the excerpts shown are the
-first 200 characters of the most representative two documnets for topics
-4 and 5. The documents give an insight of what the topics are about,
-giving a qualitative view that complements the model's quantitatvie
+The results in Figure~\ref{fig-stm5} show excerpts of the
+first 200 characters of the most representative two documents for topics
+4 and 5. These give us an insight into what the topics are about,
+providing a qualitative view which complements the model's quantitative
 approach.
 
 \subsection{Estimating metadata-topic
 relationships}\label{estimating-metadata-topic-relationships}
 
 The main function in the \texttt{stm} package for evaluating the link
-between the derived topics and metadata is \texttt{estimateEffect()}.
-For the \(K\) topics, it identifies the relationships and the associated
-uncertainty by employing, generally, the topical prevalence model used
-in estimating STM. The topical prevalence model is simlar to a
-regression model, topic proportions represent the dependent variable,
-while metadata (e.g., \texttt{Brand}, \texttt{Review\_date}, and
-\texttt{Rating}) are the independent variables that explain how the
-prevalene of topics varies across documents. The function can take as
-input some selected topics and a link formula for the metadata. There
+between topics and metadata is \texttt{estimateEffect()}.
+For \(K\) topics, it identifies their relationships and the associated
+uncertainty by employing, generally, the topical-prevalence model used
+in estimating STM. The topical-prevalence model is similar to a
+regression model, the topic proportions represent the dependent variable,
+while metadata (e.g., \texttt{Brand}, \texttt{Review\_date} and
+\texttt{Rating}) are the independent variables which explain how the
+prevalence of topics varies across documents. As an input, the function can take selected topics and a link formula for the metadata. There
 are several options for estimating this link function. To speed up
-processing time, one can choose \texttt{uncertainty\ =\ "None"}, but it
-this will not yield the estimation uncertainty or, \texttt{"Global"}
-which considers the estimation uncertainty of the topic proportions
+processing time, you can choose \texttt{uncertainty\ =\ "None"}, but
+this will not give the estimation uncertainty, or, you can use \texttt{"Global"},
+which does consider the estimation uncertainty of the topic proportions
 (Roberts, Stewart, and Tingley 2019). The estimated relationships can be
-useful in interpreting and validating the derived topics Grimmer and
-Stewart (2013). First, we need to transform the \texttt{Brand} column
-into a categorical variable, in R called factor. Then we need to
-estimate the effect of the covariates, in this specific case we have the
+useful in interpreting and validating the topics (Grimmer and
+Stewart 2013). First, we need to transform the \texttt{Brand} column
+into a categorical variable, called a factor in R. Then we need to
+estimate the effect of the covariates, in this case we have the
 \texttt{Brand}, the \texttt{Review\_date}, and the product's
 \texttt{Rating} provided in a document ranging from 1 to 5 in the
 \texttt{productsFit} topic model. The function \texttt{s()} applies a
@@ -1119,7 +1084,7 @@ non-linear trends over time. The role of a spline is to create a smooth
 curve that models variations in topic prevalence as a continuous,
 non-linear function applied to a variable, in our case
 \texttt{Review\_date}. The \texttt{summary()} function gives a summary
-of the estimated effect for a topic of choice.
+of the estimated effect of the topic.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1162,29 +1127,29 @@ Rating           -0.0762326  0.0017742 -42.967   <2e-16 ***
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
-Analyzing the output, we can get obtain the following conclusions: The
-Intercept has a significant high t-value, this means that the base level
+Analyzing the output, we can come to the following conclusions: The
+intercept has a significant high t-value, this means that the base level
 of the topic proportion is markedly different from zero. The coefficient
-for Brand Apple is very small (0.0004276) and has a high p-value (p =
-0.961, so statistically insignificant), meaning that the brand Apple is
-not strongly associated with Topic 1 compared to Amazon. The
+for brand Apple is very small (0.0004276) and has a high p-value (p =
+0.961, so is statistically insignificant), meaning that Apple is
+not strongly associated with Topic 1 when compared with Amazon. The
 coefficients for the spline function applied to \texttt{Review\_date}
 are all statistically insignificant, so the date of the review does not
 influence Topic 1. The coefficient for \texttt{Rating} is negative
 (-0.0770018) and highly significant (p\textless2e-16), meaning that
-higher ratings are associated to a lower prevalence of Topic 1. In other
+higher ratings are associated with a lower prevalence of Topic 1. In other
 words, Topic 1 is more prevalent in reviews with lower ratings, this can
-indicate a topic related to user unhappiness. This information can be
-used by the companies to better focus on specific themes and to address
-user concerns.
+indicate the topic is related to user unhappiness. This information can be
+used by the companies to  focus on specific themes and to address
+the concerns of users.
 
-In marketing, the comparison between brand associations is essential for
+In marketing, comparing brand associations is essential for
 brand management. The change in topic proportions as a function of
 associated brands can be evaluated using \texttt{method="difference"}.
-In our case, taking the words from the Score method value in
-\texttt{productsFit} and plot the change in topic proportion between the
-two brands, Apple and Amazon. The \texttt{Score} methods captures the
-frequent words in a topic while penalizing their prevalence across all
+In our case, this means taking the words from the score method value in
+\texttt{productsFit} and plotting the change in topic proportion between the
+two brands, Apple and Amazon. The \texttt{Score} method captures the
+frequent words in a topic while penalizing their prevalence across all the
 topics. This is ideal for identifying specific terms within each topic.
 
 \begin{Shaded}
@@ -1212,18 +1177,17 @@ topics. This is ideal for identifying specific terms within each topic.
 
 \end{figure}%
 
-From the plot in Figure~\ref{fig-stm7}, we observe that topics 1, 2, 3,
+From the plot in Figure~\ref{fig-stm7}, we can see that topics 1, 2, 3,
 and 5, are more strongly associated with Amazon while Topic 4 is more
-associated with Apple. It is evident that topic 1, the most negatively
-rated, is defined by words related to the customer service, at least for
-some users. Marketers will make good use from the information that now
-it is easy to see: Kindle Fire can be an important Christmas gift. These
-insights can help understand how specific brands dominate certain
+associated with Apple. It is evident that topic 1, the most negative, is defined by words related to customer service, at least for
+some users. Marketers can make use of the information which is now
+easy to see: The Kindle Fire might be an important Christmas gift. These
+insights can us to help understand how specific brands dominate certain
 themes.
 
-There are variables that can be treated as continuous, the
-\texttt{Review\_date} is such an example. Plotting the relationship
-between time (Year 2012) and its effect on topic 4 would yield
+There are variables which can be treated as continuous, such as the
+\texttt{Review\_date}. Plotting the relationship
+between the time (Year 2012) and its effect on topic 4 would yield
 interesting results, see Figure~\ref{fig-stm8}. Remember, the variable
 \texttt{prep} contains the estimated effects.
 
@@ -1255,27 +1219,25 @@ interesting results, see Figure~\ref{fig-stm8}. Remember, the variable
 
 \end{figure}%
 
-Because there is a bump starting from March and towards April and going
-down in May, there was an Apple Special Event in 2012, on March 7 2012,
-Apple hosted an event announced with the tagline
- `We have something you really have to see. And touch.
-'' where they presented the
-3rd generation iPad as the New iPad, model with a Retina display and a
-dual-core Apple A5X processor with quad-core graphics. So, this topic
-over a timeline, about Apple, shows that something exceptional has
-happened in that time interval.
+Because there is a bump starting from March and April and going
+down in May, we might imagine Apple held a special event in 2012. And indeed, on March 7 2012,
+Apple hosted an event, announcing it with the tagline
+ `We have something you really have to see. And touch'', where they presented the
+3rd generation iPad, a model with a Retina display and a
+dual-core Apple A5X processor with quad-core graphics. So, the timeline of this topic
+shows that something exceptional for Apple
+happened during that time interval.
 
-\subsection{Topical Content.}\label{topical-content.}
+\subsection{Topical content.}\label{topical-content.}
 
 To check the influence of a topical content covariate, we need to
 understand how the vocabulary used to describe a particular topic varies
-as a function of this covariate. This is achieved by fitting the STM
-with a content variable and \texttt{Brand} is the one that can serve
-this purpose. When we include a content covariate, we examine how the
+as a function of this. It is achieved by fitting the STM
+with a content variable such as \texttt{Brand}. When we include a content covariate, we examine how the
 words associated with each topic differ depending on the value of the
-covariate (e.g., Apple vs.~Amazon for \texttt{Brand}). We accomplish
-this by fitting a completely new model and thus the new found topics may
-differ compared to the previous example where no content covariate was
+covariate (e.g., Apple vs.~Amazon for \texttt{Brand}). We do
+this by fitting a completely new model and thus the new topics may
+differ from the previous example where no content covariate was
 used.
 
 \begin{Shaded}
@@ -1288,18 +1250,18 @@ used.
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Visualizing the Influence of Topical
-Content}\label{visualizing-the-influence-of-topical-content}
+\subsection{Visualizing the influence of topical
+content}\label{visualizing-the-influence-of-topical-content}
 
-To visualize the influence of a topical content covariate (in our case:
+To visualize the influence of a topical content covariate (in our case
 Brand), we can use the plot method for the newly created STM object with
-the option type = ``perspectives''. This visualization compares the
-vocabulary used within a specific topic (e.g., Topic 4) for different
-values of the covariate (e.g., Apple vs.~Amazon for \texttt{Brand}).This
+the option = ``perspectives''. This visualization compares the
+vocabulary used within a specific topic (e.g., Topic 4) with different
+values of the covariate (e.g., Apple vs.~Amazon for \texttt{Brand}). This
 function displays which words within a topic are more associated with
-one covariate value compared to another. In the vocabulary differences
-by Brand for topic 4, which is related to Apple, the terms identified
-through the \texttt{covariate} output highlight how the vocabulary
+one covariate value than another. In the vocabulary differences
+by brand for topic 4, that of Apple, the terms identified
+by the \texttt{covariate} output show how the vocabulary
 varies between Apple and Amazon.
 
 \begin{Shaded}
@@ -1322,7 +1284,7 @@ varies between Apple and Amazon.
 \end{figure}%
 
 The larger words on each side of the plot, see Figure~\ref{fig-stm10},
-are those most strongly associated with that covariate level (Apple or
+are those most strongly associated with the covariate level (Apple or
 Amazon) for Topic 4.
 
 \begin{Shaded}
@@ -1346,25 +1308,23 @@ Topic Words:
  
 \end{verbatim}
 
-From inspecting the visualization we see that the brand Apple emphasizes
-words like ibook, imac, appl, wherea, industri, profession, frame while
-the Amazon emphasizes words like small, owner, capabl, download, seri,
-say, amazon. There are oviously disting vocabulary pattersns for Topic 4
-based on the \texttt{Brand} covariate. For the Amazon brand, words like
-``small'', ``owner'', and ``capable'' are prominet, perhaps reflecting
-usability and ownership experience. For the Apple brand, terms like
-ibook, imac, or profession, underline branding and professional
-associations. The interaction words highlight ``creativity'' and
-adaptability (through words like ``green'' and ``clever'') for Amazon,
-while Apple reviews highlight the durability of the products but also
-the conditions of products, related to a seller and the packaging
-condition. Actionable insights here for Amazon could be the usability of
-the product, ownership experience and high versatility that smiles to a
-borad audience, while for Apple, branding and professional associations
-are appealing to consumers that are industry-focused.
+From inspecting the visualization we see that for Apple the emphasis is on
+words such as, ibook, imac, appl, wherea, industri, profession, and frame, while for Amazon it is on small, owner, capabl, download, seri,
+say, and amazon. There are obvious distancing patterns for the vocabulary of Topic 4
+based on the \texttt{Brand} covariate. For Amazon, words like
+``small'', ``owner'', and ``capable'' are prominent, perhaps reflecting the tablet's
+usability and and the experience of owners. For Apple, terms like
+ibook, imac, or profession, underline the products' branding and professional
+associations. Words such as ``creativity'' and
+adaptability (through to  words like ``green'' and ``clever'') show the interactive nature of the Amazon product,
+while the Apple reviews highlight the durability of the products and also
+the condition of the products, related the sellers and packaging. Insights which might be of use here for Amazon could be the usability of
+the product, ownership experience, and high degree of versatility, appealing to a
+broad audience, while for Apple, branding and professional associations
+appeal to consumers who are industry-focused.
 
-\subsection{Comparing Words Across Two
-Topics}\label{comparing-words-across-two-topics}
+\subsection{Comparing words across two
+topics}\label{comparing-words-across-two-topics}
 
 We can also use the \texttt{plot()} function to check the contrast in
 words across two topics, see Figure~\ref{fig-stm11}.
@@ -1389,7 +1349,7 @@ words across two topics, see Figure~\ref{fig-stm11}.
 \end{figure}%
 
 To further explore the content, we can create a word cloud for a
-specific topic, Figure~\ref{fig-stm12}.
+specific topic, see Figure~\ref{fig-stm12}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1411,9 +1371,9 @@ specific topic, Figure~\ref{fig-stm12}.
 \end{figure}%
 
 Topic correlations can be investigated too. These can identify groups of
-topics that tend to appear together in documents, possibly revealing
+topics which tend to appear together in documents, possibly revealing
 latent structures. The correlations can be visualized after calculating
-the topic correlation matrix with the function \texttt{topicCorr()}.
+the topic correlation matrix using the function \texttt{topicCorr()}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1435,24 +1395,24 @@ the topic correlation matrix with the function \texttt{topicCorr()}.
 
 \end{figure}%
 
-To interpretat the topic correlation plot, we need to define its
+To interpret the topic correlation plot we need to define its
 components. Each node in the plot represents a topic, each edge
 signifies the correlation between two topics. Positive correlations are
 typically depicted with solid lines, while negative correlations are
 often shown with dashed lines. Thicker lines indicate stronger
 correlations. Groups of tightly connected nodes may form clusters,
-indicating topics that frequently co-occur in documents. In our example
-we see that topics 4 and 2 as well as topics 5 and 3 are negatively
-correlated, whereas topic 1 appears more independent from the the other
-topics in the document.
+showing topics which frequently occur together in documents. In our example,
+we can see that topics 4 and 2, as well as topics 5 and 3, are negatively
+correlated, whereas topic 1 appears to be more detached from the the other
+topics.
 
-\subsection{Exploring Topic Interactions and Visualizations in
+\subsection{Exploring topic interactions and visualizations in
 STM}\label{exploring-topic-interactions-and-visualizations-in-stm}
 
-Complex relationships between covariates and topics can be explored in
-STM as well. To understand how the interactions between covariates can
-unveil how one variable can moderate the effect of another we estimate a
-model including an interaction term between \texttt{Brand} and
+It is also possible to explore complex relationships between covariates and topics in
+STM. To understand how the interactions between covariates can
+reveal how one variable can moderate the effect of another, we can estimate a
+model including a term which interacts with \texttt{Brand} and
 \texttt{Review\_date}.
 
 \begin{Shaded}
@@ -1463,10 +1423,10 @@ model including an interaction term between \texttt{Brand} and
 \end{Highlighting}
 \end{Shaded}
 
-We re-estimate the model to consider the interaction between the brand
-and the day, which was transformed linearly. In the function
-\texttt{estimateEffect()} we include the same interaction and prepare
-these objects to be plotted, making a Brand interaction over time.
+We have re-estimated the model to consider the interaction between the brand
+and the day, and transformed this linearly. Using the function
+\texttt{estimateEffect()} we have included the same interaction and prepared
+these objects for plotting, showing the interaction over time.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1497,20 +1457,20 @@ these objects to be plotted, making a Brand interaction over time.
 
 }
 
-\caption{\label{fig-stm15}Brand Interaction over Time for Topic 4}
+\caption{\label{fig-stm15}Brand Interaction over time for Topic 4}
 
 \end{figure}%
 
-The plot in Figure~\ref{fig-stm15} shows the Topic 4 prevalence as a
+The plot in Figure~\ref{fig-stm15} shows the prevalence of Topic 4 as a
 linear function of time, with the brand set to either Apple or Amazon.
-Other variables in the model are held at their sample medians. In the
-graph, it is clear that Apple is a much discussed Brand in Topic 4,
+Other variables in the model are held at their sample medians. From the
+graph, it is clear that Apple is discussed widely in Topic 4,
 slightly increasing over time, while Amazon is underrepresented and
 discussed without much variation over time.
 
-Again, we can explore the topic correlations in the
+Again, we can explore the topic correlations using the
 \texttt{tabletInteraction} model. Positive correlations indicate that
-both topics are likely to be discussed in the same document.
+both topics are likely to be discussed within the same document.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1546,47 +1506,46 @@ both topics are likely to be discussed in the same document.
 
 }
 
-\caption{\label{fig-stm16}Topic Correlation in the tabletInteraction
-Model}
+\caption{\label{fig-stm16}Topic correlation using the tabletInteraction
+model}
 
 \end{figure}%
 
-Unlike in Figure~\ref{fig-stm13} that shows the influence of the Brand
-covariate, in Figure~\ref{fig-stm16} we notice the general topic
-co-occurrence and opposition patterns across the dataset. The negative
+Unlike in Figure~\ref{fig-stm13} that shows the influence of the brand
+covariate, in Figure~\ref{fig-stm16} we can see the general
+co-occurrence of the topics and their opposition across the dataset. The negative
 correlation between Topics 3 and 5 highlights a divergence in their
 thematic content, while the independence of Topics 1, 2, and 4 indicate
 that these topics cover distinct, non-overlapping themes.
 
 Given the significant number of visualizations and information that can
-be extracted from the data, this paves the way to further exploration,
-for example in exercises that will be given at the end of the chapter.
+be extracted from the data, this paves the way for further exploration,
+for example, in the exercises at the end of this chapter.
 
-\subsection{Determining the number of topics with
+\subsection{Determining the number of topics using
 STM.}\label{determining-the-number-of-topics-with-stm.}
 
-As it is specified also in the \texttt{stm} package manual (Roberts,
-Stewart, and Tingley 2019), there is no clear answer on how to decide on
+As specified in the \texttt{stm} manual (Roberts,
+Stewart, and Tingley 2019), there is no clear way to decide which is
 the best number of topics for a given corpus (Grimmer and Stewart 2013).
 While the \texttt{stm()} function accepts a fixed number for modeling
-the topics, function \texttt{searchK()} uses a data-driven approach to
-selecting the number of topics. The function will perform several
-automated tests to help the analyst choosing the number of topics. For
-example, one could estimate a STM model from 3 to 7 topics and compare
-the results along each of the criteria. The default initialization is
-the spectral initialization due to its stability. This function will
+the topics, \texttt{searchK()} uses a data-driven approach to
+select the number of topics. The function performs several
+automated tests to help the analyst choose the number of topics. For
+example, it is possible to estimate an STM model of 3 to 7 topics and compare
+the results for each of the criteria. The default initialization is spectral initialization because of its stability. This function will
 also calculate a range of quantities of interest, such as average
 exclusivity, semantic coherence, held-out likelihood, residuals, bound,
 lower bound, and EM iterations. Exclusivity generally increases with the
-number of topics (K), indicating more distinct topics. Semantic
-coherence decreases with (K), with higher coherence suggesting more
-meaningful topics and some more difficulty to interpret topics. The
+number of topics (K), indicating the presence of more distinct topics. Semantic
+coherence decreases with (K), with a higher degree of coherence suggesting more
+meaningful topics and some difficulty in interpreting them. The
 held-out likelihood becomes less negative as (K) increases, with higher
 values being better. Residuals decrease with increasing (K), with lower
 residuals being preferable. The bound (or lower bound) increases with
-(K), where higher values are advantageous, and leading to a better model
-fitting the data. EM iterations vary, and typically, fewer iterations
-indicate better convergence, but this depends on other factors too.
+(K), where higher values are advantageous and lead to a better fit between the model
+and the data. EM iterations vary, and, typically, fewer iterations
+indicate better convergence, but this depends on other factors as well.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1597,9 +1556,9 @@ indicate better convergence, but this depends on other factors too.
 \end{Shaded}
 
 When selecting the best (K) from a range of topic models, we should
-consider several factors such as exclusivity, semantic coherence,
-held-out likelihood, residuals, bound, and the number of EM iterations.
-Let's analyze these metrics for your new results:
+consider the factors given above (i.e., exclusivity, semantic coherence,
+held-out likelihood, residuals, bound, and the number of EM iterations).
+Let us analyze these metrics for the new results:
 
 \begin{verbatim}
   K   exclus    semcoh   heldout residual    bound   lbound em.its
@@ -1610,29 +1569,27 @@ Let's analyze these metrics for your new results:
 5 7 8.444968 -56.71841 -6.189823 2.692228 -3622360 -3622352     11
 \end{verbatim}
 
-The optimal number of topics, based on the metrics appears to be 7. It
-has a high exclusivity compared to \(K=6\) for example, this means that
-topics at \(K=7\) are more distinct than at \(K=6\). Despite having the
-lowest semantic coherence (the topics may be less interpretable), it
-performs well on the held-out likelihood, showing the least-negative
-value (meaning that it generalizes unseen data better), residuals (best
-fit to the data), and bound (best in both high and low). The number of a
-lower EM iterations indicates that the model is stable and not
-overfitted. So \(K=7\) appears to offer a good balance among the
-metrics, if data fit and generalization are important for predictive
-modeling or explanatory purposes, otherwise, one can choose \(K=5\) for
-more meaningful and easily understood topics if interpretability and
-semantic coherence are important.
+The optimal number of topics, based on the metrics, appears to be 7. For example, it
+has a high exclusivity compared to \(K=6\) , this means that
+topics at \(K=7\) are more distinct than those at \(K=6\). Despite having the
+lowest semantic coherence (the topics may be less susceptible to interpretation), it
+performs well for the held-out likelihood, showing the least-negative
+value (meaning that it generalizes unseen data better), residuals (with the best
+fit to the data), and bound (being the best for both high and low). The low number of EM iterations indicates that the model is stable and not
+overfitted. So \(K=7\) appears to offer a good balance between the
+metrics if data fit and generalization are important for predictive
+modeling or explanatory purposes, otherwise, it might be better to choose \(K=5\) for
+more meaningful and easily understood topics if you prefer easier interpretation and
+semantic coherence.
 
-There ore other ways to select the number of topics, for example using
-LDA tuning. This might be an useful tool for optimizing topic modeling
-performance by selecting an optimal number of topics. By tuning LDA
-parameters, we can obtain models that represent better the topics in the
-corpus, allowing the analyst to interpret the results and draw
-actionable insights. The \texttt{ldatuning} package (Nikita and Nikita
-2016) allows for analyzing some metrics that either reflect minimization
-Cao et al. (2009), or maximization (Griffiths and Steyvers 2004). We
-load the dataset inside R, we preprocess it, then we apply several
+There are other ways to select the number of topics, for example using
+LDA tuning. This might be a useful tool to help optimize topic-modeling
+performance by selecting an optimal number of topics. By tuning the LDA
+parameters we can create models that represent the topics in the
+corpus better, allowing the analyst to interpret the results and gain insights which can lead to action. The \texttt{ldatuning} package (Nikita and Nikita
+2016) allows for the analysis of some metrics which either show minimization
+(Cao et al. 2009), or maximization (Griffiths and Steyvers 2004). We have
+loaded the dataset to R, pre-processed it, then applied several
 metrics, such as ``Griffiths2004'', ``CaoJuan2009'', ``Arun2010'', and a
 method, such as ``Gibbs''.
 
@@ -1704,54 +1661,51 @@ calculate metrics:
 
 \end{figure}%
 
-From the plots obtained (see Figure~\ref{fig-selectlda}), it is easy to
-conclude that K=7 is the best number of topic, one is found out by
-minimizing values, the other one by maximizing. Both approaches confirm
-and converge to similar results.
+From the plots (see Figure~\ref{fig-selectlda}), it is easy to
+see that K=7 is the best number of topics, found by either
+minimizing or maximizing the values, with both converging and producing similar results.
 
-The obtain topics of high quality we need to consider several factors.
+To acquire topics of high quality we need to consider several factors.
 One of them is the quality and quantity of the corpus and its
-pre-processing steps. Another one is the real variety of topics in the
-corpus. The number of grams (n-grams) considered, may influence the
-context and coherence of topics, here we have worked with 1-grams but 2
-or more grams add value to the final results. Last but not least, the
-fine-tuning of parameters, optimizing model performance for better
-accuracy and insights.
+pre-processing. Another is the variety of topics in the
+corpus. The number of grams (n-grams), may also influence the
+context and coherence of topics: Here we have worked with 1-grams but 2
+or more grams would add value to the final results. Last but not least, the
+fine-tuning of parameters will optimize the model's performance to achieve better
+accuracy and greater insights.
 
 \emph{Exercise starts}
 
-\textbf{Exercise 1}: Another packages used for LDA topic modeling. Use
+\textbf{Exercise 1}: Other packages used for LDA topic modeling. Use
 another package, such as \texttt{tm} from CRAN to perform LDA.
 
-\textbf{Exercise 2}: A 2-gram approach to better insights. Use a 2-gram
-(also known as a bigram) approach in the \texttt{seededlda} package and
+\textbf{Exercise 2}: A 2-gram approach for better insights. Use a 2-gram
+(also known as a bi-gram) approach using the \texttt{seededlda} package and
 check the results.
 
 \textbf{Exercise 3}: Topic modeling with residuals. Use the topic
 modeling with residuals and seeded words at sentence level using the
-\texttt{seededlda} package. You can get more information of this package
+\texttt{seededlda} package. You can get more information on this package
 by reading the package's manual.
 
-\textbf{Exercise 4}. Bigrams in the \texttt{stm}package. Use the
-\texttt{stm} package with bigrams for simple topic extraction.
+\textbf{Exercise 4}. Bi-grams in the \texttt{stm}package. Use the
+\texttt{stm} package with bi-grams for simple topic extraction.
 
-\textbf{Exercise 5}. Covariates and bigrams. Use the \texttt{stm}
-package with different covariates and bigrams to compare two brands.
+\textbf{Exercise 5}. Covariates and bi-grams. Use the \texttt{stm}
+package with different covariates and bi-grams to compare two brands.
 
 \emph{Exercise ends}
 
 \emph{Conclusion starts}
 
-The chapter begins with an introduction to topic modeling, employing the
-simple mathematical formulas that power the Latent Dirichlet Allocation
-(LDA) algorithm. A simple example of how topics are derived and how
-words in a corpus are assigned to specific topics is provided. Next, the
-chapter presents a practical application of LDA, using the same dataset
-and utilizing the \texttt{seededlda} package. Examples of high
-importance, such as seeded LDA, which initializes topics around given
+The chapter began with an introduction to topic modeling, showing the
+simple mathematical formulas which power the latent Dirichlet allocation
+(LDA) algorithm. It provided a simple example of how topics are derived and how
+words in a corpus are assigned to specific topics. Next, we looked at a practical application of LDA using the same data set
+and using the \texttt{seededlda} package. To give a more complete overview of the LDA, we looked at important examples, such as seeded LDA, which initializes topics around
 keywords, or sentence-based LDA, which treats each sentence as a
-distinct topic, give a more complete overview of the LDA realm. The
-chapter then explores another topic modeling technique, Structural Topic
-Model (STM), to expand the capabilities of topic modeling from a
-marketing-discovery perspective. \emph{Conclusion ends}
+distinct topic. The
+chapter then explored another topic modeling technique, structural topic
+model (STM), to expand the scope of topic modeling from a
+marketing perspective. \emph{Conclusion ends}
 

@@ -7,16 +7,16 @@
 \begin{itemize}
 \tightlist
 \item
-  Identify and understand the main clustering algorithms.
+  Identifying and understanding the main clustering algorithms.
 \item
-  Explore practical examples of different clustering methods.
+  Exploring practical examples of different clustering methods.
 \item
-  Understand the techniques for clustering text or documents to uncover
+  Understanding the techniques for clustering text or documents to uncover
   latent patterns.
 \item
-  Analyze and extract information from clustering to aid decision-making.
+  Analyzing and extracting information from clustering to aid decision-making.
 \item
-  Experiment with clustering and apply it in different
+  Experimenting with clustering and apply it in different
   contexts.
 \end{itemize}
 
@@ -44,7 +44,7 @@ clustering methods one is model-based
 and uses statistical probability models, another is density-based
 clustering, which uses a model that groups objects based on objective functions, while yet another is distance-based
 and has a strong exploratory component. Various measures can be
-used for this last version, including Hamming for categorial data,
+used for this last version, including Hamming for categorical data,
 Manhattan and Euclidean for continuous data, Jaccard for binary data,
 Mahalanobis for correlated data, or cosine similarity for text data.
 There are also hybrid methods which combine various
@@ -262,22 +262,22 @@ doc3 17.888544 18.027756
 
 \emph{Program code ends}
 
-Euclidean distance is a simple method for calculating proximity but
-in marketing it is not frequently applied due to its sensitivity to the
+Euclidean distance is a simple method for calculating proximity, but
+in marketing it is not used frequently due to its sensitivity to the
 magnitude of the term frequencies. Another metric, called cosine
-distance is preferred, as it measures the angle between vectors, we will
-discuss about it more in detail in
+distance is preferred, as it measures the angle between vectors: We will
+discuss this in more in detail in
 Chapter~\ref{sec-extracting-information-from-embeddings}. In marketing
-applications, cosine distance helps analyze text similarity, such as
+applications, cosine distance helps in the analysis of text similarity, such as
 clustering customer reviews or segmenting product descriptions (Berger
 et al. 2020).
 
 \subsection{Cosine similarity}\label{cosine-similarity}
 
-We can calculate the cosine similarity of two vectors by considering the
-data from the previous subchapter. We can consider a document expressed
-as a vector, the elements of the vector are the frequencies of the words
-in a document (J. Han, Pei, and Tong 2022). The cosine similarity
+We can calculate the cosine similarity of two vectors by using the
+data from the previous session. We can consider a document
+as a vector, with the elements of the vector being the frequencies of the words
+in a document (Han, Pei, and Tong 2022). The cosine similarity
 between two vectors \(\vec{A}\) and \(\vec{B}\) is defined as:
 
 \begin{equation}\phantomsection\label{eq-cosine_similarity}{
@@ -291,16 +291,16 @@ denominator is the product of their Euclidean magnitudes. We have the
 three documents represented as vectors, \(\vec{doc_1} = (20, 11)\),
 \(\vec{doc_2} = (22, 12)\), \(\vec{doc_2} = (12, 27)\). The cosine
 similarity between \(\vec{doc_1}\) and \(\vec{doc_2}\) is calculated
-like
+as
 
 \[
 \text{sim}(\vec{doc_1}, \vec{doc_2}) = \frac{(20 \cdot 22) + (11 \cdot 12)}{\sqrt{20^2 + 11^2} \cdot \sqrt{22^2 + 12^2}}
 = \frac{572}{22.83 \cdot 25.07} \approx 0.998
-\] Similarly we can calculate the cosine similarity between
+\] Similarly, we can calculate the cosine similarity between
 \(\vec{doc_1}\) and \(\vec{doc_3}\), and between \(\vec{doc_2}\) and
-\(\vec{doc_2}\). The closer the similarity measure between two vectors
+\(\vec{doc_2}\). The closer the similarity measure between the two vectors
 is to \(1\), the more similar they are. In R we can use the package
-\texttt{lsa} to speed up the computational part.
+\texttt{lsa} to speed up the computation.
 
 \emph{Program code starts}
 
@@ -333,26 +333,26 @@ doc3 0.7962479 0.7941278 1.0000000
 
 \emph{Program code ends}
 
-It is obvious to observe that \texttt{doc1} and \texttt{doc2} are the
-most similar, while \texttt{doc3} is less similar to them.
+It is easy to observe that \texttt{doc1} and \texttt{doc2} are the
+most similar, while \texttt{doc3} is less.
 
-\section{Hyerarchical Agglomerative
-Clustering}\label{hyerarchical-agglomerative-clustering}
+\section{Hierarchical agglomerative
+clustering}\label{hyerarchical-agglomerative-clustering}
 
-If we do not want to cluster or find document similarities but we need
-to focus more on the words, a directly related application, exemplifying
+If we do not want to cluster or find document similarities, but we need
+to focus on the words, a directly related application, exemplifying
 the principles discussed in Section~\ref{sec-euclidean-distance}, is
-Hierarchical Clustering (HC), one of the simplest forms of clustering.
+hierarchical clustering (HC), one of the simplest forms of clustering.
 HC has two primary methodologies: agglomerative and divisive. In
 agglomerative (or bottom-up) clustering, each element initially
-represents a distinct cluster. Then, they are merged or ``agglomerated''
-into increasingly larger clusters culminating in a single, comprehensive
-cluster. In the divisive (or top-down) clustering the algorithm begins
-with one big cluster that is sistematically divided into smaller and
-smaller ones ultimately reahcing the level of individual elements in a
+represents a distinct cluster. Then, they are merged, or agglomerated,
+into increasingly larger clusters, culminating in a single, comprehensive
+cluster. In the divisive (or top-down) clustering, the algorithm begins
+with one large cluster which is systematically divided into smaller and
+smaller ones, ultimately reaching the level of individual elements with a
 tree-like taxonomy. The analogy with a tree (dendrogram) is
-straightforward: the leaves symbolize individual objects, nodes signify
-clusters and the root contains the entire dataset, as illustrated in
+straightforward: the end branches are individual objects, the nodes where they divide signify
+the clusters, and the root contains the entire dataset, as illustrated in
 Figure~\ref{fig-clusteringhac}.
 
 \begin{figure}
@@ -368,15 +368,14 @@ clustering \newline Authors' own figure}
 
 \end{figure}%
 
-We have learned how to calculate the distance between objects using the
-Eucledian distance. But a cluster contains one or more than one element.
+We have learned how to calculate the distance between objects using
+Eucledian distance, but a cluster contains one or more than one element.
 So, if the distance between individual elements is well understood, how
-would we calculate the distance between clusters? There ar several ways
-to do that. The distance between two clusters can be given by the
-distance between the closest elements contained in the two clusters. Or
-the distance between the furthest elements. Or the mean distance between
-all pairs of elements, one from each cluster. Each of these methods,
-known collectively as linkage criteria, influences the shape and size of
+can we calculate the distance between clusters? There are several ways
+to do this. The distance between two clusters can be given by the
+distance between either the closest or furthest elements contained in the two clusters. Or it is possible to calculate the mean distance between
+all the pairs of elements, one from each cluster. Both of these methods,
+known collectively as linkage criteria, influence the shape and size of
 the clusters formed. To better visualize these concepts,
 Table~\ref{tbl-linkage} provides diagrams and succinct descriptions.
 
@@ -414,25 +413,24 @@ Complete Linkage & This is the distance between the members that are
 farthest apart &
 \includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/completelinkage.png} \\
 Average Linkage & This method involves looking at the distances between
-all pairs and averages all of the distances. Also called UPGMA &
+all the pairs and averages all of the distances, also called UPGMA &
 \includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/averagelinkage.png} \\
-Ward Linkage & This method minimizes the total within-cluster distance
+Ward Linkage & This method minimizes the distance within the clusters
 variance &
 \includegraphics[width=1.04167in,height=0.625in]{figure/chapter5/wardlinkage.png} \\
 \end{longtable}
 
 Apart from the linkage methods presented in Table~\ref{tbl-linkage},
-there exist other procedures such as the combined weighted algorithm, as
-discussed by (Maqbool and Babri 2004). While these methods offer nuanced
-approaches to clustering, their practical usage is somewhat limited.
+there are other procedures, such as the combined weighted algorithm
+discussed by Maqbool and Babri (2004). While these other methods offer nuanced
+approaches to clustering, their practical use is somewhat limited.
 
 To illustrate the workings of HAC, consider a scenario with six elements
-(referred to as `words') across two dimensions (labelled as
-`documents'). This example is a slightly more complex than the previous
-one, but remains accessible for novice readers to understand. We will
-apply HAC using the single linkage criterion. Notice that in the
-previous example the clustering focus was on documents, while now
-clustering revolves around words. We hypothesize that these words appear
+(referred to as `words') across two dimensions (labeled as
+`documents'). This example is a slightly more complex than the
+one above, but is still accessible to beginners. We have applied HAC using a single-linkage method. Notice that in the
+previous example, the focus was on the clustering of documents, while now
+the clustering revolves around words. We hypothesized that these words appear
 with varying frequencies within the documents, meaning that in each
 document, the six words appear a certain number of times. The words have
 a similar characteristic if they appear with a similar frequency in the
@@ -460,7 +458,7 @@ Word6 & 45 & 30 \\
 \end{longtable}
 
 The first step in starting to perform HAC is to calculate the distances
-between the elements, in this case, words. Words that exhibit similar
+between the elements, in this case, the words. Words that exhibit similar
 frequencies across documents will be positioned closer to each other in
 the conceptual space. A visual representation of this arrangement, if
 plotted on a canvas, would resemble the configuration shown in
@@ -520,8 +518,8 @@ axis, \texttt{Document2} on the Y axis:
 
 \[
 dist(Word1, Word2)=\sqrt{(40-22)^2+(53-35)^2}=23.43 
-\] Analogously, we calculate the distance between all the pairs of
-words, (Word1, Word3), (Word1, Word4), (Word1, Word5), etc. and put them
+\] We can calculate the distance between all the pairs of
+words in the same way, (Word1, Word3), (Word1, Word4), (Word1, Word5), etc., and put them
 into a distance matrix, see Table~\ref{tbl-dd1}.
 
 \begin{longtable}[]{@{}ccccccc@{}}
@@ -544,28 +542,27 @@ Word 5 & 34.18 & 14.32 & 28.46 & 28.43 & 0.00 & \\
 Word 6 & 23.54 & 24.35 & \textbf{10.20} & 21.95 & 38.60 & 0.00 \\
 \end{longtable}
 
-We notice that the diagonal of the distance matrix is always zero
-because the distance between a word and itself is null. In symmetric
-distance matrices the values above and below the diagonal mirror each
-other, hence only one part, the lower one, is usually displayed for
+You can see that the diagonal of the distance matrix is always zero,
+because the distance between a word and itself is null. In symmetric-distance matrices the values above and below the diagonal mirror each
+other, hence only one part, usually the lower, is displayed for
 simplicity. For example, the distance between \texttt{Word1} and
-\texttt{Word3} will be the same distance as the one between
-\texttt{Word3} and \texttt{Word1}. Using the Euclidean distance formula,
-we calculate these distances and then apply single-linkage clustering,
-also known as the minimum method. In other words, we search for the
-minimum value between two elements. Initially, all the elements form a
-cluster on their own, resulting in six separate clusters. The minimum
+\texttt{Word3} is the same distance as the one between
+\texttt{Word3} and \texttt{Word1}. Using the Euclidean-distance formula,
+we can calculate these distances and then apply single-linkage clustering,
+which is also known as the minimum method. In other words, we search for the
+minimum value between two elements. Initially, all the elements form
+clusters on their own, resulting in six separate clusters. The minimum
 value between two values is between \texttt{Word3} and \texttt{Word6},
 as highlighted in Table~\ref{tbl-dd1}, leading to their combination into
-the first cluster. There are two vertical lines that represent the
-individual clusters that merge into a single line that represents the
+the first cluster. There are two vertical lines which represent the
+individual clusters, merging into a single line that represents the
 new cluster. The number 1 in Figure~\ref{fig-hac1} states that this is
 the first cluster, the vertical line indicates at what height on the
 dendrogram the cluster was produced, in this case at \textbf{10.20}. The
-``height'' represents the distance or dissimilarity between clusters. If
+height represents the distance or difference between the clusters. If
 two clusters join at a low height, it suggests they are quite similar or
 close to each other. Conversely, if two clusters join at a higher
-height, it indicates a larger dissimilarity or distance, suggesting that
+height, it indicates a greater degree of dissimilarity or distance, suggesting that
 the clusters are less alike.
 
 \begin{figure}
@@ -580,12 +577,11 @@ the clusters are less alike.
 
 \end{figure}%
 
-After the initial clustering step, we update the distance matrix to
-reflect the newly formed cluster, see Table~\ref{tbl-dd2}. In this
-revised matrix, distances are recalculated to account for the cluster of
-elements that was just created. We must be consistent and apply each
-time the single-linkage criterion. In this updated scenario, the minimum
-distance is now observed between \texttt{Word2} and \texttt{Word5}, as
+After the initial clustering, we can update the distance matrix to
+show the newly formed cluster, see Table~\ref{tbl-dd2}. In this
+revised matrix, the distances have been recalculated to account for the clusters of
+elements that have just been created. We must be consistent and apply the single-linkage criterion each time. In this updated scenario, the minimum
+distance can now be seen between \texttt{Word2} and \texttt{Word5},
 highlighted in bold in the table. This indicates that these two words
 are the next closest pair.
 
@@ -636,12 +632,11 @@ Word 4 & 36.77 & 19.42 & (15.82, 21.96) & 0.00 & \\
 Word 5 & 34.17 & \textbf{14.32} & (28.46, 38.60) & 28.42 & 0.00 \\
 \end{longtable}
 
-We focus on finding the minimum distance between the newly formed
-cluster and the remaining individual words or existing clusters. We
-specifically look for the smallest value among these recalculated
+We can also focus on finding the minimum distance between the newly formed
+cluster and the remaining individual words or existing clusters. To do this, we have to look for the smallest value among these recalculated
 distances. In this case, the next smallest distance is observed between
 \texttt{Word2} and \texttt{Word5}, indicating that these two entities
-will form the next cluster In Figure~\ref{fig-hac2} it is marked with
+will form the next cluster. In Figure~\ref{fig-hac2} this is marked as
 number 2.
 
 \begin{figure}
@@ -656,13 +651,13 @@ number 2.
 
 \end{figure}%
 
-We conclude our iterative explanation at this stage, assuming the
-hierarchical clustering procedure is now clear. As it is presented in
-Figure~\ref{fig-hac5} in the end we will have one single comprehensive
-final cluster and we will label it Cluster 5. Note that the number of
-clusters can be selectively determined by cutting the dendrogram at a
+We hope by now that the
+hierarchical-clustering procedure is clear. As shown in
+Figure~\ref{fig-hac5}, at the end of the process we will have one single comprehensive
+final cluster, here labeled as Cluster 5. Note that the number of
+clusters can be determined by cutting the dendrogram at a
 specific height. To sum up, the dendrogram's horizontal axis displays
-the clusters, while the vertical axis signifies the sequence and scale
+the clusters, while the vertical axis represents the sequence and scale
 of cluster amalgamation, with the numerical values indicating the
 proximity or similarity between the merged clusters.
 
@@ -678,31 +673,31 @@ proximity or similarity between the merged clusters.
 
 \end{figure}%
 
-The determination of the optimal number of clusters in a dataset is
+Determining the optimal number of clusters in a data set is
 often challenging, as there is no definitive answer. Several heuristic
-methods, commonly referred to as stopping rules, may offer guidance by
-generating a score or index, guiding the decision on the ideal number of
+methods, commonly referred to as stopping rules, may offer a degree of guidance by
+generating a score or index, helping you come to a decision about the ideal number of
 clusters. The choice of an appropriate number of clusters and how well
 data are clustered is subjective and influenced by various factors,
-including the distance metric used.
+including which distance metric is used.
 
 Some of the prominent stopping rules or indices dealing with clustering
-validation include Bayesian Information Criterion (BIC), Akaike
-Information Criterion (AIC), Silhouette Score, Davies-Bouldin Index,
-Homogeneity Score, Completeness Score, V-measure, Calinski-Harabasz
-Index, Duda-Hartigan's Rule, and others. It's crucial to note that while
-these mathematical methods can yield an optimal result, the clusters
+validation include the Bayesian information criterion (BIC), Akaike
+information criterion (AIC), silhouette score, Davies-Bouldin index,
+homogeneity score, completeness score, V-measure, the Calinski-Harabasz
+index, Duda-Hartigan's rule, among others. It is crucial to note that while
+these mathematical methods can deliver an optimal result, the clusters
 formed may not always align with intuitive or meaningful groupings in
 practical scenarios.
 
-In applying HAC to our dataset, we introduce a variation. Instead of the
-conventional Euclidean distance, we opt for the Canberra distance
+In applying HAC to our dataset, we have introduced variation. Instead of using the
+conventional Euclidean distance, we opted for the Canberra distance
 (Kocher and Savoy 2017), and instead of single linkage, we employ Ward's
 method (Strauss and Maltitz 2017). As we have already mentioned, we can
-employ also the cosine distance (Maimon and Rokach 2010). For assessing
-the optimal number of clusters we implement the Hartigan index
+also employ the cosine distance (Maimon and Rokach 2010). For assessing
+the optimal number of clusters, we used the Hartigan index
 (Purwitasari et al. 2011) which calculates the maximum difference
-between hierarchy levels of the index.
+between the levels of the index's hierarchy.
 
 \emph{Program code starts}
 
@@ -729,20 +724,20 @@ between hierarchy levels of the index.
 \end{Shaded}
 
 *** : The Hubert index is a graphical method of determining the number
-of clusters. In the plot of Hubert index, we seek a significant knee
-that corresponds to a significant increase of the value of the measure
-i.e the significant peak in Hubert index second differences plot.
+of clusters. In the plot of a Hubert index, we are looking for a significant knee
+that corresponds to a significant increase in the value of the measure,
+i.e., the significant peak in Hubert-index second differences plot.
 
 *** : The D index is a graphical method of determining the number of
-clusters. In the plot of D index, we seek a significant knee (the
-significant peak in Dindex second differences plot) that corresponds to
-a significant increase of the value of the measure.
+clusters. In the plot of a D index, we are looking for a significant knee (the
+significant peak in the D index second differences plot) that corresponds to
+a significant increase in the value of the measure.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \begin{itemize}
 \item
-  Among all indices:\\
+  Of the indices:\\
 \item
   6 proposed 2 as the best number of clusters
 \item
@@ -756,7 +751,7 @@ a significant increase of the value of the measure.
              ***** Conclusion *****                            
 \end{verbatim}
 \item
-  According to the majority rule, the best number of clusters is 3
+  According to the majority, the best number of clusters is 3
 \end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -772,13 +767,11 @@ a significant increase of the value of the measure.
 
 \emph{Program code ends}
 
-To visualize the hierarchical clustering results in a dendrogram, see
-Figure~\ref{fig-dendrogram}, we empoloy the function
-\texttt{fviz\_dend()} from the factoextra (Kassambara and Mundt 2020)
-package. It leverages the capability of \texttt{ggplot2} that easily
-creates aesthetically informative dendrograms. For the calculation of
-distances between the clustered items, we utilize the \texttt{dist()}
-function, specifically with the cosine distance measure, from the
+To visualize the hierarchical clustering results as a dendrogram, see
+Figure~\ref{fig-dendrogram},. To do this we used the function
+\texttt{fviz\_dend()} from the factoextra package (Kassambara and Mundt 2020). It uses \texttt{ggplot2} to create aesthetically informative dendrograms. For the calculation of
+the distances between the clustered items, we used the \texttt{dist()}
+function, with the cosine distance measure from the
 \texttt{proxy} package (Meyer and Buchta 2021).
 
 \emph{Program code starts}
@@ -832,37 +825,37 @@ Figure~\ref{fig-clusterplot}.
 
 In this analysis, we used a weighted version of the term-document
 matrix, see Chapter~\ref{sec-basic-text-analysis-and-statistics}. Unlike
-the regular TDM that employs plain word frequencies, the weighted
-version contains a numerical statistic, considering the significance of
+the regular TDM, which employs plain word frequencies, the weighted
+version contains a numerical statistic and considers the significance of
 words across the entire corpus.
 
 The removal of most of the words was done to manage the complexity and
-ensure clarity in visualization. Try (well, do not) without the removal
-of the words.
+ensure clarity of the visualization. Try doing this without the removal
+of the words (inadvisable) to see the chaos that ensues.
 
-The clustering process grouped words that appeared with similar
-importance across documents. Yes, \emph{kindle fire} is one such case
-and as you can see the words \emph{kindle} and fire frequently co-occur
+The clustering process grouped words that had a similar
+importance across the documents. Yes, \emph{kindle fire} is one such case,
+and as you can see the words \emph{kindle} and \textit{fire} frequently occur together
 in the context of this dataset. It is the experience and the knowledge
-of the analyst to make sense of the clusters and the underlying semantic
+of the analyst that make sense of the clusters and the underlying semantic
 relationships and patterns.
 
 The \texttt{NbClust()} function yielded 3 as the best number of clusters
 using the Hubert index. Ideally, we would apply all the indexes to the
 function and choose the mode (the most frequent number). Unfortunately
-not all of them are applicable for the hierarchical clustering.
-Nevertheless, from all that can be applied, the mode is 3.
+not all of them are suitable for hierarchical clustering.
+Nevertheless, for all those that can be treated in this way, the mode is 3.
 
 The choice of the best linking criterion or distance metric in
 hierarchical clustering is subject to debate, as highlighted in sources
-like (Gower and Legendre 1986). There is a consensus that this choice
+such as Gower and Legendre (1986). There is a consensus that the choice
 largely depends on the specific circumstances of the data and the
-analyst's experience. As we have already mentioned the Euclidean
-distance might not always be appropriate, as it tends to group documents
+analyst's experience. As we have already mentioned, Euclidean
+distance might not always be appropriate as it tends to group documents
 based on length rather than semantic content. In such cases, cosine
 similarity, which focuses on the orientation rather than the magnitude
 of vectors, can offer a more nuanced understanding of the textual data.
-Hereby an example that demonstrates how these changes shape the final
+Here is an example which demonstrates how these changes can shape the final
 result.
 
 \begin{Shaded}
@@ -888,43 +881,42 @@ result.
 
 \section{K-means clustering}\label{k-means-clustering}
 
-K-means clustering is a partitioning method that segments a dataset into
-a predetermined number of clusters, `k.' The data set is divided into
-partitions, where each data point belongs to exactly one group. The
-objective is to partition the dataset into k clusters to maximize the
-data similarity within each cluster and minimize the data similarity
-between clusters. It is a play with the concepts of between and within.
+K-means clustering is a partitioning method that segments a data set into
+a predetermined number of clusters, denoted by 'k'. The data set is divided into
+partitions, where each data point belongs to only one group. The
+objective is to partition the data set into k clusters to maximize the similarity of the data within each cluster, and minimize that
+between clusters. To do this, it plays with the concepts of between and within.
 The process begins by specifying `k,' although finding the optimal `k'
-can be challenging, and methods like the Elbow or Silhouette technique
-are often employed (Saputra, Saputra, and Oswari 2020). The algorithm
-randomly selects `k' initial centroids (cluster centers), either from
+can be challenging, and methods like the elbow or silhouette technique
+are often employed (see, Saputra, Saputra, and Oswari 2020). The algorithm
+randomly selects the intial `k' centroids (cluster centers), either from
 the data points or random locations. Each point is then assigned to its
 nearest centroid based on Euclidean distance (or other distance
-metrics). Centroids are recalculated as the mean of all points in the
-cluster, and points are reassigned to the closest new centroids. This
-process iterates until points no longer switch clusters or a maximum
-number of iterations is reached (typically 10 in R). The goal is to
+metrics). The centroids are recalculated as the mean of all the points within their
+cluster,s and points are reassigned to the closest new centroids. This
+process repeats until points no longer switch clusters or a maximum
+number of iterations has been reached (typically 10 in R). The goal is to
 minimize within-cluster variance, making k-means suitable for spherical
-clusters; it may face challenges with clusters of varying densities or
+clusters; it may face challenges when confronted by clusters of varying densities or
 non-spherical shapes.
 
-Let us apply the k-means algorithm to our example dataset, consisting of
-six words and two documents. Because k-means involves a degree of
-randomness in its initial cluster assignments, this can lead to
-different outcomes in separate runs. The randomness is managed in R
+Let us apply the k-means algorithm to our data set consisting of
+six words and two documents. Because k-means clustering involves a degree of
+randomness in its initial assignments, this can lead to
+different outcomes from separate runs. The randomness is managed in R
 using the \texttt{kmeans()} function's \texttt{nstart} parameter, which
-attempts multiple initial configurations (25 in our case) to find the
+carries out multiple initial configurations (25 in our case) to find the
 best starting point. This approach helps mitigate the algorithm's
 tendency to converge to local optima. To make the algorithm's process
-more understandable, we will use the \texttt{animation} library in R to
+easier to understand, we will use the \texttt{animation} library in R to
 create a visual clustering sequence.
 
-For our example, we will form the data into a table (\texttt{dt}
-variable) and choose to segment it into two clusters, showcasing how
-k-means partitions the data without the hierarchical structure seen in
-previous methods like HAC. The version printed on paper is not that
-spectacular, you will see only the final result, but once one runs the
-code on their machine, one can appreciate and understand the power of
+For our example, we will place the data into a table (using the \texttt{dt}
+variable) and choose to segment it into two clusters, showing how
+k-means clustering partitions the data without the hierarchical structure seen in
+other methods such as HAC. The version printed here is not that
+spectacular, you see only the final result, but once you have run the
+code on you machine, you will appreciate and understand the power of
 animation as an educational tool.
 
 \emph{Program code starts}
@@ -961,17 +953,16 @@ animation as an educational tool.
 
 \emph{Program code ends}
 
-Several limitations should be considered in k-means clustering. One is
+Several limitations need to be taken into account for k-means clustering. One is
 that the algorithm may perform poorly when cluster sizes and densities
 vary significantly. Another one is that the presence of outliers can
-skew the clustering results since k-means is sensitive to extreme
-values. Additionally, k-means assumes clusters to be roughly spherical
+skew the clustering results, as k-means clustering is sensitive to extreme
+values. Additionally, this technique assumes clusters are roughly spherical
 in shape, meaning it struggles with non-spherical (e.g., elongated or
 oblong) clusters. In a two-dimensional space, k-means is most effective
 when data points within a cluster are equidistant from the cluster
-center, forming a circular pattern. However, this is only sometimes the
-case in real-world data, as illustrated by the oblong shape of cluster 1
-in Figure~\ref{fig-oblongandnot}, which is not ideal for k-means.
+center, forming a circular pattern. However, this occurs rarely in real-world data, as illustrated by the oblong shape of cluster 1
+in Figure~\ref{fig-oblongandnot}, which is not ideal for for this form of clustering.
 
 \begin{figure}
 
@@ -985,20 +976,18 @@ in Figure~\ref{fig-oblongandnot}, which is not ideal for k-means.
 
 \end{figure}%
 
-In our enhanced example, we continue to analyze the reviews dataset
-using the k-means clustering algorithm. We employ the \texttt{kmeans()}
-function in R, but we let \texttt{NbClust()} find the optima number of
-clusters. The \texttt{nstart} parameter sets the number of random
-initial centroid configurations to try, with the algorithm selecting the
-configuration that yields the most stable cluster arrangement. Empirical
-observations suggest that a higher value often benefits smaller datasets
-by enhancing cluster stability. We use the \texttt{fviz\_cluster()}
+In our example, we analyzed the reviews data set
+using the k-means clustering algorithm, employing the \texttt{kmeans()}
+function in R. However, we let \texttt{NbClust()} find the optima number of
+clusters. The \texttt{nstart} parameter sets the number of initial random centroid configurations to try, with the algorithm selecting the
+configuration that yields the most stable arrangement of clusters. Empirical
+observations suggest that a higher value often benefits smaller data sets
+by enhancing the stability of the clusters. We use the \texttt{fviz\_cluster()}
 function to visualize the clustering results, which offers several
 helpful formatting options. The \texttt{repel} argument helps to prevent
 label overlap, enhancing readability, while \texttt{show.clust.cent}
 plots the centroid of each cluster, providing a clear visual
-representation of the clustering. After plotting, one can examine the
-specific cluster assignments of individual words through the cluster
+representation of the clustering. After plotting, it is possible to examine the cluster assignment of individual words through the cluster
 attribute in the \texttt{km} object (accessible via
 \texttt{km\$cluster}). This analysis allows us to understand how words
 from the reviews can be grouped into distinct clusters.
@@ -1065,75 +1054,73 @@ from the reviews can be grouped into distinct clusters.
         1         1         1         1         2         2         1 
 \end{verbatim}
 
-We determined our dataset's optimal number of clusters using the k-means
-method and applying the \texttt{ch} index. This approach resulted in an
+We determined our data set's optimal number of clusters using the k-means
+method and by applying the \texttt{ch} index. This resulted in an
 optimal cluster count of 2. This process enables us to visually inspect
-and understand the distribution of words across the identified clusters.
+and understand the distribution of words across the clusters.
 
-The k-means algorithm has several variations tailored to different data
-characteristics. One such variation is k-medians, where the cluster's
-center is determined by the median rather than the mean, offering
-robustness against outliers (Arora, Raghavan, and Rao 1998). Another
-variation, k-medoids, designates an actual data point as the cluster
-center, usually the most centrally located point in the cluster,
-enhancing the interpretability of the clusters (Rdusseeun and Kaufman
-1987). Spherical k-means is particularly useful for high-dimensional
-data. In this approach, data points are considered as vectors on a unit
+The k-means algorithm has several variations tailored to different characteristics of the data. One such variation is k-medians, where the cluster's
+center is determined by the median rather than the mean, offering a
+robust defense against outliers (Arora, Raghavan, and Rao 1998). Another
+variation, k-medoids, designates a real data point as the centre of the cluster, usually the most centrally located point in the cluster,
+enhancing the clarity of the interpretation of the clusters (Rdusseeun and Kaufman
+1987). Spherical k-means clustering is particularly useful for high-dimensional
+data. In this approach, data points are considered to be vectors on a unit
 sphere, and the cosine similarity is used as the distance metric, making
 it suitable for text and other high-dimensional data (Dhillon and Modha
 2001).
 
-\subsection{Considerations on
+\subsection{Some considerations regarding
 k-clustering}\label{considerations-on-k-clustering}
 
 K-means clustering is a widely used algorithm due to its simplicity and
-computational efficiency, making it suitable for large datasets with
-multiple variables. The algorithm's core requirement is specifying the
-number of clusters (k), and it adapts to new cluster partitions by
+computational efficiency, making it suitable for large data sets with
+multiple variables. The algorithm's core requirement is that the
+number of clusters (k) is specified, and it adapts to new partitions by
 simply changing this value. It performs efficiently when clusters are
 spherical or circular in a 2D plane, often resulting in tightly grouped
-clusters with clear interpretation compared to hierarchical clustering.
+clusters allowing for clear interpretation when compared to hierarchical clustering.
 
 However, selecting the optimal number of clusters can be challenging,
-and results may vary between runs due to the algorithm's sensitivity to
+and results may vary between runs due to the algorithm's sensitivity to the
 initial conditions. This inconsistency is a notable limitation.
-Moreover, k-means typically assumes clusters of approximately equal
+Moreover, it typically assumes the clusters are of approximately equal
 sizes, which may not align with the underlying distribution of the data.
 Another limitation is its exclusive focus on numerical data, which
-relies on calculating Euclidean (or other types of) distances between
+relies on calculating the Euclidean (or other types of) distance between
 points.
 
-\section{Gaussian Mixtures Clusterig}\label{gaussian-mixtures-clusterig}
+\section{Gaussian mixtures clustering}\label{gaussian-mixtures-clusterig}
 
-Gaussian Mixture Clustering (GMC), often employed in conjunction with
-the Expectation-Maximization (EM) algorithm, is a sophisticated method
+Gaussian mixture clustering (GMC), often used in conjunction with
+the expectation-maximization (EM) algorithm, is a sophisticated method
 for identifying underlying patterns in data (Bouman et al. 1997). This
-approach assumes that data points are generated from a combination of
-several Gaussian (or Normal) distributions, each representing a distinct
-cluster. The term `Mixture' in GMC reflects this concept of multiple,
-potentially overlapping, Gaussian distributions within the dataset.
-Unlike the `hard clustering' approach of k-means, where each data point
-is distinctly assigned to one cluster, GMC adopts a `soft clustering'
+approach assumes that data points are generated using a combination of
+several Gaussian (or normal) distributions, each representing a distinct
+cluster. The term `mixture' in GMC reflects this concept of multiple,
+potentially overlapping, Gaussian distributions within the data set.
+Unlike the `hard' approach of k-means clustering, where each data point
+is assigned to one cluster, GMC adopts a `soft clustering'
 technique. Each data point is associated with probabilities denoting its
 likelihood of belonging to different clusters, allowing for more nuanced
-and probabilistic classification. In GMC, each Gaussian distribution
+and probabilistic classifications. In GMC, each Gaussian distribution
 within the model is defined by its own mean and covariance, shaping the
 cluster's appearance in the data space. The EM algorithm plays an
 essential role in GMC by iteratively estimating and refining these
-parameters, aiming to maximize the fit of the model to the observed
+parameters, aiming to maximize the fit of the model to the
 data.
 
 This model is handy in scenarios where data does not conform to the
-spherical cluster assumption of k-means, as illustrated in cluster 1 of
-Figure~\ref{fig-oblongandnot}. For instance, GMC can effectively handle
-elongated or irregularly shaped clusters. In R, the Gaussian Mixture
-Model can be implemented using the \texttt{GMM()} function from the
+spherical cluster assumed of k-means clustering, as shown by cluster 1 of
+Figure~\ref{fig-oblongandnot}. For instance, GMC can handle
+elongated or irregularly shaped clusters effectively. In R, the Gaussian mixture
+model can be implemented using the \texttt{GMM()} function from the
 \texttt{ClusterR} package (Mouselimis 2023). The process typically
-involves converting data into a suitable format (like a data frame) and
-specifying the desired number of clusters. The \texttt{predict\_GMM}
+involves converting data into a suitable format (such as a data frame) and
+specifying the number of clusters. The \texttt{predict\_GMM}
 function assigns each data point to clusters based on the probabilities
 calculated by \texttt{GMM()}. It is advisable to explore the functions'
-parameters and settings to understand their application. We will explore
+parameters and settings to understand their application. We will now explore
 this type of clustering using 3 clusters.
 
 \begin{Shaded}
@@ -1188,22 +1175,21 @@ this type of clustering using 3 clusters.
 6 anything       3
 \end{verbatim}
 
-We notice a better clustering with respect to the k-means situation. One
-can also check to what clusters the words belong to.
+Here we can see better clustering compared to that produced by k-means clustering. It is also possible to check which clusters the words belong to.
 
-\subsection{Considerations on GMM}\label{considerations-on-gmm}
+\subsection{Considerations regarding GMM}\label{considerations-on-gmm}
 
-GMM introduces significant flexibility compared to k-means, particularly
+GMM introduces significant degree of flexibility compared to k-means clustering, and particularly
 in accommodating clusters of different shapes, orientations, and
 variances. This is partly due to GMM's ability to model each cluster
-with its own covariance structure. Unlike the hard clustering of
-k-means, where each object is assigned to a single cluster, GMM allows
-for probabilistic cluster assignments. This soft clustering approach is
-particularly advantageous in text analytics, where words often relate to
-multiple topics. In GMM, centroid updates consider both mean and
+with its own covariance structure. Unlike the hard clustering of the
+k-means approach, where each object is assigned to a single cluster, GMM allows
+for probabilistic assignments to clusters. This soft-clustering approach is
+particularly advantageous in text analytics where words often relate to
+multiple topics. In GMM, centroid updates consider both the mean and
 variance, capturing more complex data structures than the mean-only
-updates of k-means. However, GMM assumes Gaussian distributed data and
-may have difficulties with highly correlated datasets. It also requires
+updates of k-means clustering. However, GMM assumes that you have Gaussian distributed data and
+may have difficulties working with highly correlated datasets. It also requires
 careful selection of the number of clusters and can be computationally
 demanding, particularly for large datasets. Despite these limitations,
 GMM is a powerful algorithm that performs well, especially where data
@@ -1211,36 +1197,35 @@ exhibits complex, overlapping clustering patterns.
 
 \section{Density-based clustering}\label{density-based-clustering}
 
-DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is
+DBSCAN (density-based spatial clustering of applications with noise) is
 ideal for datasets where clusters are not necessarily spherical,
-offering, like GMC, a flexible alternative to methods such as k-means.
-It operates based on two parameters: a radius \(\epsilon\) and a minimum
+offering, like GMC, a flexible alternative to methods such as k-means clustering.
+It operates using two parameters: a radius \(\epsilon\) and a minimum
 number of points (minPts). DBSCAN forms clusters from dense regions of
 data points, delineated by the \(\epsilon\) radius, and identifies
 outliers in low-density areas. Unlike some algorithms, it does not
-require the pre-specification of the number of clusters, as these
-naturally emerge from the data based on the density criteria. It is
+require you to specify the number of clusters, as these
+emerge naturally from the data based on its density. It is
 important to know that if a data point falls within the \(\epsilon\)
 radius of multiple clusters, it is typically assigned to the first
 cluster formed. Choosing the right \(\epsilon\) can be challenging, as
 it significantly affects the resulting clusters, but there are methods
-to find both, \(\epsilon\) and minPts (Ozkok and Celik 2017).
+to find both \(\epsilon\) and minPts (Ozkok and Celik 2017).
 
-HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications
-with Noise) extends DBSCAN's capabilities by transforming its flat
+HDBSCAN (hierarchical density-based spatial clustering of applications
+with noise) extends DBSCAN's capabilities by transforming its flat
 clustering into a hierarchical structure. This method extracts clusters
-based on their stability over varying density levels, with no need for
+based on their stability over varying levels of density, with no need for
 the user to specify \(\epsilon\). It is particularly good at handling
 datasets with clusters of different densities, automatically determining
 the optimal scale for \(\epsilon\) and revealing consistent clusters
 over a range of densities.
 
-We will use the HDBSCAN algorithm to explore density-based clustering,
-available in the \texttt{dbscan} package. This approach requires setting
-hyper-parameters, which often depend on the dataset and specific
-clustering objectives. HDBSCAN's ability to identify stable clusters
+We will use the HDBSCAN algorithm, available in the \texttt{dbscan} package, to explore density-based clustering. This approach requires setting
+hyper-parameters, which often depend on the data set and objectives of the
+clustering. HDBSCAN's ability to identify stable clusters
 without predefined parameters like \(\epsilon\) makes it a robust and
-user-friendly choice in case of complex datasets.
+user-friendly choice when confronted with complex datasets.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1306,58 +1291,51 @@ Available fields: cluster, minPts, coredist, cluster_scores,
 
 \includegraphics{5.Chapter_files/figure-pdf/dbclustering-2.pdf}
 
-We notice how there is a big cluster created and two smaller ones. With
-a bigger dataset the clustering result would yield better results.
+We can see how it has created a big cluster and two smaller ones. With
+a bigger data set the clustering would yield better results.
 
-\subsection{(H)DBSCAN clustering
-considerations.}\label{hdbscan-clustering-considerations.}
+\subsection{Considerations regarding (H)DBSCAN clustering}\label{hdbscan-clustering-considerations.}
 
-DBSCAN and its variant, HDBSCAN, separate clusters into high-density and
-low-density but has difficulties when densities are similar. Unlike in
-the previous clustering algorithms, the shape of the clusters can be
-any, outliers are dealt well with and there is no no need to set the
-number of clusters ahead. You have to tune the \(\epsilon\) and the
-minimum points parameters though. The order of the data has an influence
+DBSCAN and its variant HDBSCAN separate clusters into those of high- and low-density, but face difficulties when the densities are similar. Unlike in
+other clustering algorithms, the clusters can take any shape, outliers are dealt with well, and there is no need to set the
+number of clusters manually. However, you must tune the \(\epsilon\) and the
+minimum points parameters. The order of the data has an influence
 on the final result and you need sufficient data to separate dense
-areas, otherwise you obtain poorer results.
+areas, otherwise you obtain poor results.
 
-As a practical example, in case you have a business and we want to
-improve your products based on consumer's feedback. We can apply DBSCAN
-to our data set and find clusters based on the reviews. Using the
-created clusters we can find similarities between reviews, for example,
-if one customer writes about the screen, memory and connection of a
-tablet and another one about the screen and memory, then it is useful to
-inquiry about the connection too. In a commercial setup, if one customer
-talks about product 1, 2 and 3, and another one only about the first
-two, a recommender system might propose the third product to the second
+As a practical example, it is possible to apply DBSCAN
+to the data set and find clusters based on the reviews. Using the clusters we can see similarities between reviews, for example,
+if one customer writes about the screen, memory, and connection of a
+tablet, and another one about the screen and memory, then it is useful to
+enquire about the connection between the two. In a commercial setup, if one customer
+talks about products 1, 2 and 3, and another one only about the first
+two, a system of recommendation might propose the third product to the second
 customer.
 
 \section{Affinity propagation
 clustering}\label{affinity-propagation-clustering}
 
-Affinity propagation clustering as delineated by (Frey and Dueck 2007;
-Dueck and Frey 2007; Dueck 2009) introduces the concept of
-``exemplars''. These are the foundational elements or the core nodes of
-a dataset around which clustering is performed. The idea that holds this
-concept is that all the elements are potential exemplars and a message
-system between data points iteratively identifies a subset of exemplars
-and their respective clusters.
+Affinity propagation clustering, as defined by Frey and Dueck (2007 and 2009), introduces the concept of
+``exemplars''. These are the foundational elements, or the core nodes, of
+a data set around which clustering is performed. The idea is that all the elements are potential exemplars and a message
+system between data points identifies a subset of exemplars
+and their clusters iteratively.
 
-The implementation is done by the \texttt{apcluster} package
-(Bodenhofer, Kothmeier, and Hochreiter 2011). Unlike in the previous
-clustering algorithms, the data can be of any shape and variable
-density. Another important thing is that, the basic version of apc will
-calculate the optimal number of clusters without pre-specification.
-Nevertheless, the function \texttt{apclusterK()} in the
+This is carried out by the \texttt{apcluster} package
+(Bodenhofer, Kothmeier, and Hochreiter 2011). Unlike in the other
+clustering algorithms, the data can be of any shape and of variable
+density. Importantly, the basic version of apc will
+calculate the optimal number of clusters without any specifications being given.
+Nevertheless, the \texttt{apclusterK()} function in the
 \texttt{apcluster} package provides a mechanism to specify the cluster
-count a priori. In the function, the first parameter, \texttt{s},
+count. In this, the first parameter, \texttt{s},
 calculates the similarity function using the negative squared distances
-by default, although alternative similarity measures, such as Spearman
+by default, although alternative similarity measures, such as the Spearman
 correlation, can be employed to capture the relationships within certain
 datasets.
 
 The second parameter, \texttt{x}, represents the distance matrix we
-derived from on our previous analysis with k-means. Despite the
+derived from on our previous analysis using k-means clustering. Despite the
 possibility of setting a predetermined number of clusters via \(K\), the
 adaptive nature of the apcluster() function's algorithm can ascertain
 the optimal cluster count.
@@ -1443,53 +1421,53 @@ Clusters:
       wifi will youre
 \end{verbatim}
 
-We notice that each cluster has the ``exemplar'' cluster, a prominent
+We notice that each cluster has an ``exemplar'' cluster, a prominent
 word that best represents the cluster. It is a word that should define
-the other words that come in the same cluster with it. It can be
-considered the ``topic'' of the cluster which can be the thematic focus
-of a cluster. In our case the exemplars are: can , cant and think. Check
+the other words which are contained in the same cluster. It might be
+considered the ``topic'' of the cluster and can be the thematic focus
+of a cluster. In our case the exemplars are: \textit{can} , \textit{cant} and \textit{think}. Check
 the words in each cluster and see if you can relate them to the
 exemplar.
 
-The examplars are chosen based on message passing between data points
-regarding their suitability as the most representative point of a
-cluster. Imagine the reviews dataset in our book. We need to want to
-group reviews that are similar between them. Each review can ``send a
-message'' to other reviews revealing its topic. If another review has
-the same topic, they group. Some reviews will receive many messages
-back, showing that they are very popular within that topic. These
-reviews become their groups' exemplars and have the strongest connection
+The examplars are chosen based on a message passing between data points
+regarding their suitability as the most representative points of a
+cluster. To demonstrate this, think of the reviews data set in our book. We want to
+group reviews which are similar. Each review can ``send a
+message'' to the other reviews revealing its topic. If another review has
+the same topic, they will group. Some reviews will receive many messages
+back, showing that they are popular within that topic. These
+reviews become their groups' exemplars and have the strongest connections
 to all the other reviews. The process continues until each review is
 grouped. Eventually, the corpus will be organized into sections where
-each group will be characterized by a topic led by an exemplar that
-distills the essence of that topic.
+each group is characterized by a topic led by an exemplar that is the
+distilled essence of the topic.
 
-We may wonder which clustering algorithm performs optimally or yields
-the most appropriate number of clusters for our specific dataset.
+We might wonder which clustering algorithm performs optimally or yields
+the most appropriate number of clusters for our specific data set.
 Various methods and packages, like \texttt{cValid}, offer comparative
 analyses of clustering algorithms by evaluating their stability and
-validity across different datasets. However, the effectiveness of these
-algorithms can significantly depend on the nature of the dataset,
-including its size, dimensionality, distribution, and the presence of
+validity across different data sets. However, the effectiveness of these
+algorithms can be greatly dependent on the nature of the data set,
+including its size, dimensions, distribution, and the presence of
 outliers. Familiarity with these characteristics and hands-on experience
-is crucial in selecting the most suitable clustering approach.
-Practicing with diverse datasets and challenges is essential to
+is crucial when selecting the most suitable clustering approach.
+Practicing with diverse data sets and challenges is essential to
 developing this expertise. For a comprehensive comparison of the
-algorithms discussed, including their strengths and limitations in
+algorithms discussed here, including their strengths and limitations in
 different scenarios, refer to Table A {[}reference{]} in the appendix.
 
-\section{Documents clustering}\label{documents-clustering}
+\section{Document clustering}\label{documents-clustering}
 
 In marketing, clustering similar elements enables more effective
-segmentation. For illustration, let us apply a clustering method, such
-as HDBSCAN, to cluster documents. Unlike previous approaches, we will
-use a Document-Term Matrix (DTM) instead of a Term-Document Matrix
+segmentation. As an illustration, let us apply a method such
+as HDBSCAN to cluster documents. Unlike in previous approaches, we will
+use a document-term matrix (DTM) instead of a term-document matrix
 (TDM), focusing on clustering documents with similar features. Although
-we preprocess the documents by removing elements like stopwords and
+we have processed the documents by removing elements like stop words and
 numbers, this analysis aims to reveal insights based on the documents'
-reduced feature set. For this purpose, we utilize the same underlying
-code but apply it to a DTM. This is achieved by transposing the matrix
-so that rows and columns are switched, effectively turning document
+reduced set of features. For this purpose, we are using the same underlying
+code but applying it to a DTM. This is achieved by transposing the matrix
+so that rows and columns are switched, effectively turning the document
 features into the primary axis for clustering. This allows us to examine
 the thematic similarities between documents more directly.
 
@@ -1531,16 +1509,16 @@ Available fields: cluster, minPts, coredist, cluster_scores,
                   membership_prob, outlier_scores, hc
 \end{verbatim}
 
-In cluster 2, there are only two elements, document 16 and 35. In R,
+In cluster 2, there are only two elements, documents 16 and 35. In R,
 type \texttt{content{[}16{]}} and \texttt{content{[}35{]}} to compare
 the documents.
 
 The two reviews seem to be similar in terms of length and content. To
 hone your skills, you can try various combinations of clustering
-methods, distances and parameters.
+methods, distances, and parameters.
 
-All in all, you can apply these techniques to any corpus in order to
-extract the meaning in terms of topics, but also similarities and
+More generally, you can apply these techniques to any corpus in order to
+extract their meaning in terms of topics, but also similarities and
 differences between and within clusters.
 
 \texttt{Exercise\ starts}
@@ -1549,21 +1527,21 @@ differences between and within clusters.
 clustering using various distance metrics (e.g., Euclidean, Manhattan)
 and linkage methods (e.g., single-linkage, average-linkage,
 complete-linkage). Analyze how different combinations affect the
-resulting dendrogram structure.
+structure of the dendrogram.
 
-\textbf{Exercise 2: K-means} Experiment with the K-means algorithm by
+\textbf{Exercise 2: K-means Clustering} Experiment with the k-means algorithm by
 varying the number of clusters (K). Evaluate how the choice of K
-influences the cluster cohesion and separation. Use methods like the
-Elbow or the Silhouette score to determine the optimal K value.
+influences the cohesion and separation of the clusters. Use methods like the
+elbow or silhouette score to determine the optimal K value.
 
 \textbf{Exercise 3: Gaussian Mixture Models (GMM) Clustering} Apply GMM
-clustering with varying numbers of components (clusters). Experiment
-with different covariance types (e.g., full, tied, diag, spherical) and
-initialization methods to observe their effects on cluster shapes and
-sizes.
+clustering to varying numbers of components (clusters). Experiment
+with different types of covariance (e.g., full, tied, diagonal, spherical) and
+initialization methods to observe their effects on the shapes and
+sizes of clusters.
 
 \textbf{Exercise 4: HDBSCAN Clustering} Explore the HDBSCAN algorithm by
-modifying the minimum cluster size and the \(\epsilon\) value.
+modifying the minimum size of the clusters and the \(\epsilon\) value.
 Experiment with adjusting the algorithm's parameters to see how they
 affect the number of clusters detected and the handling of noise.
 
@@ -1571,24 +1549,24 @@ affect the number of clusters detected and the handling of noise.
 of different affinity propagation methods provided by the
 \texttt{apcluster} package, such as \texttt{apcluster()} and
 \texttt{apclusterL()}. Explore the impact of preference values and
-similarity measures on the number and composition of the identified
+similarity measures on the number and composition of the
 exemplars and clusters.
 
 \texttt{Exercise\ ends}
 
 \textbf{Conclusion} \emph{Conclusion starts}
 
-This chapter touches on the fundamentals of clustering analysis,
+This chapter deals with the fundamentals of clustering analysis,
 starting with basic step-by-step examples and advancing to more
 sophisticated clustering methods. It covers a range of techniques,
-including hierarchical clustering, K-means, Gaussian Mixture Models
-(GMM), DBSCAN, and Affinity Propagation, each selected to showcase its
-unique approach to grouping data. Through practical coding examples, the
+including hierarchical clustering, K-means clustering, Gaussian mixture models
+(GMM), DBSCAN, and affinity propagation, each selected to show its
+unique approach to grouping data. The
 chapter demonstrates how these methods can be applied to diverse
-datasets, emphasizing the adaptability and utility of clustering in
+datasets using practical examples of coding, emphasizing the adaptability and utility of clustering in
 uncovering hidden patterns within data. The discussion aims to provide
 readers with a comprehensive understanding of how different clustering
-algorithms perform and their potential applications in text analytics in
+algorithms perform. and their potential application to text analytics in
 marketing.
 
 \emph{Conclusion ends}

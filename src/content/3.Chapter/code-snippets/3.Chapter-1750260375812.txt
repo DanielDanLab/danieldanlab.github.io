@@ -1,7 +1,0 @@
-                                                       Sentence
-1       Lorem ipsum dolor sit amet, consectetur adipiscing elit
-2                                      Quisque sed venenatis mi
-3  Mauris eget lectus luctus, molestie enim nec, tincidunt urna
-4                              Nulla iaculis ut lorem a blandit
-5             Etiam non arcu et magna tempor iaculis ac at erat
-6          Quisque non malesuada augue, sit amet vulputate enim

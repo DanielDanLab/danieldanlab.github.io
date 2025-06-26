@@ -1,3 +1,0 @@
-[1] "Problem solved with the tablet."     
-[2] "At first the tablet works just fine."
-[3] "Love this tablet."                   

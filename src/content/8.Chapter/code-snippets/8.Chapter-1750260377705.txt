@@ -1,1 +1,0 @@
-[1] "Total frequency of negative bigrams: 12901"

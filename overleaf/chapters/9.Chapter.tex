@@ -1,5 +1,5 @@
 \chapter{Named Entity Recognition and
-Summarization}\label{sec-named-entity-recognition-and-summarization}
+Summarizing}\label{sec-named-entity-recognition-and-summarization}
 
 \textbf{Learning Objectives}
 
@@ -8,118 +8,113 @@ Summarization}\label{sec-named-entity-recognition-and-summarization}
 \begin{itemize}
 \tightlist
 \item
-  Understand what Named Entity Recognition (NER) is.
+  Understanding what named entity recognition (NER) is.
 \item
-  Understand how NER works.
+  Understanding how NER works.
 \item
-  Understand NER's workflow.
+  Understanding workflow in NER.
 \item
-  How to apply NER in R.
+  Learning how to apply NER in R.
 \item
-  How to extract information with `spacyr()```.
+  Learning how to extract information using spacyr().
 \item
-  Understand and select Parts-of-Speech (POS) tagging.
+  Understanding and selecting parts-of-speech (POS) tagging.
 \item
-  Analyze POS over a timeline.
+  Analyzing POS over a timeline.
 \item
-  Measure language complexity.
+  Measuring language complexity.
 \item
-  Tackle summarization.
+  Tackling summarizing.
 \end{itemize}
 
 \emph{Overview ends}
 
-Named Entity Recognition (NER) is used in NLP to find important
-information in documents. The goal is to identify and classify basic
-text elements and their interactions. Named Entities (NE) are important
-to a specific purpose or topic, determining their type and boundary.
+Named entity recognition (NER) is used in NLP to find important
+information in documents. Its goal is to identify and classify basic
+text elements and their interactions. Named entities (NE) are important
+for a specific purpose or topic, determining their type and boundary.
 Although NEs do not have a direct and precise definition, maybe because
-there are too many, they can be defined more from a practical point of
-view. They are elements that describe categories, such as persons,
+there are too many of them, they can be defined from a more practical point of
+view. They are elements which describe categories, such as people,
 organizations, locations, dates, times, percentages, and monetary
 amounts, among others. For example, a person can be identified by a name
-or alias, and a location could be a city, village, or forest name. These
+or an alias, and a location could be a city, village, or forest. These
 two categories, person and location, might be related by the place of
-birth of someone identified by its name. NER is an NLP branch and aims
-to help understand text questions such as Who? What? Where? When?
-through simple elements (Nouvel, Ehrmann, and Rosset 2016).
+birth of someone identified by its name. NER is a branch of NLP and helps us understand text questions such as ''who?'', ''what?'', ''where?'', and ''when?'',
+through simple principles (Nouvel, Ehrmann, and Rosset 2016).
 
-As we already demonstrated in the previous chapter when tracking the
-evolution of brand sentiment over time, in marketing, this information
-can be used to monitor several aspects. A company might want to know the
-opinion of the customers (who), what they think about their products or
-brands (what), in which region or country (where), and at which point in
-time (when.) They might also want to check competitors' technological
-advancements, national or international marketing strategies, and pain
-points of the brand's customer perceptions. Some reviewing platforms,
+As we have already demonstrated in the previous chapter when tracking the
+evolution of brand sentiment over time, in marketing this information
+can be used to monitor several aspects of a product or brand. A company might want to know the
+opinion of their customers (''who''), what they think about their products or
+brands (''what''), in which region or country they are located (''where''), and at which point in
+time they bought the product (''when''). They might also want to check on competitors for their development of technologies, national or international marketing strategies, or the pain
+points of a brand's customer perceptions. Some reviewing platforms,
 ranging in their focus from general topics (e.g., Yelp) to more
 specialized areas, such as traveling (e.g., TripAdvisor) or movie review
 platforms (e.g., IMDb), aim to collect information on products and link
-them to consumer feedback (A.-M. Popescu and Etzioni 2007). If well
-extracted, NEs can be considered the building blocks of a nice summary,
-giving insight into the information contained in documents (Hassel
+them to consumer feedback (Popescu and Etzioni 2007). If well
+extracted, NEs can be considered the building blocks of a summary,
+giving insights into the information contained in documents (Hassel
 2003).
 
-An important application of NER is the possibility of anonymizing the
-personal data contained in a document; this is very important in several
-fields since data privacy is paramount. Personal information can be
-hidden while the related data and the possibility to interpret them can
+An important application of NER is the possibility to anonymize the
+personal data contained in a document; this is very important as data privacy is paramount. Personal information can be
+hidden while the related data and the possibility of interpreting them can
 be used for statistical purposes or the development of segment-specific
 marketing campaigns.
 
 \section{How does NER work?}\label{how-does-ner-work}
 
-There are several ways to implement NER, such as rule-based systems,
-statistical models, and neural network models. Rule-based systems use
-predefined lists of entities, for example, gazetteers\footnote{A
-  gazzetteer is akin to a geographical dictionary or directory}, and
+There are several ways of using NER, such as through rule-based systems,
+statistical models, and neural-network models. Rule-based systems use
+predefined lists of entities, for example, gazetteers,\footnote{A
+  gazetteer is akin to a geographical dictionary or directory} and
 regular expressions, like the ones we presented in
-Chapter~\ref{sec-textual-data}. This is relatively simple to implement,
-but it is not very scalable or flexible if you have large heterogeneous
-datasets. Statistical methods and machine learning algorithms use
-methods, like those we discussed for the classification task in
+Chapter~\ref{sec-textual-data}. This is relatively simple to set up,
+but it is not very scalable or flexible if you have large heterogeneous sets of 
+data. Statistical methods and machine-learning algorithms use
+methods, like those we discussed for classification in
 Chapter~\ref{sec-classification}. Some other frequently used approaches
-employ Hidden Markov Models (HMM) (Morwal, Jahan, and Chopra 2012),
-Conditional Random Fields (CRF) Sun et al. (2006), and Maximum Entropy
-(ME) methods (Chieu and Ng 2003). These methods are more accurate than
-the rule-based systems, but the data to be trained on must be of a
-substantial size. The most accurate methods are the neural network
-models. They use techniques such as Recurrent Neural Networks (RNN) (Li
-et al. 2015), Convolutional Neural Networks (CNN) (Zhu, Wang, and
-Karlsson 2019), and Transformers (Arkhipov et al. 2019) to accomplish
-NER tasks. The computational power required by such models is high, and
-they also need large annotated datasets. Nevertheless, results are not
+include hidden Markov models (HMM; Morwal, Jahan, and Chopra 2012),
+conditional random fields (CRF; Sun et al. 2006), and maximum entropy
+(ME) methods (Chieu and Ng 2003). These are more accurate than
+the rule-based systems, but the data used for training must be of a
+substantial size. The most accurate methods are the neural-network
+models. They use techniques such as recurrent neural networks (RNN; Li
+et al. 2015), convolutional neural networks (CNN; Zhu, Wang, and
+Karlsson 2019), and transformers (Arkhipov et al. 2019). The computational power required by such models is high, and
+they also need large annotated data sets. Even then, however, results are not
 always perfect, and the process of identifying and classifying can be
-faulty, especially with entities that can be ambiguous or
-context-dependent. Take as an example Amazon, which can be related with
+faulty, especially with entities that are ambiguous or
+context-dependent. Take, as an example, Amazon, which can be connected with
 a forest (location) or a company (organization). Disambiguation is a
-complex task, but most recent transformer technologies that understand
-context well, have made this more and more precise. It is necessary to
+complex task, but most recent transformer technologies understand
+context well and have made this more and more precise. It is necessary to
 mention that variability introduces misclassification, for example, in
 cases where an entity is referred to in different ways, like CR7 or
-Cristiano Ronaldo, this task is called coreference resolution, sometimes
-called Named Entity Resolution, extremely useful in text analytics.
+Cristiano Ronaldo: This task is called co-reference resolution, sometimes
+called named entity resolution, and is extremely useful in text analytics.
 
 \subsection{Workflow}\label{workflow}
 
-In an NER task, raw text must undergo several transformations, from a
-preprocessing part to a final NER part. Here, we will explain a generic
-NER method. The preprocessing task helps transform the text into a more
-suitable format for subsequent NER procedures. It starts with segmenting
-the text into sentences, which are represented by lists of strings; this
-is followed by tokenization, which helps to break down text at a desired
-granular level and becomes a list of strings. Next comes the the
-Part-of-Speech (POS) tagging, which identifies which parts of speech
-specific words belong to; tokens can be nouns, verbs, adjectives, and so
-on, and can turn very useful for entity recognition. In modern contexts,
-tokens can be transformed into word embeddings; we will discuss them in
-Chapter~\ref{sec-extracting-information-from-embeddings}. Next is the
-Entity detection part, which helps classify tokens into categories
-through one of the models discussed. At this step, the boundaries of the
-entity and its type are identified. Then, relation detection comes into
-action with a final result in the form of text tuples associated with
+In an NER task, raw text must undergo several transformations, from
+pre-processing to the final NER output. Here, we will explain a generic
+NER method. Pre-processing helps transform the text into a more
+suitable format for the subsequent NER procedures. It starts by segmenting
+the text into sentences, which are represented by lists of strings. This
+is followed by tokenization, which helps to break down text to the desired level of detail and becomes a list of strings. Next is the
+parts-of-speech (POS) tagging, which identifies which parts of speech
+specific words belong to: Tokens can be nouns, verbs, adjectives, and so
+on, and are very useful for entity recognition. In modern contexts,
+tokens can be transformed into word embedding; we will discuss this in
+Chapter~\ref{sec-extracting-information-from-embeddings}. Next comes the
+entity detection, which helps classify the tokens into categories
+using one of the models discussed above. During this step, the model identifies the boundaries of the
+entity and its type. Then, relation detection comes into
+action, with the final result being in the form of text tuples associated with
 entities and relationships. See Figure~\ref{fig-ner}, inspired by Dias
-et al. (2020) for a visual representation of the process.
+et al. (2020), for a visual representation of the process.
 
 \begin{figure}
 
@@ -134,55 +129,54 @@ et al. (2020) for a visual representation of the process.
 \end{figure}%
 
 The landscape of linguistic annotations is made more complex by the use
-of various formats, two of them being predominant: Conference of Natural
-Language Learning Universal Dependencies (CoNNL-U; cf. Project (2022),
-Schuster and Manning (2016)) and Text Interchange Format (TIF) (Mullen
+of various formats, two of them being more common than others: conference of natural
+language learning universal dependencies (CoNNL-U; cf. Project 2022; Schuster and Manning 2016) and text interchange format (TIF; Mullen
 et al. 2018). The former represents a highly standardized and widespread
 format for dependency structures across various languages. Its form is a
-plain text file containing several fields for each token, and it turns
-useful when universal dependencies are needed. The latter, especially
-used in R, offers a flexible structure for text package objects, such as
-corpus and token objects. All R packages that support this standard will
-be able to interact between them nicely; such R packages are
+plain text file containing several fields for each token, and it becomes
+useful when universal dependencies are needed. The latter,
+used in R especially, offers a flexible structure for text package objects, such as objects from
+corpora and tokens. All R packages which support this standard will
+be able to interact between them nicely; two R packages are
 \texttt{spacyr} and \texttt{quanteda}.
 
-The model of choice depends on several factors, for example, the
-dimension of the dataset, the presence of labeled data, computational
-capabilities, or the extreme need for precise accuracy of the results.
+The choice of model depends on several factors, for example, the
+dimension of the data set, the presence of labeled data, the computational
+capacity available, or the degree of precision and accuracy needed from the results.
 
 \section{NER using R}\label{ner-using-r}
 
-There are several packages that can be used in R. Each package might use
+There are several packages which can be used in R. Each package might use
 a different model to annotate the text. One of them is
 \texttt{nametagger}, another is \texttt{OpenNLP}, which is based on the
-Apache OpenNLP library. Related to the previous one is \texttt{entity},
+Apache OpenNLP library. Related to the latter is \texttt{entity},
 which is a wrapper for \texttt{NLP} and \texttt{OpenNLP}. Another is
-\texttt{crfsuite}, that provides an interface to CRF. Yet, another one
+\texttt{crfsuite}, providing an interface with CRF. Yet another
 is \texttt{udpipe}, a package developed by the Belgium Network of Open
 Source Analytical Consultants (BNOSAC). Packages like
-\texttt{nametagger}, \texttt{crfsuite} or \texttt{udpipe} use CoNLL-U
+\texttt{nametagger}, \texttt{crfsuite}, or \texttt{udpipe} use CoNLL-U
 models \footnote{CoNLL-U format:
   https://universaldependencies.org/format.html} while \texttt{OpenNLP}
 has its own annotator. Last but not least, an important package,
-\texttt{spacyr} (Benoit and Matsuo 2023), is used in R through and
-interface to the Python \texttt{SpaCy} library (Vasiliev 2020).
-\texttt{SpaCy} uses neural network models and tries to predict entities
-based on these models, which are pre-trained on large datasets.
-Depending on the need they are optimized for speed, sm (small), for a
+\texttt{spacyr} (Benoit and Matsuo 2023), is used in R through an
+interface with the Python \texttt{SpaCy} library (Vasiliev 2020).
+\texttt{SpaCy} uses neural-network models and tries to predict entities
+based on them. The models are trained using large data sets.
+Depending on the need, they are optimized for speed, sm (small), for a
 balance between speed and accuracy, md (medium), and for higher accuracy
 but with more computational power needed, lg (large). These models exist
-for several languages, such as English, German, French, and many more. A
-pipeline for how \texttt{Spacy} does annotations, is provided in
+for several languages, such as English, German, French, and many others. A
+pipeline for how \texttt{Spacy} carries out annotations is provided in
 Figure~\ref{fig-pipeline}. The first component, ``tok2vec'', transforms
-tokens into vector embeddings (more about this in
-Chapter~\ref{sec-extracting-information-from-embeddings}) that represent
-semantic meanings in a numerical space. These vectors are used by both
-the ``tagger'' which assigns POS tags, and the ``parser'' which analyzes
+tokens into embedded vectors (there is more about this in
+Chapter~\ref{sec-extracting-information-from-embeddings}) which represent
+semantic meaning in a numerical space. These vectors are used by both
+the ``tagger'', which assigns POS tags, and the ``parser'' which analyzes
 the grammatical structure of the sentence. The ``attribute\_ruler''
-applies rules to attributes like lemma, POS, etc., and helps the
-``lemmatizer'' to standardize words to their root form. The last
+applies rules to elements such as lemma, POS, etc., and helps the
+``lemmatizer'' standardize words as their root form. The last
 component, ``ner'', identifies named entities. It might loop back,
-though, to ``tok2vec'' for better detection.
+however, to ``tok2vec'' for better detection.
 
 \begin{figure}
 
@@ -197,36 +191,35 @@ spaCy website)}
 
 \end{figure}%
 
-The entities (or categories) for NER that \texttt{SpaCy} extracts are
-some basic ones; some names are intuitive, and others might need an
-explanation. The examples are not exhaustive.
+The entities (or categories) for NER that \texttt{SpaCy} extracts are basic; some names are intuitive, while others might need an
+explanation. The examples below are not exhaustive.
 
 \begin{itemize}
 \tightlist
 \item
-  PERSON: People, including fictional, aliases, former names;
+  PERSON: People, including fictional, aliases, former names
 \item
   NORP (Nationalities, or Religious or Political): Nationalities or
-  religious or political groups;
+  religious or political groups
 \item
-  FAC (Facility): Buildings, airports, highways, bridges, hospitals;
+  FAC (Facility): Buildings, airports, highways, bridges, hospitals
 \item
-  ORG: Companies, agencies, institutions, NGOs;
+  ORG: Companies, agencies, institutions, NGOs
 \item
-  GPE (Geopolitical Entity): Countries, states, cities, rural areas;
+  GPE (Geopolitical Entity): Countries, states, cities, rural areas
 \item
-  LOC: Non-GPE locations, mountain ranges, bodies of water, deserts;
+  LOC: Non-GPE locations, mountain ranges, bodies of water, deserts
 \item
-  PRODUCT: Objects, vehicles, foods (Not services.);
+  PRODUCT: Objects, vehicles, food (not services.)
 \item
   EVENT: Named hurricanes, battles, wars, sports events, political
-  events, cultural events, scientific events, economic events;
+  events, cultural events, scientific events, economic events
 \item
-  WORK\_OF\_ART: Titles of books, songs, paintings;
+  WORK\_OF\_ART: Titles of books, songs, paintings
 \item
-  LAW: Named documents made into laws;
+  LAW: Named documents made into laws
 \item
-  LANGUAGE: Any named language;
+  LANGUAGE: Any named language
 \end{itemize}
 
 SpaCy includes some extended categories, too:
@@ -234,19 +227,19 @@ SpaCy includes some extended categories, too:
 \begin{itemize}
 \tightlist
 \item
-  DATE: Absolute or relative dates or periods;
+  DATE: Absolute or relative dates or periods
 \item
-  TIME: Times smaller than a day;
+  TIME: Times smaller than a day
 \item
-  PERCENT: Percentage, including ``\%'';
+  PERCENT: Percentage, including ``\%''
 \item
-  MONEY: Monetary values, including units;
+  MONEY: Monetary values, including units
 \item
-  QUANTITY: Measurements, as of weight or distance;
+  QUANTITY: Measurements, e.g., of weight or distance
 \item
-  ORDINAL: ``first'', ``second'', etc.;
+  ORDINAL: ``first'', ``second'', etc.
 \item
-  CARDINAL: Numerals, such as 1, 10, 100, three, seventeen;
+  CARDINAL: Numerals, such as 1, 10, 100, three, seventeen
 \end{itemize}
 
 The previous categories might have a letter assigned after them, for
@@ -256,59 +249,58 @@ which stands for:
 \begin{itemize}
 \tightlist
 \item
-  B: Beginning of an entity.
+  B: Beginning of an entity
 \item
-  I: Inside of an entity (continuation of an entity started with B).
+  I: Inside of an entity (continuation of an entity started with B)
 \item
-  L: Last token of an entity.
+  L: Last token of an entity
 \item
-  U: Unit entity (a single-token entity).
+  U: Unit entity (a single-token entity)
 \item
-  O: Outside of any entity.
+  O: Outside of any entity
 \end{itemize}
 
 This is used when the entity spans multiple tokens, and the current
-token is the first, inside, the last, etc. token in that sequence.
+token is the first, inside, the last, etc., token in that sequence.
 
-\section{NER Information extraction with
+\section{NER Information extraction using
 spacyr}\label{ner-information-extraction-with-spacyr}
 
-In this subsection we illustrate the functionalities of the just
-described NER process by using the R package \texttt{spacyr} along with
-the sentiment dataset we already familiarized with in
+In this subsection we illustrate the functionalities of the NER process by using the R package \texttt{spacyr}, along with
+the sentiment dataset we already familiar with from
 Chapter~\ref{sec-sentiment-analysis}. We will extract the most frequent
-entities for two chosen brands and compare their counts. Then we will
+entities for two brands and compare their counts. Then we will
 focus on the negative reviews and check how often specific entities are
-mentioned. Adjectives are related to emotions and checking them give us
-more insight into how brands are perceived, but adjectives ar related to
-other words, so, the Part of Speech (POS) dependencies are explored.
-Tracking adjectives over time is very useful to measure the level of
-satisfaction or dissatisfaction with products. Language complexity,
-another metric that can be calculated, is potentially important to
-understand and compare how people express their opinions with respect to
-specific brands and gives a hint to managers of how to respond and match
-the users' style.
+mentioned. Adjectives are often related to emotions, and checking them gives us
+more insights into how brands are perceived. However, adjectives can be related to
+other words, so we will also explore the part-of-speech (POS) dependencies.
+Tracking adjectives over time is a very useful way to measure the levels of
+satisfaction or dissatisfaction with products. Language complexity is
+another metric which can be calculated, and is potentially important for
+understanding and comparing how people express their opinions about
+specific brands, and also gives a hint to managers for how to respond and match
+the users' styles.
 
-\subsection{Identifying and Describing
-Entities}\label{identifying-and-describing-entities}
+\subsection{Identifying and describing
+entities}\label{identifying-and-describing-entities}
 
-After loading the library \texttt{spacyr,} the package authors
-introduced a function called \texttt{spacy\_initialize()} to open the
-connection between R and Python, which detects if the library exists and
+After loading the \texttt{spacyr} library, the package
+introduces a function called \texttt{spacy\_initialize()} to open the
+connection between R and Python, and which detects if the library exists and, if so,
 initializes it. Frequently, the cohabitation of R and Python can be
-problematic due to the environments Python might be in and the several
-ways and versions it was installed on your operating system. For this
-dataset, we suggest installing the model \texttt{en\_core\_web\_lg.}
+problematic due to the environments Python might exist in and the versions or
+way it was installed on your operating system. For this
+data set, we suggest installing the model \texttt{en\_core\_web\_lg.}
 
-We will use our \texttt{comparison\ dataset} from
+We will use the \texttt{comparison\ dataset} from
 Chapter~\ref{sec-sentiment-analysis}, which is a reduced version of the
-initial dataset of the product reviews. It contains the sentiment scores
-already assigned to each document, and select those that have a
-sentiment.ai score \(<-0,7\), an empirical threshold, so we focus on the
-most negative side of the reviews to identify communicated issues with
-the brands. We also drop some fields that we will not need, such as
-sentimentAnalysis, vader, sentimentr, or syuzhet, and select two brands,
-in the example below we chose as Samsung and Apple.
+initial data set of product reviews. It contains the sentiment scores
+already assigned to each document, and we will select those which have a
+sentiment.ai score \(<-0,7\), an empirical threshold, so we can focus on the
+most negative reviews to identify the problems with
+the brands. We have also dropped some fields which we will not need, such as
+sentimentAnalysis, vader, sentimentr, or syuzhet, and selected two brands.
+In the example below we chose Samsung and Apple.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -328,14 +320,14 @@ in the example below we chose as Samsung and Apple.
 \end{Highlighting}
 \end{Shaded}
 
-Next we use the \texttt{spacy\_parse()} function in the text column, to
+Next we use the \texttt{spacy\_parse()} function in the text column to
 perform some initial linguistic analysis. The parsed text is summarized
-as a table in the \texttt{parsedtxt} variable which contains the text
-identifier (the number of the review), the sentence position in the
-text, the token position in the sentence, the actual word and its base
+as a table using the \texttt{parsedtxt} variable which contains the text
+identifier (the number of the review), the sentence's position in the
+text, the token's position in the sentence, the actual word and its base
 (root) form, the grammatical category (e.g., noun, verb, adjective), and
-the NER labels as classifications in terms of organizations, products,
-etc.
+the NER labels as classifications for organizations, products,
+and so on.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -345,17 +337,17 @@ etc.
 \end{Highlighting}
 \end{Shaded}
 
-By doing this operation, we lose some information from the original
-dataset, but if we want to have a correspondence between each document
-we still can merge this newly obtained data frame with an enhanced
-version of the original dataset. Because it is comfortable for
-subsequent processing to separate the text into sentences, we transform
+By carrying out this operation, we have lost some information from the original
+data set, but if we want to have a correspondence between each document
+we still can merge this new data frame with an enhanced
+version of the original data set. Because it is helpful for
+the subsequent processing to separate the text into sentences, we transform
 each review's identification in the \texttt{data} frame by adding
 ``text'' to the numerical value of the ``doc\_id'' field. After
-performing this operation, we save the dataset to a new variable called
-\texttt{sent\_df}. We then merge this with the original dataset to
-include the ``brand'' column. We join this dataset with the
-\texttt{parsedtxt} dataframe to obtain a new structure ready for
+performing this operation, we save the data set to a new variable called
+\texttt{sent\_df}. We then merge this with the original data set to
+include the Brand column. Finally, we combine this data set with the
+\texttt{parsedtxt} data frame to create a new structure ready for
 analysis.
 
 \begin{Shaded}
@@ -388,10 +380,9 @@ analysis.
 
 The following code filters out invalid entity values, identifies unique
 \texttt{doc\_id} and \texttt{entity} pairs, groups by brand and entity,
-counts the frequency of each entity for each brand, sorts by brand in
+counts the frequency of each entity for each brand, sorts by brand by the
 ascending number of appearances, and then selects the top 10 most
-frequent entities per brand. A plot visualizes the entities' frequency
-difference for each brand. For the meaning of the entities, check the
+frequent entities per brand. A plot visualizes the frequency difference of the entities for each brand. For the meaning of the entities, check the
 beginning of this chapter.
 
 \begin{Shaded}
@@ -423,17 +414,16 @@ beginning of this chapter.
 
 \includegraphics{9.Chapter_new_files/figure-pdf/ner4-1.pdf}
 
-Now, we are trying to find which ORG or PRODUCT entities are present in
-the negative reviews and how often. First, we filter specific entities,
-such as ``PRODUCT\_B'', ``ORG\_B'', ``ORG\_I'', then we capitalize
-tokens for both ORG and PRODUCT to have uniformity in results. Then we
+Now, we want to to find which ORG or PRODUCT entities are present in
+the negative reviews and how often. First, we filter for specific entities,
+such as ``PRODUCT\_B'', ``ORG\_B'', ``ORG\_I'', then we capitalize the
+tokens for both ORG and PRODUCT to ensure uniformity in the results. Then we
 group the tokens by brand, count the occurrences, filter tokens with
-more than 5 occurrences and sort by descending counts. In the plot of
-the most frequent entities for each of the two brands we notice how
-often the competitors are mentioned in these reviews. For example, in
-Samsung or Galaxy or Android reviews, there is no iPad or Apple product
-mentioned while in the Apple ecosystem reviews, Samsung is mentioned.
-Amazon is mentioned in both brands because is the vendor.
+more than 5 occurrences, and sort by descending counts. In the plot of
+the most frequent entities for each of the two brands we can see how
+often competitors are mentioned in these reviews. For example, in the
+Samsung or Galaxy or Android reviews, there is no mention of an iPad or Apple product, while for Apple, Samsung is mentioned.
+Amazon is mentioned for both brands because it is the vendor.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -464,32 +454,31 @@ Amazon is mentioned in both brands because is the vendor.
 
 \includegraphics{9.Chapter_new_files/figure-pdf/ner5-1.pdf}
 
-\subsection{Extracting Adjectives}\label{extracting-adjectives}
+\subsection{Extracting adjectives}\label{extracting-adjectives}
 
 The \texttt{pos} field identifies which category a word, or its lemma,
-belongs to and uses a tag set that is generally well understood and
+belongs to, and uses a tag set that is generally well understood and
 useful across various applications. For a more detailed treatment,
-especially in English, \texttt{spaCy} utilizes the OntoNotes 5 version
+especially in English, \texttt{spaCy} uses the OntoNotes 5 version
 of the Penn Treebank tag set, while other languages may use different
-Treebanks \footnote{spaCy's POS Tagging Documentation:
-  https://spacy.io/docs/usage/pos-tagging\#pos-tagging-english}. More
+Treebanks. \footnote{spaCy's POS Tagging Documentation:
+  https://spacy.io/docs/usage/pos-tagging\#pos-tagging-english} More
 details can be found in spaCy's documentation. With this understanding
-of the text structure, we can now proceed to extract some specific
-aspect of interest used in the analyzed content.
+of the text structure, we can now proceed to extract specific
+elements from the analyzed content.
 
-Emotions and sensory perceptions are expressed through adjectives and it
-is useful to understand how they are used because they help to
+Emotions and sensory perceptions are often expressed in language through adjectives, and it
+is useful to understand this because they help us to
 differentiate a brand and to detect underlying pain points. Repeated use
-of adjectives in reviews or their appearance in slogans (Ke and Wang
-2013) might persuade (Ebaid 2018) the audience about a product or a
-service and emphasize strengths or weaknesses. Adjectives are commonly
-used in commerce, whether they appear in simple basic form, comparative,
-or superlative (Hakkarainen 2016). They can elicit emotions and make
-that a specific attribute of a brand to be remembered Berger, Kim, and
-Meyer (2021). We select the ADJ part of the reviews, group by adjective
-token and brand, count the occurrences, filter adjectives with more than
-one occurrence, and sort by descending counts. After this, we list the
-first 20 most frequent adjectives and the brands they are related to.
+of adjectives in reviews, or their appearance in slogans (Ke and Wang
+2013), might be persuasive (Ebaid 2018) for how a product or a
+service is perceived and emphasize strengths or weaknesses. Adjectives are commonly
+used in commerce, whether they appear in a simple basic form, or as comparatives
+or superlatives (Hakkarainen 2016). They can elicit emotions and help people remember a specific attribute of a brand (Berger, Kim, and
+Meyer 2021). We have selected the ADJ part of the reviews, grouped them by adjective
+token and brand, counted the occurrences, filtered adjectives with more than
+one occurrence, and then sorted by descending counts. After this, we have listed the
+20 most frequent adjectives and the brands they are related to.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -547,39 +536,39 @@ first 20 most frequent adjectives and the brands they are related to.
 20 slow                     1               7
 \end{verbatim}
 
-Basic adjectives describe a quality in a simple form, without making any
+Basic adjectives describe a quality in a simple form without making any
 comparison. Comparative adjectives often end in ``-er'' and might appear
 together with ``more'', ``much'', or ``less''. One such example is
 ``better'' or ``much better''. Superlative adjectives go to the extreme,
 they often end in ``-est'' and are used with words like ``most'',
-``least'', such in ``best'' or ``least useful''. In our dataset, in the
-20 adjectives displayed, two are comparative, ``more'' and ``much'', the
-other are basic. As an exercise, we leave you the task to view all the
-adjectives and categorize them.
+``least'', such in the ``best'' or ``least useful''. In our data set, of the
+20 adjectives, two are comparative, ``more'' and ``much'', the
+others are basic. As an exercise, we have left you the task of viewing all the
+adjectives and categorizing them.
 
 \subsection{Dependencies and POS
 highlighting}\label{dependencies-and-pos-highlighting}
 
 It is interesting and useful to obtain additional information from the
 text and better understand how parts of speech contribute to meaning.
-\texttt{spacyr} in conjunction with the package \texttt{rsyntax} help
-plot a tree of POS, highlighting the dependencies between words. If you
-want another example, you can substitute ``text1'' and assign to
-``doc\_id'' a document of your choice, see Figure~\ref{fig-ner7} to
-visualize a syntactic dependency parse tree and understand the
-grammatical structure of a sentence. Words are related to one another
+\texttt{spacyr}, in conjunction with the package \texttt{rsyntax}, help
+us to plot a tree of POS, highlighting the dependencies between words. If you
+want another example, you can substitute ``text1'' and assign a document of your choice to
+``doc\_id''; see Figure~\ref{fig-ner7} to
+visualize a syntactic-dependency parse tree and understand the
+grammatical structure of a sentence. The words are related to one another
 and this is indicated by the branches. The arrows points from a head
 word to a dependent word. The numbers correspond to the word order in a
 sentence to keep track of the order of appearance. The ROOT of the tree
-is the main verb, represents the central action while other words are
+is the main verb, representing the central action, while other words are
 linked through different dependency relations. There are several labels
-in the image, such as ``nsubjh'', ``dobj'', ``punct'', they come from
-the Universal Dependencies (UD) annotation scheme. For example, ``nobj''
+in the image, such as ``nsubjh'', ``dobj'', and ``punct'', which come from
+the universal-dependencies (UD) annotation scheme. For example, ``nobj''
 represents a nominal subject (who or what performs an action), ``dobj''
-represents a direct object (the one that receives the action of a verb),
-``punct'' is a punctuation mark. For a more complete definition of all
-the labels, see (De Marneffe et al. 2021) . This type of analysis is
-also suitable for chatbots, search engines, or grammar correction tools.
+represents a direct object (the person or object that is the recipient of the action of a verb),
+``punct'' is a punctuation mark. For a more complete list and definition of
+the labels, see De Marneffe et al. (2021) . This type of analysis is
+also suitable for chatbots, search engines, or grammar-correction tools.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -615,15 +604,14 @@ also suitable for chatbots, search engines, or grammar correction tools.
 
 \end{figure}%
 
-It is a useful to visualize some POS elements, especially those you are
+It is a useful to visualize some of the POS elements, especially those you are
 interested in. In the next example, we will select the first text in the
-dataset and highlight the adjectives and nouns that refer to some
-specific entities. Although on printed paper with only shades of gray,
-the results are not that appealing, we encoded the entities in blue, the
+data set and highlight the adjectives and nouns that refer to a number of
+specific entities. Although printed using shades of gray, we have encoded the entities in blue, the
 adjectives in red, and the nouns in green. Nouns are excellent
 candidates for product features (Kauffmann et al. 2019) and will allow
-you to immediately capture the link between the adjectives and the
-nouns, considering the entities we are trying to understand more about,
+you to capture the link between the adjectives and the
+nouns immediately. For the entities we are trying to understand more about,
 see the color-annotated text after the code.
 
 \begin{Shaded}
@@ -682,33 +670,32 @@ see the color-annotated text after the code.
 
 Explore this review and run the code again to visualize another review
 by simply substituting ``text1'' with another value, such as ``text2'',
-``text10,'' or ``tex42''. You can make several combinations by
-extracting not only adjectives and nouns but also adverbs. Adverbs can
-be classified based on time, frequency, location, manner, degree, or
-conjunctive adverbs. In sentiment analysis, the adverbs of degree, such
-as ``extremely,'' ``absolutely,'' ``really,'' and so on, are the most
+``text10'', or ``tex42''. You can create several combinations by
+extracting not only the adjectives and nouns, but also adverbs. Adverbs can
+be classified as being of time, frequency, location, manner, degree, or
+as conjunctive adverbs. In sentiment analysis, the adverbs of degree, such
+as ``extremely'', ``absolutely'', ``really'', and so on, are the most
 relevant ones. These adverbs have a further classification, as found in
-(Benamara et al. 2007), a few examples for each class is given:
+(Benamara et al. 2007), and a few examples of each class are given below:
 
 \begin{itemize}
 \tightlist
 \item
-  Adverbs of affirmation, such as certainly, definitely, absolutely,
-  surely, indeed, undoubtedly, clearly, obviously, etc.
+  Adverbs of affirmation: certainly, definitely, absolutely,
+  surely, indeed, undoubtedly, clearly, obviously
 \item
-  Adverbs of doubt, such as possibly, maybe, possibly, apparently,
-  likely, conceivably, arguably, supposedly, uncertainly, etc.
+  Adverbs of doubt,: possibly, maybe, possibly, apparently,
+  likely, conceivably, arguably, supposedly, uncertainly
 \item
-  Strong intensifying adverbs, such as extremely, incredibly,
+  Strong intensifying adverbs: extremely, incredibly,
   absolutely, totally, completely, remarkably, exceptionally, amazingly,
-  terribly, deeply, etc.
+  terribly, deeply
 \item
-  Weak intensifying adverbs, such as somewhat, fairly, slightly,
-  moderately, rather, mildly, partly, relatively, etc.
+  Weak intensifying adverbs: somewhat, fairly, slightly,
+  moderately, rather, mildly, partly, relatively
 \item
-  Negation and minimizers are those that negate or diminish sentiments,
-  for example, never, nowhere, nothing, hardly, barely, rarely, little,
-  infrequently, etc.
+  Negation and minimizers are those that negate or diminish sentiments: never, nowhere, nothing, hardly, barely, rarely, little,
+  infrequently
 \end{itemize}
 
 Adverbs, ADV, can be extracted in a similar manner to adjectives, and
@@ -718,19 +705,19 @@ can be used to shape targeted marketing messages.
 \subsection{Tracking adjective usage over
 time}\label{tracking-adjective-usage-over-time}
 
-Marketers are interested in assessing the performance of their marketing
+Marketers are interested in assessing the performance of their
 efforts by analyzing the prevalence of adjectives in consumer reviews
 before, during, and after marketing campaigns or product launches. A
-successful campaign might be reflected in an uplift in positive
-adjectives and a decrease in negative ones. We next showcase the
-tracking of the frequency of negative reviews on a brand together with
-those containing a competitor over time. If information is properly
-extracted from the dataset, such tracking can also be helpful in
-deriving seasonal insights and supporting crisis management. The
+successful campaign might be reflected in an increase in the use of positive
+adjectives and a decrease in negative ones. We next demonstrate the
+tracking over time of the frequency of negative reviews for a brand, together with
+those containing a competitor. If the information is
+extracted properly from the dataset, such tracking can also be helpful in
+acquiring seasonal insights and supporting crisis management. The
 following code filters the \texttt{comparison} dataset to include only
 adjectives related to two brands (Apple and Samsung). Then it groups and
 counts the adjectives by date and brand, creates a line chart to display
-the adjective usage over time and adds a smoothing curve to show trends.
+the adjective usage over time, and adds a smoothing curve to show the trends.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -772,32 +759,32 @@ the adjective usage over time and adds a smoothing curve to show trends.
 The graph in Figure~\ref{fig-ner9} plots the frequency of adjectives
 associated with two brands, Apple and Samsung. The trend for Apple shows
 fluctuations, with a general increase in the use of adjectives from 2010
-to around mid-2012. A smooth trend line is also represented. Samsung
+to around mid-2012. A smooth trend line can also be seen. Samsung
 showed more variability between mid-2011 and late 2012. There is a
-general increase in variability in time, with peaks becoming more
-extreme. This might indicate a more varied public and media reactions
-through a spike in adjective usage. Consumers express negative feelings
+general increase in variability over time, with peaks becoming more
+extreme. This might indicate more varied public and media reactions
+through a spike in adjective usage. Consumers expressed negative feelings
 about Apple's products through the steady use of adjectives. Given that
-customers express their anger differently in the two brands, marketers
-can shape their communication strategies accordingly. The language used
-can be leveraged for different population segments. One can modify the
+customers express their anger differently for the two brands, marketers
+can use this information to shape their communication strategies. The language used
+can be targeted at different segments of the population. It is possible to modify the
 previous code to add more brands, use a different smoothing method (for
-example a linear model, ``lm'') or use a stacked bar chart instead,
+example a linear model, ``lm'') or use a stacked bar chart instead:
 replace \texttt{geom\_line()} with
-\texttt{geom\_bar(stat\ =\ "identity",\ position\ =\ "stack")}
+\texttt{geom\_bar(stat\ =\ "identity",\ position\ =\ "stack")}.
 
 \subsection{Language complexity}\label{language-complexity}
 
 Sometimes researchers are interested in studying the syntactic
-complexity in the relationship with the language proficiency reflected
-in texts and the overall (or ``objective'') proficiency in a target
-language (Ortega 2003). When conducting these measurements, one must
+complexity in relation to the language proficiency shown
+in texts, and the overall (or ``objective'') proficiency in a target
+language (Ortega 2003). When conducting these measurements, it is important to
 compare them against a benchmark or another unit, for example, unit A
 compared to unit B on a specific index can provide insights into
 accuracy and applicability (Szmrecsanyi 2004). There are several metrics
 used to calculate syntactic complexity, and they are mainly used in
 linguistics, language acquisition, and computational linguistics. In
-this subchapter, we demonstrate the use of a simple metric, which is
+this section, we demonstrate the use of a simple metric, which is
 based on the measurement of the density of verbs called Fichtner's C
 (Fichtner 1980; Samples, Ireland, and Kraczon 2024), which is defined
 as:
@@ -806,13 +793,13 @@ as:
 \text{Fichtner's C} = \frac{\text{Number of Verbs}}{\text{Number of Sentences}} \times \frac{\text{Number of Words}}{\text{Number of Sentences}}
 \]
 
-Using syntactic complexity in marketing allows a detailed comparison of
+Using syntactic complexity in marketing allows for a detailed comparison of
 the language used to describe different brands. By analyzing metrics
 like Fichtner's C, marketers can gain insights into how brands are
 perceived and what level of complexity is used to describe them, thus
-tailoring their communication style to a specific audience. The code
-below computes Fichtner's C index and compares linguistic complexity
-between brands displaying a table.
+tailoring their communication styles to specific audiences. The code
+below computes the index for Fichtner's C and compares the linguistic complexity
+between the brands on a table.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -850,20 +837,9 @@ between brands displaying a table.
 2 Samsung    42.8   44.1       26.5    71
 \end{verbatim}
 
-From the table, we can see that Apple has, on average, a higher
-linguistic complexity and much greater variability than Samsung. This
-could imply that Apple's content ranges from very simple to very
-complex, possibly depending on the type of document or context.
-Samsung's documents are more consistent in terms of linguistic
-complexity, as indicated by the lower standard deviation. This suggests
-that Samsung maintains a more uniform style across its documents. Both
-brands have median values lower than their respective averages,
-indicating a right-skewed distribution. This means there are some
-documents with very high complexity that raise the average.
-
-From the table, we can see that reviews containing the brand Apple
-exhibit, on average, a higher linguistic complexity, with a greater
-average Fichtner's C index (\texttt{avg\_F\_C}) and a greater
+From the table, we can see that reviews containing Apple
+exhibit, on average, higher linguistic complexity, with a greater
+than average Fichtner's C index (\texttt{avg\_F\_C}) and a greater
 variability than Samsung, as shown by the higher standard deviation
 (\texttt{sd\_F\_C}). This could imply that content about Apple ranges
 from very simple to very complex, possibly depending on the type of
@@ -873,12 +849,12 @@ standard deviation (\texttt{sd\_F\_C}). This suggests that reviews about
 Samsung maintain a more uniform style across its documents. Both brands
 have median values (\texttt{median\_F\_C}) values lower than their
 respective averages (\texttt{avg\_F\_C}), indicating a right-skewed
-distribution. This means there most reviews have moderate complexity but
-there are some documents with very high complexity that raise the
+distribution. This means that most reviews have moderate levels of complexity but
+there are some documents with very high complexity which raise the
 average. Notice that differences in reviews (in this case across brands)
-can also reflect the heterogeneity in language used by the respective
+can also reflect the heterogeneity in language used by the
 clientele and not necessarily is attributable to the brand as such. To
-visualize, we can also plot the observed linguistic complexity measures.
+visualize this, we can also plot the linguistic complexity measures.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -898,42 +874,41 @@ visualize, we can also plot the observed linguistic complexity measures.
 
 The visualization confirms out previous discussion. At the lower end of
 the linguistic complexity scale, both brands show a peak, and this shows
-that a larger proportion of documents exhibit low linguistic complexity.
+that a larger proportion of their documents have low linguistic complexity.
 Apple reviews have a higher peak density compared to Samsung, meaning
-more linguistic complexity. The brands show long tails that reach higher
-linguistic complexity values, with Samsung having a more pronounced
-tail. This indicates that some documents have higher complexity. Across
-the negative reviews, customers refer to Apple with a more consistent
-linguistic complexity, so documents are more homogenous. Customers who
+they have greater linguistic complexity. The brands have long tails which reach higher levels of
+linguistic complexity, with Samsung having a more pronounced
+tail. This indicates that some documents have higher levels of complexity. Across
+the negative reviews, customers refer to Apple with more consistent
+linguistic complexity, so its documents are more homogenous. Customers who
 write about Samsung in a negative context use a slightly more varied
 writing style. Nevertheless, both brands, when they are described in
-negative terms, have a low linguistic complexity, indicating a precise
+negative terms, have a low level of linguistic complexity, indicating a precise
 focus and clear, straightforward communication.
 
 \subsection{A final technical note}\label{a-final-technical-note}
 
-Several advanced techniques can be employed to enhance the capabilities
-of an NER task. An example can be the use of consolidation functions to
-merge multi-word entities into a single token or the concatenation of
+Several advanced techniques can be employed to enhance an NER task. An example is the use of consolidation functions to
+merge multi-word entities into a single token, or the concatenation of
 words into noun phrases, also called noun chunks. \texttt{SpaCy} can use
-language models that are not limited only to English but also include
+language models which are not limited to English, but also include
 German, Spanish, Portugues, French, Italian, and Dutch, among others.
-\texttt{spacyr} can be integrated with other R text analysis packages,
+\texttt{spacyr} can be integrated with other R text-analysis packages,
 for example, \texttt{quanteda}, or \texttt{tidytext}, thus simplifying
 text manipulation and analysis tasks.
 
 Additionally, as we have seen in Chapter~\ref{sec-textual-data}, regular
-expressions can be helpful in extracting preposition-noun combinations
-from the corpus and checking the most frequent noun for each preposition
-or many other parts of speech. A clear understanding of the annotations
-and the meanings of the tags at different levels, as well as tag sets
+expressions can be helpful when extracting preposition-noun combinations
+from the corpus, and checking the most frequent noun for each preposition
+or other parts of speech. A clear understanding of the annotations
+and the meanings of the tags at different levels, as well as the tag sets
 present in various languages, is essential because these could influence
-the approach to NER and text analysis in general.
+your approach to NER and text analysis in general.
 
-Using Python in the backround of an R session can be very
-memory-intensive. Once your analysis is done, tt is strongly advised to
-use the \texttt{spacy\_finalize()} function which terminates the Python
-process and frees up the memory it was using.
+Using Python in the background of an R session can be very
+memory-intensive. Once your analysis is done, it is strongly recommended to
+use the \texttt{spacy\_finalize()} function which terminates Python
+and frees up the memory it was using.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -942,54 +917,52 @@ process and frees up the memory it was using.
 \end{Highlighting}
 \end{Shaded}
 
-\section{Summarization}\label{summarization}
+\section{Summarizing}\label{summarization}
 
-Talking about POS, the word summary relates to something that is brief
-and concise. The word comes from the Latin word ``summa,'' which means
-``totality, gist. One will find summarizations everywhere, such as the
-summary of a book, at the workplace, in the meeting minutes, in news
-articles, and in customer reviews. Because we focus on the latter one,
-we must understand that this allows for an aggregated view of opinions,
-delivering something similar to''the wisdom of the crowd .''Many texts
-are too long to read, while we have too little time, often encountered
-as ``too long, did not read.'' The abbreviation of this is TL;DR (again
+The word summary relates to something which is brief
+and concise. The word comes from the Latin word \textit{summa}, which means
+``totality, gist''. One will find summaries everywhere, such as a
+summary of a book, in the workplace, in the minutes of meetings, in news
+articles, and in customer reviews. Because we focus on the latter,
+we have to understand that this allows for an aggregated view of opinions,
+delivering something similar to''the wisdom of the crowd''. Many texts
+are too long to read, and we often have too little time, and so the comment ``too long, did not read''. The abbreviation for this is TL;DR (again
 a shorter version of something), which is commonly used in online
-discussion, social media, etc., indicates content that is lengthy and a
+discussions, social media, etc., indicating content that is lengthy and that a
 summary is provided for whoever does not have time to read the whole
-text. TL;DR can be used as a label for the summary itself or as a
-comment, to indicate that the text is too long. Summaries are also
-useful for information retention to enhance the ability to learn
-something (Reder and Anderson 1980), and it implies conveying
+text. TL;DR can be used as a label for the summary itself, or as a
+comment to indicate that the text is too long. Summaries are also
+useful for information retention and enhance the ability to learn
+something (Reder and Anderson 1980), implying that they conveying
 information in a very abridged form, creating a shortened version that
-keeps the original content's essential information and main points. But
-how much can one summarize? In NLP, summarization can be achieved mainly
+retains only the essential information and main points. But
+how much can one summarize? In NLP, summarizing can, generally, be achieved by
 using three approaches: extractive (Moratanch and Chitrakala 2017),
-abstractive (Som Gupta and Gupta 2019), or hybrid (El-Kassas et al.
-2021). The first approach, uses a selection (and extraction) of key
+abstractive (Gupta and Gupta 2019), or hybrid (El-Kassas et al.
+2021). The first approach uses a selection (and extraction) of key
 sentences, or phrases, from the original text that act as a summary.
-This selection is typically based on some statistical features, such as
-importance scores, term frequency, or position. The second one, is a
-generative process that uses rephrasing or paraphrasing with words that
-might not even exist in the original text. This last approach involves
-understanding the context and producing an abridged version that
-captures the gist of the original text. The hybrid method is a
-combination of the first two. Below we will focus on the extractive
-summarization because it can be accomplished relatively quick, although
+This selection is typically based on statistical features such as
+importance scores, term frequency, or position. Abstractive summarizing is a
+generative process that uses the rephrasing or paraphrasing of words which
+might not exist in the original text. This last approach involves
+understanding the context of a text and producing an abridged version that
+captures the gist of the original. The hybrid method is a
+combination of the first two. Below we will focus on extractive
+summarization because it can be accomplished relatively quickly, although
 it might be computationally intensive. It also fits nicely with the NER
-part we have discussed so far.
+elements we have discussed so far.
 
-\subsection{Summarization in R}\label{summarization-in-r}
+\subsection{Summarizing in R}\label{summarization-in-r}
 
-There are a few packages that help with the task of summarization in R,
-either directly or indirectly. One is \texttt{lexRankr}, another one is
-LSAfun, and yet, another one is \texttt{textrank}. The simplest one to
+There are a few packages that help with the task of summarizing in R,
+either directly or indirectly. One is \texttt{lexRankr}, another is
+LSAfun, and yet another one is \texttt{textrank}. The simplest one to
 work with is \texttt{lexRankr}. The implementation of the algorithm in R
-uses a stochastic graph-based method to assess the importance of a text
-unit, such as a sentence, in a corpus (Erkan and Radev 2004). The basic
-idea is that, if the algorithm finds sentences that are similar to other
+uses a stochastic graph-based method to assess the importance of a unit of text, such as a sentence, in a corpus (Erkan and Radev 2004). The basic
+idea is that if the algorithm finds sentences with are similar to other
 sentences, it means that they are important. In this graph-base
-approach, sentences are nodes, edges represent the similarity between
-sentences. To illustrate, let us take the ``data'' dataframe and apply
+approach, sentences are nodes and edges represent the similarity between
+sentences. To illustrate, let us take the ``data'' data frame and apply
 the algorithm.
 
 \begin{Shaded}
@@ -1038,23 +1011,21 @@ the algorithm.
 [3] "I will never buy a samsung product again!"                                               
 \end{verbatim}
 
-Considering that the dataset was selected from negative reviews, the
-customers who talk about the Apple products, express themselves in
+Considering that the data set was selected from negative reviews, the
+customers who talk about the Apple products express themselves in
 negative terms but not in a vehement way. The customers who talk about
-the Samsung tablets, seem to prefer Apple products.
+the Samsung tablets, however, seem to prefer Apple products.
 
-To illustrate usage of another package to summarize text let us take a
-look at \texttt{LSAfun}, which uses Latent Semantic Analysis to
-summarize text (Gong and Liu 2001). The basic idea is to decompose text
-into sentences and then choose a few \texttt{k} candidate sentences to
+To illustrate the use of another package to summarize text let us take a
+look at \texttt{LSAfun}, which uses latent semantic analysis (Gong and Liu 2001). The basic idea is to decompose the text
+into sentences and then choose a few \texttt{k}-candidate sentences to
 form the summary. Let us imagine a simple example, where we extract two
-sentences in the negative reviews dataset we selected at the beginning
-of this chapter, and understand the summary of the customer's reviews on
-both Apple and Samsung products expressed on two sentences each. The
+sentences from the negative reviews data set, and try to understand the customers' reviews for
+both Apple and Samsung products from two sentences each. The
 function that performs this task is called \texttt{genericSummary()} and
 has several arguments. The first, is the set of documents to analyze.
-The second is the number of sentences one needs to extract, and the
-third, (called \texttt{split}) is a character vector that allows you to
+The second is the number of sentences it needs to extract. And the
+third, called \texttt{split}, is a character vector which allows you to
 chose what symbols indicate the end of a sentence. \texttt{min}
 indicates the minimum amount of words a sentence should contain. Here we
 will use only the first two arguments.
@@ -1095,34 +1066,33 @@ will use only the first two arguments.
 [2] "Of course it shouldn't be hard to change this to my preferred language (English UK) but it was sort of annoying to see that and have to correct it."                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 \end{verbatim}
 
-With this approach, we notice that the documents extracted are much
+With this approach, we can see that the documents extracted are much
 longer, but are they really representative of the two brands?
 
-Another graph-based ranking method (Mihalcea and Tarau 2004) to extract
+Another graph-based ranking method (Mihalcea and Tarau 2004) used to extract
 sentences or keywords is \texttt{textrank} (Wijffels 2020). The nodes of
 the graph represent a sentence, and the edges between them are
 computations of the number of words adjacent nodes have in common. This
 structure is passed on to the PageRank algorithm (Xing and Ghorbani
-2004), (implemented in Google's search engine (Brin and Page 1998) and
-named after one of its founders, Larry Page,) to find the most important
-sentences that will form the summary of the text. In other words, the
-summary is given by the most important sentences. A summary can also be
-provided by using keywords. They represent documents and have the
-capability to distill the content and express concepts, themes, or
+2004; implemented in Google's search engine, Brin and Page 1998, and
+named after one of its founders, Larry Page) to find the most important
+sentences which will form the summary of the text. In other words, the
+summary is made out of the most important sentences. A summary can also be
+created by using keywords. These represent documents and have the
+capability to distill their content and express concepts, themes, or
 topics in just a few words, making the process of information indexing,
-search, and retrieval easier. In the \texttt{textranking} algorithm, a
-word network is built, similar to those that you have already seen in,
+searching, and retrieval easier. In the \texttt{textranking} algorithm, a
+word network is built in a similar way to those that you have already encountered in
 Chapter~\ref{sec-sentiment-analysis},
 Section~\ref{sec-sentiment-word-networks}, for example. The link between
-words becomes more important as two words frequently follow one another.
-In this case, too, PageRank is applied, and the top \(\frac{1}{3}\) of
-the found keywords are considered important. Finding which words are
-relevant can be extracted through POS tagging that we have done in the
-NER part of this chapter with \texttt{spacyr}. Let us set up the scene
-and extract the important keywords. We create a table that contains the
-sentences, lemmas, and parts of speech. We can peek at the newly created
-dataframe that contains all the information needed, selecting the
-relevant fields: ``sentence\_id'', ``lemma'', and ``upos''.
+words becomes important when two words frequently follow one another.
+In this case, PageRank is used as well, and the top third of
+the keywords is considered important. Finding which words are
+relevant can be done through the POS tagging we have seen in the
+NER part of this chapter using \texttt{spacyr}. Let us set this up
+and extract the important keywords. We have created a table that contains the
+sentences, lemmas, and parts of speech. We can look at the newly created
+data frame which contains all the information we need by selecting the fields ``sentence\_id'', ``lemma'', and ``upos''.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1158,11 +1128,11 @@ relevant fields: ``sentence\_id'', ``lemma'', and ``upos''.
 10           1         an   DET
 \end{verbatim}
 
-Now, we extract the most important keywords for both brands. For this
-example, we will choose nouns and adjectives. Subset the datasets for
-multi-word frequencies. For space reasons, we chose different
-frequencies for the brands, but one can play around and select the
-frequency threshold to be \(>0\).
+Now, we can extract the most important keywords for both brands. For this
+example we will choose nouns and adjectives and subset the datasets for
+multi-word frequencies. For space reasons, we have chosen different
+frequencies for the brands, but it is possible to play around and select a
+frequency threshold of \(>0\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1225,11 +1195,11 @@ frequency threshold to be \(>0\).
 80    same-loop     2    4
 \end{verbatim}
 
-Similarly, we do the same procedure but for sentences, this time for
-both brands, and apply the textrank function to sentences. We can also
-plot the ranking of one of the brands to see how they visually rank. The
-ranking procedure might take a long time for larger datasets, but there
-are dimensionality reduction algorithms that are useful in such cases,
+We can do the same procedure for sentences, but this time for
+both brands, applying the textrank function to them. We can also
+plot the ranking of one of the brands to see this visually. The
+ranking procedure might take a long time for larger data sets, but there
+are dimensionality reduction algorithms which are useful in such cases,
 for example, Minhash (Broder et al. 1998).
 
 \begin{Shaded}
@@ -1256,8 +1226,8 @@ for example, Minhash (Broder et al. 1998).
 
 \includegraphics{9.Chapter_new_files/figure-pdf/sum5a-1.pdf}
 
-We eventually extracted the top 3 sentences for Apple, although we could
-extract as many as we wanted. They appear in ranking order.
+We have extracted the top three sentences for Apple, although we could have
+extracted as many as we wanted. They appear in ranking order.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1273,7 +1243,7 @@ extract as many as we wanted. They appear in ranking order.
 [3] "Nor can I review all the items I purchased to use with the product."                 
 \end{verbatim}
 
-Similarly we extracted the top 3 sentences for Samsung.
+Here we have extracted the top three sentences for Samsung.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1290,52 +1260,46 @@ Similarly we extracted the top 3 sentences for Samsung.
 \end{verbatim}
 
 Interestingly, sentences with \texttt{textrank} are shorter than in the
-results obtained with the previous package. We can notice that very
-often, a comparison with other brands is made, especially in negative
+results obtained using the previous package. We can see that a comparison with other brands is made very often, especially in negative
 reviews. As an exercise, plot pagerank for Samsung's textrank results
 
-\subsection{A summarization note}\label{a-summarization-note}
+\subsection{A note}\label{a-summarization-note}
 
-Abstractive summarization is a more complex form of text summarization
-compared to extractive summarization. It involves generating new
+Abstractive summarizing is a more complex form
+compared to extractive summarizing. It involves generating new
 sentences that convey the main ideas of the original text. In R,
-abstractive summarization is not as straightforward as extractive
-summarization due to the lack of direct support for complex neural
-network models within R itself. However, you can use R to interface with
-other tools or libraries that support abstractive summarization, such as
+abstractive summarizing is not straightforward due to the lack of direct support for complex neural-network models within R itself. However, you can use R to interface with
+other tools or libraries which support abstractive summarizing, such as
 Python libraries via reticulate or external APIs. But in the next
-chapter, we discuss more advanced tools to accomplish several text
-analysis tasks, and this will allow us to generate text, too.
+chapter, we will discuss more advanced tools for carrying out text
+analysis, and these will allow us to generate text, too.
 
-\subsection{Conclusions and exercises}\label{conclusions-and-exercises}
+\subsection{Conclusion and exercises}\label{conclusions-and-exercises}
 
-Exercise 1: Select all the entities referred to a person's name. Are
-they related to the dataset?\\
+Exercise 1: Select all the entities which refer to a person's name. Are
+they related to the data set?\\
 Exercise 2: Visualize a series of nouns for two brands over a
 timeline.\\
-Exercise 3: It would be interesting to see a linguistic complexity
-expressed over a timeline.\\
-Exercise 4: Check \texttt{spacyr}'s documentation and apply a
+Exercise 3: Create a model of linguistic complexity over a timeline.\\
+Exercise 4: Read \texttt{spacyr}'s documentation and use a
 consolidation function to merge multi-word entities.\\
 Exercise 5: Visually plot the relative importance of sentences in the
 \texttt{tr\_smsng} variable.
 
 \emph{Conclusion starts}
 
-The chapter begins with an introduction to Named Entity Recognition, its
-definition, and why this method is useful in marketing. Several packages
-to perform NER are discussed, making \texttt{spacyr} the package of
-choice for performing analysis. The package is discussed in more detail,
-and the annotation types are also presented. The extraction of entities
-is privileged, together with some other parts of speech. The discussion
-continues with the information extraction based on specific POS, such as
-adjectives whose frequency is also presented on a timeline in a brand
-comparative plot. Parts of speech dependencies, as well as entity,
-nouns, and adjective highlighting, are visually implemented to help
-researchers understand the methods. A special mention is given to the
-text complexity, which can offer insight into how customers express
-their frustration in negative reviews. Summarization is related to NER,
-especially for the keywords that are parts-of-speech. Three R packages
-that perform extractive summarization are proposed. This chapter has
-provided an overview of NER and summarization topics, to complete the
-text analysis tasks discussed in the previous chapters.
+The chapter began with an introduction to named entity recognition, its
+definition, and why this method is useful in marketing. We discussed several packages used for
+NER, with \texttt{spacyr} being the package of
+choice for performing analysis. The package is discussed in detail,
+and its types of annotation are also presented. 
+We have focused on the extraction of entities, along with other parts of speech. We discussed
+the information extraction based on specific POS, such as
+adjectives whose frequency is also presented as a timeline on a brand-comparison plot. Continuing with visual representation, we used this to examine parts of speech dependencies, as well as entity,
+nouns, and highlighting adjectives. A special mention was given to the
+text complexity, which can offer insights into how customers express
+their frustration in negative reviews. Summarizing is related to NER,
+especially via the keywords which are parts-of-speech. We also introduced three R packages
+which perform extractive summarizing. This chapter has
+provided an overview of NER and summarizing, and complements the methods of
+text analysis discussed in previous chapters.

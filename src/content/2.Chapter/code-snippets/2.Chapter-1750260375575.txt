@@ -1,9 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Find {}xz\{2,\}y{} (at least two {}z{}s before {}y{}) in {}strings{}}
-{grep}{(}{"xz\{2,\}y"}{, strings, }{value =} {TRUE}{)}
-{Highlighting}
-{Shaded}
-
-[1] "xzzy"     "xzzzy"    "xzzzzy"   "xzzzzyzy"

@@ -1,5 +1,0 @@
-fit models... done.
-calculate metrics:
-  Griffiths2004... done.
-  CaoJuan2009... done.
-  Arun2010... done.

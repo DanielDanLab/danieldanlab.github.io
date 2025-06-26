@@ -1,7 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Create a vector of sample strings with varying patterns}
-{strings }{{}{-}} {c}{(}{"x"}{, }{"xy"}{, }{"xz"}{, }{"xzy"}{, }{"xzzy"}{, }{"xzzzy"}{, }{"xzzzzy"}{, }{"xzzzzyzy"}{)}
-{Highlighting}
-{Shaded}

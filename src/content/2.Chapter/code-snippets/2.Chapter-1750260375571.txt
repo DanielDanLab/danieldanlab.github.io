@@ -1,9 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Return elements matching {}xz?y{} pattern in {}strings{}}
-{grep}{(}{"xz?y"}{, strings, }{value =} {TRUE}{)}
-{Highlighting}
-{Shaded}
-
-[1] "xy"  "xzy"

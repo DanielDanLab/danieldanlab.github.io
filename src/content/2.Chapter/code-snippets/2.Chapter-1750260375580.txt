@@ -1,9 +1,0 @@
-
-{Shaded}
-{Highlighting}[]
-{\# Find elements in {}prodtitle20{} with the word "Fire" as a whole word}
-{grep}{(}{"}{{}{}}{bFire}{{}{}}{b"}{, prodtitle20, }{value =} {TRUE}{)}
-{Highlighting}
-{Shaded}
-
-[1] "The Kindle Fire is a great first effort"

@@ -1,6 +1,0 @@
-        keyword ngram freq
-62 same-problem     2    4
-65 model-number     2    4
-66 touch-screen     2    4
-67     web-page     2    4
-80    same-loop     2    4
