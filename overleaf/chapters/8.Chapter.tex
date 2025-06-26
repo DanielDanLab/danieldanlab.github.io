@@ -1,0 +1,1398 @@
+\chapter{Sentiment Analysis}\label{sec-sentiment-analysis}
+
+\textbf{Learning Objectives}
+
+\emph{Overview starts}
+
+\begin{itemize}
+\tightlist
+\item
+  Understanding what sentiment analysis is.
+\item
+  Learning how to analyze sentiment analysis.
+\item
+  Learning how to deal with sentiment over a timeline.
+\item
+  Understanding what to do with the emojis.
+\item
+  Learning how to use bi-grams to better understand polarities.
+\item
+  Learning how to use word networks to extract polarized information.
+\item
+  Correlating sentiment scores and user ratings.
+\item
+  Extracting usable information from topics, sentiment, and time.
+\item
+  Learning how to classify emotions.
+\item
+  Tackling profanity in reviews.
+\end{itemize}
+
+\emph{Overview ends}
+
+\section{Meaning, levels and the tasks of sentiment
+analysis}\label{meaning-levels-and-tasks-of-sentiment-analysis}
+
+Sentiment analysis is a widely used technique in text analytics. The
+word ``sentiment'' is often interchangeable with ``emotion,'' and it
+has specific meanings in disciplines, such as literature, the visual
+arts, or psychology, and psychologists and philosophers often disagree about
+its meaning. The word originates from the French term
+``sentement'', and, according to the Oxford Dictionary, is: ``What one feels
+with regard to something; mental attitude (of approval or disapproval,
+etc.); an opinion or view as to what is right or agreeable''. In our
+context, sentiment is an opinion expressed in a text, be it a review or
+feedback which can be positive, negative, or neutral. Emotions in text may reveal
+the expression of specific feelings such as happiness, joy, anger,
+disgust, or surprise, and can be detected through analysis. And so another term for sentiment
+analysis is emotion detection in text corpora (Alslaity and Orji 2024).
+In this chapter, we will analyze both sentiment and emotion. Sentiment
+analysis is applied to several fields, such as: finance (Tirunillai and
+Tellis 2012) to predict stock-market movements and assess economic indicators;
+healthcare (Denecke and Deng 2015) to improve patient care; customer
+service (Kumar, Desai, and Majumdar 2016) to improve customer
+care; entertainment (Baid, Gupta, and Chaplot 2017) to understand
+reactions to movies or concerts; product development (Fang and Zhan
+2015) to improve product features; psychology (Wang et al. 2013)
+to analyze emotional states; politics (Bakliwal et al. 2013) to
+understand opinions or voter sentiments; the social sciences in general
+(Pozzi et al. 2016) to understand societal trends; and, marketing (Berger
+et al. 2020) to analyze the valence of texts in social-media posts,
+consumer reviews, and other customer- and firm-generated content.
+
+In marketing, sentiment analysis can provide valuable insights into
+disaggregated and aggregated opinions about products and services over a specific period of time on a particular topic or in comparison with
+competing brands (see, e.g., Lee and Bradlow (2011)). Depending on the
+language used, customers also can be classified by gender and age,
+allowing for better market segmentation (see, e.g., Hartmann et al.
+2019).
+
+To carry out sentiment analysis, the corpus we want to analyze has to be decomposed into a number of conceptual levels. We
+will use an example to help us understand this better. Let us take a document, in our
+case a short review: ``I purchased this tablet for Christmas and have
+mixed feelings about it. The tablet quality was fantastic, but the WiFi
+connection was disappointing''. The highest level is that of the document,
+where sentiment analysis can be performed on each document of a
+collection. In our review we have only one document. If the document is
+a chapter, page, or paragraph, its polarity can be assessed as
+positive or negative. The next level is that of the sentence. In some
+instances, it is much better to examine a document at sentence
+level because the polarities of the sentences can be aggregated (see,
+Büschken and Allenby 2016). We then pass on to the phrase level. In the
+sentence, ``[t]he tablet quality was fantastic, but the WiFi connection
+was disappointing'', the first phrase, ``[t]he tablet quality was
+fantastic'', has a positive sentiment, while the second one, ``but the
+WiFi connection was disappointing'', has a negative sentiment.
+Instead of giving an averaged sentiment for the whole sentence, phrase-based sentiment analysis focuses instead on its component parts. The last one is the aspect level.
+Sentiment analysis focuses on specific aspects (topics) of a phrase.
+For example, ``tablet quality'' (the aspect) is associated with
+``fantastic'', which has a positive sentiment, while ``WiFi connection''
+is associated with ``disappointing'', which has a negative sentiment,
+see Figure~\ref{fig-salevels}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter8/salevels.png}
+
+}
+
+\caption{\label{fig-salevels}Sentiment Analysis Levels,
+\newline Authors' own figure}
+
+\end{figure}%
+
+In terms of sentiment analysis, information can be thought of as being divided into facts and opinions. We might think of facts as being statements which are
+expressed with the intention of being objective, while opinions are often representative of people's
+biases, emotions, state of mind, or interests (Liu et al. 2010) and are
+subjective. A document is deemed to be subjective if it contains a significant number of adjectives (Rittman et al. 2004).
+The measuring of opinion is of great importance because it can influence companies'
+or people's behavior in unpredictable ways (Atwal, Bryson,
+and Kaiser 2022). Sentiment classification is one of the main tasks for
+categorizing text as being positive or negative, and the most common form is
+polarity detection (Cambria et al. 2015). Cross-lingual classification
+uses one language as training data to classify documents in another
+language (Olsson, Oard, and Hajič 2005). Cross-domain classification is
+similar, it uses a sentiment classifier trained on one source domain and
+used on another (Bollegala, Mu, and Goulermas 2015). Both
+classifications are useful to cut the costs of annotating data. Deception
+detection and opinion spam detection are processes focused on
+identifying and classifying intentionally designed fake reviews aimed at
+misleading and influencing readers (Rosso and Cagnina 2017).\\
+Sentiments can be expressed either explicitly, e.g., a ``slow and unresponsive
+touchscreen experience''. or implicitly, e.g., ``I could use it for only 5
+minutes''. Both sentences are an expression of a negative sentiment, and
+there are several techniques such as subjectivity detection, polarity
+detection, and sentiment strength detection (Saad 2014) which carry out this
+this task. Aspects, or topics, can be identified using LDA (see Chapter
+7); there are sentiment-analysis aspect models which consider the
+sentiment towards a specific topic to be included in the topic model (Lu et
+al. 2011). For this, we can use, for example,
+syntax-based, supervised, unsupervised, or hybrid machine learning
+(Schouten and Frasincar 2015). For a visual representation of the
+tasks involved in sentiment analysis, see Figure~\ref{fig-satasks}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\textwidth,height=\textheight]{figure/chapter8/satasks.png}
+
+}
+
+\caption{\label{fig-satasks}Sentiment Analysis Tasks, \newline Authors'
+own figure}
+
+\end{figure}%
+
+\section{Sentiment-analysis
+methodology}\label{sentiment-analysis-methodology}
+
+Several methods are available for performing sentiment analysis:
+lexicon-based, machine learning-based, or hybrid approaches (Dhaoui,
+Webster, and Tan 2017). An extra method can also be considered which
+contains transfer learning and aspect-based approaches (Wankhade, Rao,
+and Kulkarni 2022). The lexicon-based approach is the most common.
+It uses a dictionary and assigns scores to words. This can
+be problematic, though, because, depending on the context, words can
+have a positive or negative polarity, so domain detection is important
+(Han et al. 2018). Such an algorithm takes a text, compares it
+against a dictionary which has scores annotated with a specific polarity,
+and then aggregates them to form a final score (Taboada et al. 2011).
+Given that we have studied classification (see Chapter 6), we now have
+several ways of carrying out text classification. We need to
+assign a score to a text, something that is frequently seen on collections of opinions on the internet: i.e., a review connected to a score that normally has a range of between 1 and 5 stars. A hybrid method is corpus-based, a text-classification problem which uses an annotated
+data set based on a lexicon (Abdulla et al. 2013). We have amended Figure~\ref{fig-saapproach} from Wankhade, Rao,
+and Kulkarni (2022), bringing it into line with our own
+observations. Our version shows the various methods for performing sentiment
+analysis, categorized into a number of different approaches. Most
+fall under the category of machine learning, such as linear classifiers and
+K-nearest neighbor; note that we do not refer to all the approaches which were
+discussed in Chapter 6. Advanced techniques, such as transformer-based
+models, are discussed in Chapter 10, where the contextual relationships
+in text data are explored more fully.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter8/saapproach.png}
+
+}
+
+\caption{\label{fig-saapproach}Sentiment Analysis Approach}
+
+\end{figure}%
+
+\section{Performing sentiment analysis in
+R}\label{performing-sentiment-analysis-in-r}
+
+In R, several packages can be used to carry out sentiment analysis. \texttt{sentiment} (Rinker 2021), \texttt{syuzhet} (Jockers 2015), and \texttt{SentimentAnalysis} (Proellochs and
+Feuerriegel 2023) all use a lexicon-based approach, employing
+dictionaries of words associated with a sentiment score.
+\texttt{sentimentr} uses the Jockers-Rinker sentiment lexicon, based on
+a combination of several lexicons. It takes into account several
+interesting elements, such as negators, amplifiers, and de-amplifiers, with which
+to fine-tune the sentiment scores. The result is an intensity polarity
+scale with a range of very negative to very positive {[}-1,1{]}, passing
+through a neutral 0. \texttt{syuzhet} uses scores from different
+dictionaries, including: Bing (Hu and Liu 2004) to classify
+words as a positive or negative binary without an intensity; the NRC emotion
+lexicon (Khoo and Johnkhan 2018), developed at the National Research
+Council of Canada (NRC), which associates words with eight basic emotions,
+such as anger, fear, anticipation, trust, surprise, joy, and disgust; and
+Afinn (Aung and Myo 2017), which assigns integer scores to words, ranging
+discretely from {[}-5, 5{]}. It also assigns positive or negative
+sentiment to the results. \texttt{SentimentAnalysis} supports several
+lexicons, including the QDAP dictionary (Rinker, Rinker, and LazyData
+2018), the Harvard IV dictionary (Frankel, Jennings, and Lee 2022), and
+many others. \texttt{vader} (Roehrick 2020) takes the Valence Aware
+Dictionary for Sentiment Reasoning (VADER; Hutto and Gilbert 2014)
+as a rules-based classifier. It uses a predefined dictionary and
+considers the context of the words, being ``aware'' of the surrounding
+words and their impact on the sentiment of the target word. Sentiment
+scores are adjusted according to intensity modifiers such as ``very'' or
+``extremely'', or punctuation and capitalization (``GREAT!!'' is considered to be more
+intense than ``great''), and negations are dealt with by flipping the
+sentiment score.
+
+The \texttt{sentiment.ai} package (Wiseman, Nydick, and Wisner 2022)
+uses deep learning to perform accurate sentiment analysis on text which
+is context-dependent. It uses transformer-based models,
+trained on large data sets, to identify the contexts in which sarcasm
+and ambiguous phrases appear. Its multi-language support is a plus.
+sentiment.ai seems to identify negative context more successfully than
+other packages, \footnote{https://github.com/BenWiseman/sentiment.ai} as
+claimed by the authors, who disagree with the use of lexicon-based
+packages.
+
+\subsection{Sentiment over a timeline}\label{sentiment-over-a-timeline}
+
+Let us work with an example to better understand the steps we need to take to perform
+sentiment analysis on a data set. Here we use the same data we analyzed in the
+previous chapters. Importing them into R and selecting the relevant
+columns and rows should be a breeze for you by now. We have chosen two brands,
+because comparison is crucial in marketing analysis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(lubridate)}
+
+\CommentTok{\# Prevent conversion of strings into factors}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{stringsAsFactors =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Read product reviews from the CSV file into a dataframe}
+\NormalTok{prodreviews }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data/Product Reviews.csv"}\NormalTok{)}
+
+\CommentTok{\# Select the desired columns}
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ prodreviews[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Content"}\NormalTok{, }\StringTok{"Rating"}\NormalTok{, }
+                        \StringTok{"Brand"}\NormalTok{, }\StringTok{"Review\_date"}\NormalTok{)]}
+
+\CommentTok{\# Transform the character content of Review\_date into date type}
+\NormalTok{data}\SpecialCharTok{$}\NormalTok{Review\_date }\OtherTok{\textless{}{-}} \FunctionTok{mdy}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Review\_date)}
+
+\CommentTok{\# Select the relevant rows (Amazon and Apple)}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(data, Brand }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Samsung"}\NormalTok{, }\StringTok{"Apple"}\NormalTok{, }\StringTok{"Amazon"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+After the dataset has been loaded, we have to address an important detail:
+emojis and emoticons. Text can contain them, sometimes in abundance. They influence the sentiment of the reviews and taking them into account can
+lead to better accuracy of the overall score (see, Gupta, Singh,
+and Ranjan 2020). There are also cases in which text can be
+``emojified'', to better understand feelings about certain products
+(Hotz-Behofsits, Wlömert, and Nabout 2025). Of the packages mentioned above,
+\texttt{vader} has a built-in lexicon which links emojis to sentiments.
+Methods have been proposed, though, which calculate sentiment analysis
+from emojis by using tweets and GitHub posts containing emojis to
+better classify text containing them (Chen et al. 2021). In R, there are several packages to deal with emojis, such as \texttt{textclean}
+where functions like \texttt{replace\_emoji()} or
+\texttt{replace\_non\_ascii()} transform emojis and emoticons into
+their descriptive text counterparts. It is good to use them both as they
+complement each other. Other such packages include \texttt{emoji}, or
+\texttt{tidyEmoji}. We can also apply straightforward approaches, e.g., the manual identification of emojis and their transformation into text
+descriptions. Because our data set does not have emojis, the final result
+will not differ from the initial text. The following
+example is provided so that you can use it
+with your own data set when necessary.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(stringr)}
+
+\CommentTok{\# Replace the emojis in reviews with their explanation}
+\NormalTok{data}\SpecialCharTok{$}\NormalTok{Content }\OtherTok{\textless{}{-}} \FunctionTok{replace\_emoji}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}
+
+\CommentTok{\# Remove non{-}ASCII characters with suitable ASCII equivalent or removes them}
+\NormalTok{data}\SpecialCharTok{$}\NormalTok{Content }\OtherTok{\textless{}{-}} \FunctionTok{replace\_non\_ascii}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}
+\end{Highlighting}
+\end{Shaded}
+
+After this procedure, the text is ready for analysis. During the
+computations we will use, several sentiment analysis packages, but
+we will mostly focus on \texttt{sentiment.ai} in this chapter. This package seems to outperform \texttt{sentimentAnalysis} or
+\texttt{sentimentr} given the authors' claims on their GitHub page. We
+have kept the other results for comparison.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sentimentr)}
+\FunctionTok{library}\NormalTok{(sentiment.ai)}
+\FunctionTok{library}\NormalTok{(SentimentAnalysis)}
+\FunctionTok{library}\NormalTok{(vader)}
+\FunctionTok{library}\NormalTok{(syuzhet)}
+\FunctionTok{library}\NormalTok{(data.table)}
+
+\CommentTok{\# init\_sentiment.ai() is to be run once, at the beginning}
+
+\CommentTok{\# sentiment.ai}
+\NormalTok{sentiment.ai.score }\OtherTok{\textless{}{-}} \FunctionTok{sentiment\_score}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}
+
+\CommentTok{\# From Sentiment Analysis}
+\NormalTok{sentimentAnalysis.score }\OtherTok{\textless{}{-}} \FunctionTok{analyzeSentiment}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}\SpecialCharTok{$}\NormalTok{SentimentQDAP}
+
+\CommentTok{\# From sentimentr}
+\NormalTok{sentimentr.score }\OtherTok{\textless{}{-}} \FunctionTok{sentiment\_by}\NormalTok{(}\FunctionTok{get\_sentences}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content),}
+                    \DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{length}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{))}\SpecialCharTok{$}\NormalTok{ave\_sentiment}
+\CommentTok{\# Calculate and aggregate sentiment scores}
+
+\CommentTok{\# From VADER}
+\NormalTok{vader.score }\OtherTok{\textless{}{-}} \FunctionTok{vader\_df}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}\SpecialCharTok{$}\NormalTok{compound}
+
+\CommentTok{\# From syuzhet}
+\NormalTok{syuzhet.score }\OtherTok{\textless{}{-}} \FunctionTok{get\_sentiment}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}
+
+\CommentTok{\# Compile results into a data table}
+\NormalTok{comparison }\OtherTok{\textless{}{-}} \FunctionTok{data.table}\NormalTok{(}
+  \AttributeTok{Review\_id =} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(data),}
+  \AttributeTok{target =}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{Content,}
+  \AttributeTok{sentiment.ai =}\NormalTok{ sentiment.ai.score,}
+  \AttributeTok{sentimentAnalysis =}\NormalTok{ sentimentAnalysis.score,}
+  \AttributeTok{sentimentr =}\NormalTok{ sentimentr.score,}
+  \AttributeTok{vader =}\NormalTok{ vader.score,}
+  \AttributeTok{syuzhet =}\NormalTok{ syuzhet.score, }
+  \AttributeTok{Brand =}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{Brand,}
+  \AttributeTok{Rating =}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{Rating,}
+  \AttributeTok{R\_date =}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{Review\_date}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We have transformed the date to display data on a monthly base and averaged
+\texttt{sentiment.ai} for each combination of \texttt{Month} and
+\texttt{Brand}. We have also renamed the \texttt{Content} column as
+\texttt{target} for easier integration with other packages. The plot of
+the graph is below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(lubridate)}
+
+\CommentTok{\# Round \textquotesingle{}R\_date\textquotesingle{} down to the first day of its month, add it as a new column}
+\NormalTok{comparison[, Month }\SpecialCharTok{:}\ErrorTok{=} \FunctionTok{floor\_date}\NormalTok{(R\_date, }\StringTok{"month"}\NormalTok{)]}
+
+\CommentTok{\# Average score for selected columns}
+\NormalTok{monthly\_aggregated }\OtherTok{\textless{}{-}}\NormalTok{ comparison[, .(}\AttributeTok{sentiment.ai =} \FunctionTok{mean}\NormalTok{(sentiment.ai)), }
+\NormalTok{                          by }\OtherTok{=}\NormalTok{ .(Month, Brand)]}
+
+\CommentTok{\# Plot the graph}
+\FunctionTok{ggplot}\NormalTok{(monthly\_aggregated, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Month, }\AttributeTok{y =}\NormalTok{ sentiment.ai, }
+                               \AttributeTok{color =}\NormalTok{ Brand, }\AttributeTok{group =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"loess"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{linewidth =} \FloatTok{1.2}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \CommentTok{\# Slightly larger points}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Month"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Average sentiment.ai score"}\NormalTok{,}
+       \AttributeTok{color =} \StringTok{"Brand"}
+\NormalTok{      ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\hfill\includegraphics{8.Chapter_files/figure-pdf/fig-sacomparison1a-1.pdf}
+
+\caption{\label{fig-sacomparison1a}Monthly Aggregated sentiment.ai
+Values Over Time for Each Brand \newline Authors' own image}
+
+\end{figure}%
+
+The graph in @fig-sacomparison1a shows the monthly
+aggregated sentiment scores over a timeline using \texttt{sentiment.ai} for
+the three brands: Amazon (represented mainly by the Kindle Fire),
+Apple, and Samsung. The lines were smoothed using the LOESS method and
+indicate a general sentiment over time. The Amazon line indicates a
+positive trend, Apple's line apparently seems flat but increases constantly with slight variations, while Samsung's line is more
+volatile, indicating sentiment fluctuations. The Kindle Fire was
+introduced later than its competitors, on November 15,
+2011, marketed before the Christmas holidays, showing it was
+well-received by customers over time. Apple seems to have stable and
+increasing customer satisfaction with its iPads, while Samsung's
+fluctuations in sentiment indicate mixed customer experiences, but the
+trend seems positive overall.
+
+A different type of visualization is provided in @fig-sacomparison2 to
+show how sentiment towards the brands has evolved over time.
+It highlights differences in how customer perception is captured by the
+results of the sentiment.ai scores. This image provides more detail
+to allow for a month-bt-month comparison. Amazon has mostly positive
+sentiment scores, hinting at a generally favorable customer reception.
+Apple has a positive sentiment distribution, indicating steady
+customer satisfaction. Samsung has fluctuations in sentiment scores but
+the overall sentiment, nevertheless, seems generally favorable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(monthly\_aggregated, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Month, }\AttributeTok{y =}\NormalTok{ sentiment.ai, }
+                               \AttributeTok{fill =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{show.legend =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+} \CommentTok{\# Use columns for visualization}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Month"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Average sentiment.ai score"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Brand"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ Brand, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{, }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{8.Chapter_files/figure-pdf/fig-sacomparison2-1.pdf}
+
+}
+
+\caption{\label{fig-sacomparison2}Monthly Aggregated Sentiment.ai Values
+for Each Brand \newline Authors' own figure}
+
+\end{figure}%
+
+\subsection{Sentiment word networks}\label{sentiment-word-networks}
+
+Now, let us gain a better understanding of Samsung's positive and
+negative feedback through the use of bi-grams and word networks. Before
+we dive into the details, to recap, bi-grams are pairs of consecutive words that
+represent common word associations when used in a particular context. Word networks
+are the relationships between words presented as graphs. The
+nodes correspond to words, the edges indicate their co-occurrence. Both
+make it easier to identify key themes or structures in textual data. To
+illustrate this process we have selected the Amazon values from the Brand column
+and separated them into strongly positive and negative groups, where the
+score is either more positive than 0.7, or more negative than -0.7. Then
+we have pre-processed the information, and set up the data set to show
+visualizations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(tm)}
+\FunctionTok{library}\NormalTok{(SnowballC)}
+\FunctionTok{library}\NormalTok{(wordcloud)}
+\FunctionTok{library}\NormalTok{(slam)}
+\FunctionTok{library}\NormalTok{(RWeka)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(igraph)}
+\FunctionTok{library}\NormalTok{(ggraph)}
+
+\CommentTok{\# Filter Amazon reviews and split into positive and negative}
+\NormalTok{kindle\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Amazon"}\NormalTok{)}
+\NormalTok{pos\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ kindle\_reviews }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textgreater{}} \FloatTok{0.7}\NormalTok{)}
+\NormalTok{neg\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ kindle\_reviews }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\FloatTok{0.7}\NormalTok{)}
+
+\CommentTok{\# Text preprocessing function}
+\NormalTok{preprocess }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(text) \{}
+\NormalTok{  text }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{tolower}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{removeWords}\NormalTok{(}\FunctionTok{stopwords}\NormalTok{(}\StringTok{"english"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{removePunctuation}\NormalTok{(}\AttributeTok{ucp =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{stripWhitespace}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{wordStem}\NormalTok{(}\AttributeTok{language =} \StringTok{"en"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{removeNumbers}\NormalTok{()}
+\NormalTok{\}}
+
+\CommentTok{\# Preprocess text and transform into a corpus}
+\NormalTok{corpus\_pos }\OtherTok{\textless{}{-}} \FunctionTok{VCorpus}\NormalTok{(}\FunctionTok{VectorSource}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(pos\_reviews}\SpecialCharTok{$}\NormalTok{target, preprocess)))}
+\NormalTok{corpus\_neg }\OtherTok{\textless{}{-}} \FunctionTok{VCorpus}\NormalTok{(}\FunctionTok{VectorSource}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(neg\_reviews}\SpecialCharTok{$}\NormalTok{target, preprocess)))}
+
+\CommentTok{\# Bigram function}
+\NormalTok{bigram\_tokenizer }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{NGramTokenizer}\NormalTok{(x, }
+                                               \FunctionTok{Weka\_control}\NormalTok{(}\AttributeTok{min =} \DecValTok{2}\NormalTok{, }\AttributeTok{max =} \DecValTok{2}\NormalTok{))}
+
+\CommentTok{\# Create matrices for both positive and negative reviews}
+\NormalTok{process\_bigrams }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(corpus) \{}
+\NormalTok{  tdm }\OtherTok{\textless{}{-}} \FunctionTok{TermDocumentMatrix}\NormalTok{(corpus, }
+                            \AttributeTok{control =} \FunctionTok{list}\NormalTok{(}\AttributeTok{tokenize =}\NormalTok{ bigram\_tokenizer))}
+  \FunctionTok{removeSparseTerms}\NormalTok{(tdm, }\FloatTok{0.999}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{as.matrix}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{rowSums}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sort}\NormalTok{(}\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{v\_pos\_bigram }\OtherTok{\textless{}{-}} \FunctionTok{process\_bigrams}\NormalTok{(corpus\_pos)}
+\NormalTok{v\_neg\_bigram }\OtherTok{\textless{}{-}} \FunctionTok{process\_bigrams}\NormalTok{(corpus\_neg)}
+
+\CommentTok{\# Create data frames}
+\NormalTok{df\_pos\_bigram }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{word =} \FunctionTok{names}\NormalTok{(v\_pos\_bigram), }
+                            \AttributeTok{freq =}\NormalTok{ v\_pos\_bigram)}
+\NormalTok{df\_neg\_bigram }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{word =} \FunctionTok{names}\NormalTok{(v\_neg\_bigram), }
+                            \AttributeTok{freq =}\NormalTok{ v\_neg\_bigram)}
+\end{Highlighting}
+\end{Shaded}
+
+So far, only pre-processing has been carried out. What we are about to do is
+create a function to allow us to present the bi-gram word frequencies, both positive
+and negative, one on top of the other, so that we can compare them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot barplots}
+\NormalTok{plot\_word\_data }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(d, title) \{}
+  \FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FloatTok{0.1}\NormalTok{)  }\CommentTok{\# Adjust margins}
+  \FunctionTok{barplot}\NormalTok{(d[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{30}\NormalTok{, ]}\SpecialCharTok{$}\NormalTok{freq, }\AttributeTok{las =} \DecValTok{2}\NormalTok{, }\AttributeTok{names.arg =}\NormalTok{ d[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{30}\NormalTok{, ]}\SpecialCharTok{$}\NormalTok{word, }
+          \AttributeTok{col =} \StringTok{"lightblue"}\NormalTok{, }\AttributeTok{main =}\NormalTok{ title, }\AttributeTok{ylab =} \StringTok{"Word frequencies"}\NormalTok{, }
+          \AttributeTok{cex.names =} \FloatTok{0.6}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# Plot the positive and negative reviews one under the other}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\FunctionTok{plot\_word\_data}\NormalTok{(df\_pos\_bigram, }\StringTok{"Most frequent bigrams in positive reviews"}\NormalTok{)}
+\FunctionTok{plot\_word\_data}\NormalTok{(df\_neg\_bigram, }\StringTok{"Most frequent bigrams in negative reviews"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{8.Chapter_files/figure-pdf/fig-posneg2-1.pdf}
+
+}
+
+\caption{\label{fig-posneg2}}
+
+\end{figure}%
+
+We can notice from the plots in Figure~\ref{fig-posneg2} showing the 30 most frequent bi-grams, positive and negative reviews contain the bi-gram
+``kindle fire'' but, after that, they start to diverge. The positive reviews
+focus on the customers' satisfaction with the features of hte product, such as
+ease of use, their emotional attachment to it, and its suitability as a gift.
+Negative reviews reveal customer-service and technical problems, as well as dissatisfaction with the features orperformance of the
+device. The comparison with iPad seems to be negative, perhaps, by showing that Apple devices are better.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Hypothetical frequency sums based on visual inspection:}
+\NormalTok{positive\_total }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(df\_pos\_bigram}\SpecialCharTok{$}\NormalTok{freq[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{30}\NormalTok{])}
+\NormalTok{negative\_total }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(df\_neg\_bigram}\SpecialCharTok{$}\NormalTok{freq[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{30}\NormalTok{])}
+
+\FunctionTok{print}\NormalTok{(positive\_total)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 3677
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(negative\_total)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1386
+\end{verbatim}
+
+In the frequency count above, we can see that the most frequent bi-grams
+show about a three-times higher positive count than the negative ones,
+but the situation changes for the total number of bi-grams which we are going to
+retrieve next.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Sum the frequencies of positive/negative bigrams}
+\NormalTok{positive\_total }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(df\_pos\_bigram}\SpecialCharTok{$}\NormalTok{freq)}
+\NormalTok{negative\_total }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(df\_neg\_bigram}\SpecialCharTok{$}\NormalTok{freq)}
+
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Total frequency of positive bigrams:"}\NormalTok{, positive\_total))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Total frequency of positive bigrams: 18693"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Total frequency of negative bigrams:"}\NormalTok{, negative\_total))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Total frequency of negative bigrams: 12901"
+\end{verbatim}
+
+A word network would provide further insights into their connections and
+frequency. Let us plot the positive terms to better understand the
+salient features which make customers happy with a brand. A function which can be used in a versatile way for both positive and
+negative reviews is a handy tool and is presented in the code below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Build and visualize word networks}
+\NormalTok{visualize\_word\_network }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(d, freq\_threshold, title) \{}
+\NormalTok{  d\_sep }\OtherTok{\textless{}{-}}\NormalTok{ d }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{separate}\NormalTok{(word, }\FunctionTok{c}\NormalTok{(}\StringTok{"word1"}\NormalTok{, }\StringTok{"word2"}\NormalTok{), }\AttributeTok{sep =} \StringTok{" "}\NormalTok{)}
+
+\NormalTok{wordnet }\OtherTok{\textless{}{-}}\NormalTok{ d\_sep }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{filter}\NormalTok{(freq }\SpecialCharTok{\textgreater{}}\NormalTok{ freq\_threshold) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{graph\_from\_data\_frame}\NormalTok{()}
+  
+\FunctionTok{ggraph}\NormalTok{(wordnet, }\AttributeTok{layout =} \StringTok{"fr"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_edge\_link}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ freq, }\AttributeTok{width =}\NormalTok{ freq), }
+        \AttributeTok{arrow =}\NormalTok{ grid}\SpecialCharTok{::}\FunctionTok{arrow}\NormalTok{(}\AttributeTok{type =} \StringTok{"closed"}\NormalTok{, }\AttributeTok{length =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.15}\NormalTok{, }\StringTok{"cm"}\NormalTok{))) }\SpecialCharTok{+}
+    \FunctionTok{geom\_node\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_node\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ name), }\AttributeTok{repel =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_edge\_color\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"lightblue"}\NormalTok{, }\AttributeTok{high =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_edge\_width}\NormalTok{(}\AttributeTok{range =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\DecValTok{3}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =}\NormalTok{ title, }\AttributeTok{edge\_color =} \StringTok{"Frequency"}\NormalTok{, }\AttributeTok{edge\_width =} \StringTok{"Frequency"}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# Visualize the word network for positive reviews}
+\FunctionTok{visualize\_word\_network}\NormalTok{(df\_pos\_bigram, }\DecValTok{30}\NormalTok{, }\StringTok{"Word Network {-} Positive Reviews"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.Chapter_files/figure-pdf/posneg5-1.pdf}
+
+In the coding example above, and the graph which results from
+it, Kindle Fire, or simply Fire, is the main product. The central node
+is ``kindle'' and is strongly connected to ``fire'', indicating this is, unsurprisingly,
+the most frequent bi-gram in these reviews. This is as expected and is not new information. But ``kindle'' is
+associated with other positive terms, whose frequencies are emphasized by
+a thicker connecting line between them. Connections such as ``purchased
+kindle'', ``new kindle'', ``received kindle'', or ``bought kindle'',
+show that many reviewers write about the buying experience. The user
+experience expressed by terms such as ``easy use'', or ``set easy'',
+indicate the users find the item easy to operate and set up. Positive
+sentiments are expressed through ``absolutely love'', ``really like'',
+and are strong selling points for the Amazon brand. Words like ``great
+product'' and ``works great'' indicate satisfaction with the product's
+performance. Mentions of gifts and holidays, such as ``christmas gift'',''best
+gift``, and ''present'', indicate that the tablets sell close to celebrations. Theultimedia
+elements of the tablet are expressed through bi-grams such as ``watch movies'' or
+``play/playing games''. A major selling point is expressed by ``read(ing)
+books'' and ``can read''. Positive brand association is seen in
+words like ``thank(s) amazon'', showing appreciation for the brand and
+the product. User friendliness, checking emails, product pricing, and
+overall satisfaction are clear through bigrams such as ``friendly user'', ``email
+check'', ``price product,'', or ``one best'.' But let us analyze the
+negative reviews as well.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Visualize the word network for positive reviews}
+\FunctionTok{visualize\_word\_network}\NormalTok{(df\_neg\_bigram, }\DecValTok{10}\NormalTok{, }\StringTok{"Word Network {-} Negative Reviews"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{8.Chapter_files/figure-pdf/posneg6-1.pdf}
+
+Obviously, the central term is, again, ``kindle'', combined with ``fire'',
+and is the central focus of many negative reviews too. This is
+strongly connected to ``disappointed'', and indicates a poor user experience.
+The purchasing experience is discussed too, through terms like ``purchased
+kindle'', ``new kindle'', ``received kindle'', and ``bought kindle'', although this
+time in a negative context. Major dissatisfaction can be seen for
+``customer service'' or ``customer support''. Technical problems and
+malfunctioning are indicated by ``power button'', ``stopped
+working'', ``tech support'', ``wifi connection'', ``connect wifi,',
+``screen touch'', ``control volume'', ``battery life,'' ``slow
+loading'', or ``freezing''. Strong negative sentiments are expressed
+through harsh terms, such as ``junk piece'',''piece crap'', or with
+elements of frustration, ``waste money'', ``every time'', ``long
+time''. A painful moment for a company is when their products are
+compared unfavorably to competitors' products, for example, ``buy ipad'' and ``got ipad'', expressing dissatisfaction with Amazon. Other
+important terms which bring to the fore other issues, include ``credit card'', ``called
+support'', ``membership store'', or ``outside us'', showing payment
+problems or regional restrictions. Interestingly, the network of
+negative reviews is much denser that the network of
+positive reviews discussed above. Detecting and managing negative feedback is extremely
+important, if it is ignored, it can severely damage the brand's reputation as
+companies need to retain their customer base and to, or try to, acquire new
+customers.
+
+\subsection{Detecting negative sections of text}\label{negative-text-sections-detection}
+
+There are several ways to get a broader view of reviews and to detect exactly which sentences are negative. A quick
+solution is given by the \texttt{sentiment.ai}
+package in conjunction with the \texttt{sentimentr} package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(magrittr)}
+\FunctionTok{library}\NormalTok{(purrr)}
+\CommentTok{\# Set seed for reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+
+\CommentTok{\# Subdivision into sentences and score assignment to each of them  }
+\CommentTok{\# Filter data and sample one row per brand}
+\NormalTok{output }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Apple"}\NormalTok{, }\StringTok{"Samsung"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\FloatTok{0.6}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_sample}\NormalTok{(}\AttributeTok{n =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\# Subdivide reviews into sentences}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{review =} \FunctionTok{map}\NormalTok{(target, get\_sentences)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest}\NormalTok{(review)}
+
+\CommentTok{\# Calculate sentiment scores by review}
+\NormalTok{sentiment\_output }\OtherTok{\textless{}{-}} \FunctionTok{sentiment\_by}\NormalTok{(output}\SpecialCharTok{$}\NormalTok{review, output}\SpecialCharTok{$}\NormalTok{Review\_id)}
+
+\CommentTok{\# Highlight sentiment results}
+\FunctionTok{highlight}\NormalTok{(sentiment\_output)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{figure/chapter8/smr.png}
+
+}
+
+\caption{Sentence-based Sentiment Analysis}
+
+\end{figure}%
+
+We have selected the rows using the \texttt{sentiment.ai} score because the
+algorithm performs better at review level. We chose a higher
+negative intensity (-0.6), which means that we are focusing on reviews with an overall negative sentiment. A threshold of
+-0.6 is a practical and empirical (rather than absolute) value, chosen by
+us to maintain a balance between that the most negative reviews are
+selected, but at the same time ensuring we keep enough data for analysis.
+\texttt{sentimentr} performs at the sentence level, and by first using the
+\texttt{sentiment.ai} package at document level, we can select the
+strongly negative reviews, then, as the second step, we can use
+\texttt{sentimentr} to identify the sentences which drive that
+negativity. This example shows that by pinpointing the negative
+results overall, we might gain more precise results when we act at
+sentence level. Both reviews are randomly selected, but we can control the
+randomness with the set.seed() function for reasons of reproducibility. The
+first review is of an Apple product, and the second is a Samsung.
+
+\subsection{Sentiment score and
+ratings}\label{sentiment-score-and-ratings}
+
+It is common to encode an opinion on a product
+or service as a numerical value, typically a ``star'' value between 1
+and 5, with one being the most negative and five the most positive. This is a quick snapshot of the overall satisfaction given by
+a customer, and it is a categorical variable (Al-Natour and Turetken
+2020). This variable is not ordinal because of the
+subjective opinion of each reviewer, and, as such, the
+``distance'' between 1 and 2 stars is not the same as the distance
+between 4 and 5. In fact, in
+real-world settings, the majority of customers typically give
+overly favorable ratings, leading on aggregate to so-called J-shape
+distributions. Such distributions are extremely skewed, with a
+mass at the positive end of the rating scale (e.g., Moe, Netzer, and
+Schweidel 2017). Similarly, the emotions expressed in words can travel
+on a different path to that of a rating. The sentiment score tries to reveal an emotional content that
+star ratings alone may not capture. Combining these two, however, we
+might acquire a more comprehensive understanding of customer feedback. Is a
+sentiment score directly correlated to the rating? The idea is to
+compare these two metrics to see if meaningful differences emerge. Let
+us find out if so with a scatter plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Boxplot to visualize the relationship between sentiment.ai scores and Rating}
+\FunctionTok{ggplot}\NormalTok{(comparison, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{factor}\NormalTok{(Rating), }\AttributeTok{y =}\NormalTok{ sentiment.ai)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribution of Sentiment Scores by Star Rating"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Star Rating"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Sentiment.ai Score"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{8.Chapter_files/figure-pdf/fig-sentrating1-1.pdf}
+
+}
+
+\caption{\label{fig-sentrating1}}
+
+\end{figure}%
+
+In Figure~\ref{fig-sentrating1}, each box represents the distribution of
+sentiment scores for a star rating. The horizontal line within
+each box is the median sentiment score, and the upper and lower edges
+indicate the quartiles. Any dots outside the whiskers show the outliers. It
+is easy to see that there are reviews with higher sentiment scores with lower star ratings, showing that the emotional content may not
+align strictly with the numerical rating. But, in general, higher sentiment scores
+generally correspond to higher ratings, and the opposite for lower
+values. Is the correlation between these two values strong?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate the correlation between sentiment.ai and Rating}
+\NormalTok{correlation }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(comparison}\SpecialCharTok{$}\NormalTok{sentiment.ai, comparison}\SpecialCharTok{$}\NormalTok{Rating, }\AttributeTok{use =} \StringTok{"complete.obs"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Correlation between sentiment.ai and Rating:"}\NormalTok{, correlation, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Correlation between sentiment.ai and Rating: 0.6251258 
+\end{verbatim}
+
+The results indicate a moderate to strong correlation, meaning that the
+sentiment score can be a good predictor of ratings. Let us check
+visually if these correlations match.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{) }\CommentTok{\# For reproducibility}
+
+\CommentTok{\# Examples of reviews with high sentiment.ai and high rating}
+\NormalTok{high\_sentiment\_high\_rating }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textgreater{}} \FloatTok{0.5}\NormalTok{, Rating }\SpecialCharTok{==} \DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_sample}\NormalTok{(}\AttributeTok{n =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"High Sentiment, High Rating Reviews:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+High Sentiment, High Rating Reviews:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display values in a nicely formatted table}
+\FunctionTok{kable}\NormalTok{(high\_sentiment\_high\_rating[, .(Review\_id, target, sentiment.ai, Rating)], }
+      \AttributeTok{format=}\StringTok{"markdown"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{width =} \StringTok{"4em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}   
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{2}\NormalTok{, }\AttributeTok{width =} \StringTok{"25em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}    
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\AttributeTok{width =} \StringTok{"5em"}\NormalTok{)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable*}[t]{>{\raggedleft\arraybackslash}p{4em}>{\raggedright\arraybackslash}p{25em}>{\raggedleft\arraybackslash}p{5em}r}
+\toprule
+Review\_id & target & sentiment.ai & Rating\\
+\midrule
+10895 & I am wanting to get a Kindle Fire for my grandson who is six years old. I want it to play games, video and music. Would this be a good gift for a six year old? The price is very close to a dsi and maybe mom could use it to read books also. What do you think? & 0.7649378 & 5\\
+16858 & I bought this for my technology challenged wife. It conected to our WI-FI quickly and stays connected. She has had no problem using many apps on it. Highly reccomended for anyone to buy! & 0.7667760 & 5\\
+9926 & I think this is a GREAT deal for the value! LOVE IT Sure it is not perfect - a bit heavy.... however a GREAT item for my daughter who is 9! She LOVES IT!!!! & 0.5799702 & 5\\
+\bottomrule
+\end{longtable*}
+
+The table shows that whenever the sentiment score is high, the rating
+also corresponds to it. This should also be similar for the negative
+reviews.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{) }\CommentTok{\# For reproducibility}
+
+\CommentTok{\# Examples of reviews with low sentiment.ai and low rating}
+\NormalTok{low\_sentiment\_low\_rating }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{, Rating }\SpecialCharTok{==} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_sample}\NormalTok{(}\AttributeTok{n =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Low Sentiment, Low Rating Reviews:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Low Sentiment, Low Rating Reviews:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{kable}\NormalTok{(low\_sentiment\_low\_rating[, .(Review\_id, target, sentiment.ai, Rating)],}
+      \AttributeTok{format=}\StringTok{"markdown"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{width =} \StringTok{"4em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}   
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{2}\NormalTok{, }\AttributeTok{width =} \StringTok{"25em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}    
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\AttributeTok{width =} \StringTok{"5em"}\NormalTok{)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable*}[t]{>{\raggedleft\arraybackslash}p{4em}>{\raggedright\arraybackslash}p{25em}>{\raggedleft\arraybackslash}p{5em}r}
+\toprule
+Review\_id & target & sentiment.ai & Rating\\
+\midrule
+9320 & I am so disappointed with this tablet! Clearly Amazon is deleting all the negative reviews on here because there is no way in hell this thing deserves 4 stars! Even Consumer Reports rated it really low! I wish my husband would have looked into this more thoroughly before purchasing it! The Kindle Fire is constantly freezing up and I have to force quit, it won't respond when I touch on a link or photo until about the 4th time or unless I enlarge the page first, it won't allow me to scroll down a page, it won't pull down a menu bar fully, it won't pull up a full photo - only a partial section of the photo. If you are intending to use this for more than reading books, I highly recommend purchasing something else! Forget online magazines, blogs, Facebook, Pinterest and even online newspapers, online stores etc...the Kindle can't offer satisfactory performance on any of these! It's extremely poor at looking anything up on the web! It's bad, bad, BAD! & -0.7189090 & 1\\
+5375 & I didn't purchase my Ipad from Amazon. I thought I add a review. I am not too computer savvy, the reason I purchased an IPad is for simple Internet use and watching shows and movies and going through my emails so far I can barely order on Amazon or open my emails. it does not support flash so not everything opens. also I have a hard time copying and pasting. It does not copy and if it does it's 50/50 chance of it working. My kid has a tablet kindle and it does a lot more than the IPad. I heard there's ways of fixing problem by purchasing Apps etc. I am still unhappy and I want my money back. My laptop is a better bargain. & -0.6908740 & 1\\
+19266 & I was little disapointed, just becouse of these cons: -Poor battery time, using wifi and programs ramdonly during the day take 1 and 1/2 day to recharge (my fathers iconia take 3 days of use). -A lot of games have slow response, like its a old hardware. -Samsung dont alow to move APPs to external SD card, and 4gb finishes very quick with GPS maps and APPs, mine is already full in 2 days :( -Touch screen is not as precise as Ipad at all. -USB host don't read hi power devices like external hard drive, only pendrive or memory cards. -Get hot on continuous use. -No flash LED -A lot of incompatible Apps for Android 4 (thats google fault) but the Pros: -Good wi-fi signal -Good GPS signal -Light and thin. Samsung took off a lot of quality to make it a low price. & -0.6647744 & 1\\
+\bottomrule
+\end{longtable*}
+
+This example shows that there is also a correspondence with the negative
+reviews. But at this point, can find reviews with a high
+sentiment score and a low rating?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+\CommentTok{\# Examples of reviews with high sentiment.ai and low rating}
+\NormalTok{high\_sentiment\_low\_rating }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textgreater{}} \FloatTok{0.5}\NormalTok{, Rating }\SpecialCharTok{==} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_sample}\NormalTok{(}\AttributeTok{n =} \DecValTok{3}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"High Sentiment, Low Rating Reviews:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+High Sentiment, Low Rating Reviews:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{kable}\NormalTok{(high\_sentiment\_low\_rating[, .(Review\_id, target, sentiment.ai, Rating)],}
+      \AttributeTok{format=}\StringTok{"markdown"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{width =} \StringTok{"4em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}   
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{2}\NormalTok{, }\AttributeTok{width =} \StringTok{"25em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}    
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\AttributeTok{width =} \StringTok{"5em"}\NormalTok{)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable*}[t]{>{\raggedleft\arraybackslash}p{4em}>{\raggedright\arraybackslash}p{25em}>{\raggedleft\arraybackslash}p{5em}r}
+\toprule
+Review\_id & target & sentiment.ai & Rating\\
+\midrule
+188 & The special use I've become addicted to on Kindle is text-to-speech. I love listening to books on the drive back and forth to work but unfortunately Kindle Fire absolutely can't be used in this way --- NO text-to-speech. I'm sure its other features are great but text-to-speech was was a real core use for me and my iPad fine for everything else. & 0.5069298 & 1\\
+16333 & This Kindle is great for surfing the "web"! I use my Kindle to browse my HUGE collection of child porn. Fantastic product, it's very easy to keep balanced next to me while I finish "pleasuring myself". I WORK AT AMAZON! & 0.6773046 & 1\\
+21588 & PURCHASED KINDLE FIRE FOR SON FOR BIRTHDAY AND HE USES IT EVERY DAY. PURCHASED ANOTHER BRAND FIRST AND SENT BACK AFTER ONLY TWO DAYS. AMAZON MADE BIRTHDAY SHOPPING EASY FOR ME...PURCHASED THE KINDLE FOR DAUGHTER-IN-LAW AND SHE LOVES IT. & 0.5401485 & 1\\
+\bottomrule
+\end{longtable*}
+
+Why does this happen? Valdivia, Luzón, and Herrera (2017) have observed that
+users sometimes write negative sentences but give positive ratings, and vice versa. Their suggestion is to avoid setting the user rate as a label
+for sentiment, meaning that if a rating is 1, it does not mean it is
+bad; and if it is 5, it it does not mean it is good. It is much better to check
+the negative opinions using sentiment analysis first and, after that, compare
+them to the rating. However, the ratings may be influenced by other
+factors, such as J-shape distributions and the under-reporting of those with
+negative attitudes (Hydock, Chen, and Carlson 2020), asymmetric social
+ratings (Muchnik, Aral, and Taylor 2013), or higher attrition rates
+among customers with moderate brand experiences (Brandes, Godes, and
+Mayzlin 2022). While some researchers propose avoiding the strict use of
+user ratings as sentiment labels, multiple
+structural and behavioral biases could also explain why some highly
+negative reviews receive high ratings (and the opposite). We will not give
+an example of low sentiment.ai and high ratings, but will leave this for you to do on your own. Hint: Modify the previous code using
+\texttt{filter(sentiment.ai\ \textless{}\ -0.5,\ Rating\ ==\ 5)}.
+
+\subsection{The classification of emotions}\label{emotions-classification}
+
+The measuring of emotions relies on many elements. We may see expressions of
+subjective feeling in people's posture, gestures, and facial
+expressions, or sometimes as a physiological response or an overt (or
+covert) action. In product reviews we are typically dealing with
+behavior which occurs after the purchase has taken place. It seems that ``frustration, anger,
+disappointment, alienation, disgust, anxiety, alarm, guilt, shame, joy,
+happiness, hope, pride, jubilation, excitement, relief, amusement, and
+pleasure'' are the varying reactions that customers experience in both negative
+or positive circumstances (Bagozzi, Gopinath, and Nyer 1999).
+
+Let us consider five main emotions, joy,
+sadness, anger, fear, and disgust. Each of these can be defined by a set
+of words that are, in general, associated with that feeling. The 2015
+cartoon movie by Pixar, \textit{Inside Out}, depicts these emotions with using.
+However, we could potentially could replace these colors with
+emojis to represent each emotion, as highlighted by the approach taken by
+Hotz-Behofsits, Wlömert, and Nabout (2025). Taking the first approach, let us link the colors used in
+the movie with the literature that describes these emotions. Joy is yellow
+and is characterized by words such as happy, cheer, content, excitement,
+pleasure, delight, or satisfaction (Tissari 2008). Sadness is blue,
+characterized by words like sad, unhappy, distress, upset, sorrow,
+grief, despair, or dismay (Wierzbicka 1992). Anger is red and
+characterized by anger, fury, rage, mad, annoyance (Chen,
+Chen, and Ku 2015). Fear is violet, it is characterized by words like
+afraid, scared, frightened, petrified, horrified, terrified, dread,
+alarmed, panicked, anguished, anxious, worried, concerned, and
+apprehensive (Wierzbicka 1990), an interestingly long list.
+Disgust is green and is characterized by the following: disgust, repulse,
+nausea, distaste, dislike, loath, or revulse (Mizin et al. 2023). This is not a complete list, but these words are sufficient for our attempt to classify comments by emotions relating to a brand and product, for example,
+Amazon's Kindle.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sentiment.ai)}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+
+\CommentTok{\# Create word vectors for each emotion}
+\NormalTok{joy }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"happy"}\NormalTok{, }\StringTok{"cheer"}\NormalTok{, }\StringTok{"content"}\NormalTok{, }\StringTok{"excitement"}\NormalTok{, }
+         \StringTok{"pleasure"}\NormalTok{, }\StringTok{"delight"}\NormalTok{, }\StringTok{"satisfaction"}\NormalTok{)}
+\NormalTok{sadness }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"sad"}\NormalTok{, }\StringTok{"unhappy"}\NormalTok{, }\StringTok{"distress"}\NormalTok{, }\StringTok{"upset"}\NormalTok{, }
+             \StringTok{"sorrow"}\NormalTok{, }\StringTok{"grief"}\NormalTok{, }\StringTok{"despair"}\NormalTok{, }\StringTok{"dismay"}\NormalTok{)}
+\NormalTok{anger }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"angry"}\NormalTok{, }\StringTok{"fury"}\NormalTok{, }\StringTok{"enragement"}\NormalTok{, }\StringTok{"mad"}\NormalTok{, }\StringTok{"annoyance"}\NormalTok{)}
+\NormalTok{fear }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"afraid"}\NormalTok{, }\StringTok{"scared"}\NormalTok{, }\StringTok{"frightened"}\NormalTok{, }
+          \StringTok{"petrified"}\NormalTok{, }\StringTok{"horrified"}\NormalTok{, }\StringTok{"terrified"}\NormalTok{, }
+          \StringTok{"dread"}\NormalTok{, }\StringTok{"alarmed"}\NormalTok{, }\StringTok{"panicked"}\NormalTok{, }\StringTok{"anguished"}\NormalTok{, }
+          \StringTok{"anxious"}\NormalTok{, }\StringTok{"worried"}\NormalTok{, }\StringTok{"concerned"}\NormalTok{, }\StringTok{"apprehensive"}\NormalTok{)}
+\NormalTok{disgust }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"disgust"}\NormalTok{, }\StringTok{"repulse"}\NormalTok{, }\StringTok{"nausea"}\NormalTok{, }\StringTok{"distaste"}\NormalTok{, }
+             \StringTok{"dislike"}\NormalTok{, }\StringTok{"loath"}\NormalTok{, }\StringTok{"revulse"}\NormalTok{)}
+
+\CommentTok{\# List of words that express emotion}
+\NormalTok{emotions }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{Joy=}\NormalTok{joy, }\AttributeTok{Sadness=}\NormalTok{sadness, }\AttributeTok{Anger=}\NormalTok{anger, }\AttributeTok{Fear=}\NormalTok{fear, }\AttributeTok{Disgust=}\NormalTok{disgust)}
+
+\CommentTok{\# Select the Kindle reviews}
+\NormalTok{kindle\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Amazon"}\NormalTok{)}
+\NormalTok{em\_words }\OtherTok{\textless{}{-}} \FunctionTok{sentiment\_match}\NormalTok{(}\AttributeTok{x =}\NormalTok{ kindle\_reviews}\SpecialCharTok{$}\NormalTok{target, }\AttributeTok{phrases =}\NormalTok{ emotions)}
+\end{Highlighting}
+\end{Shaded}
+
+After completing the pre-processing, we can try to understand the
+frequency of the prevalence of each emotion and by which words they are
+characterized.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check the frequency of each emotion}
+\NormalTok{emotion\_freq }\OtherTok{\textless{}{-}}\NormalTok{ em\_words }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(class) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(n))}
+
+\CommentTok{\# Define colors for each emotion}
+\NormalTok{color\_map }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Joy\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}yellow\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Sadness\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}blue\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Anger\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Fear\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}violet\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Disgust\textquotesingle{}} \OtherTok{=} \StringTok{\textquotesingle{}green\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# Plot the frequency of each emotion with specified colors}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(emotion\_freq, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ class, }\AttributeTok{y =}\NormalTok{ n, }\AttributeTok{fill =}\NormalTok{ class)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ color\_map) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{\textquotesingle{}Emotion\textquotesingle{}}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{\textquotesingle{}Frequency\textquotesingle{}}\NormalTok{,}
+       \AttributeTok{fill =} \StringTok{\textquotesingle{}Emotion\textquotesingle{}}
+\NormalTok{      ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{6}\NormalTok{),}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{) }\CommentTok{\# Center the plot title}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidytext)}
+
+\CommentTok{\# Tokenize the phrases into words and count the frequency of each word by emotion class}
+\NormalTok{word\_freq }\OtherTok{\textless{}{-}}\NormalTok{ em\_words }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest\_tokens}\NormalTok{(word, phrase) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(class, word, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Plot the word distribution for each emotion class}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(word\_freq, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(word, n), }\AttributeTok{y =}\NormalTok{ n, }\AttributeTok{fill =}\NormalTok{ class)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ class, }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ color\_map) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{\textquotesingle{}Words\textquotesingle{}}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{\textquotesingle{}Frequency\textquotesingle{}}
+\NormalTok{      ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{6}\NormalTok{),}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{), }\CommentTok{\# Center the plot title}
+    \AttributeTok{strip.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{6}\NormalTok{)}
+\NormalTok{  )}
+
+\CommentTok{\# Combine the plots using gridExtra}
+\FunctionTok{library}\NormalTok{(gridExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Attaching package: 'gridExtra'
+\end{verbatim}
+
+\begin{verbatim}
+The following object is masked from 'package:dplyr':
+
+    combine
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{grid.arrange}\NormalTok{(p1, p2, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{8.Chapter_files/figure-pdf/emot3-1.pdf}
+
+}
+
+\caption{(Top) Frequency of each emotion \newline (Bottom) Word
+distribution in phrases by the class of emotion, \newline Authors' own image}
+
+\end{figure}%
+
+Looking at the frequency distribution across the emotions, we can see that
+anger is the most frequent, with about 10,000 occurrences, while
+fear is the least. Joy seems to be quite common, with
+about 5,000 appearances, Fear and sadness both occur approximately
+2,500 times. In the breakdown by emotion, we can see that, for anger,
+``fury'' is the most frequent, followed by ``enragement'',
+``annoyance'', ``angry'', and ``mad''. Similarly words that define
+other emotions, appear in descending order.
+
+\section{The change of topics and sentiments over
+time.}\label{evolution-of-topics-and-sentiments-over-time.}
+
+Understanding topic-sentiment evolution over a period of time enables
+marketers to track consumer sentiment about certain aspects of a product. This
+helps detect signals of discontent, not necessarily for a product
+overall, but also for a specific topic and with a temporal duration. Current
+topic models can reveal topic-sentiment pairs or how important a topic
+is over time, but the dynamic interaction between topics and sentiments
+over time is under-researched (Dermouche et al. 2014). In this
+section, we introduce such a tool because of its potential usefulness and further enrichment of the research.
+This can be done by using a mechanism to compare brands.
+
+We have taken our data set and added Brand-identifiers and Review\_date
+columns to the content. After pre-processing part, we carried out
+topic discovery, see Chapter 7.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(quanteda)}
+\FunctionTok{library}\NormalTok{(sentimentr)}
+\FunctionTok{library}\NormalTok{(seededlda)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\NormalTok{corpus }\OtherTok{\textless{}{-}} \FunctionTok{corpus}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content, }\AttributeTok{docvars =}\NormalTok{ data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Brand"}\NormalTok{, }\StringTok{"Review\_date"}\NormalTok{)])}
+
+\CommentTok{\# Preprocess the text data}
+\NormalTok{tokens }\OtherTok{\textless{}{-}} \FunctionTok{tokens}\NormalTok{(corpus, }\AttributeTok{remove\_punct =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{tokens }\OtherTok{\textless{}{-}} \FunctionTok{tokens\_remove}\NormalTok{(tokens, }\FunctionTok{stopwords}\NormalTok{(}\StringTok{"en"}\NormalTok{))}
+\NormalTok{dfm }\OtherTok{\textless{}{-}} \FunctionTok{dfm}\NormalTok{(tokens)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
+\CommentTok{\# Fit a Sentence LDA model using sentencelda package}
+\NormalTok{lda\_model }\OtherTok{\textless{}{-}} \FunctionTok{textmodel\_lda}\NormalTok{(dfm, }\AttributeTok{k =} \DecValTok{5}\NormalTok{, }\AttributeTok{verbose =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Extract the topic probabilities for each document}
+\NormalTok{topic\_probs }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(lda\_model}\SpecialCharTok{$}\NormalTok{theta)}
+
+\CommentTok{\# Add the date and brand to the topic probabilities}
+\NormalTok{topic\_probs}\SpecialCharTok{$}\NormalTok{date }\OtherTok{\textless{}{-}} \FunctionTok{docvars}\NormalTok{(corpus, }\StringTok{"Review\_date"}\NormalTok{)}
+\NormalTok{topic\_probs}\SpecialCharTok{$}\NormalTok{brand }\OtherTok{\textless{}{-}} \FunctionTok{docvars}\NormalTok{(corpus, }\StringTok{"Brand"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+At this point, we can focus on the sentiment analysis. We used the
+\texttt{sentimentr} package and combined the topic probabilities with the
+sentiment score.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Conduct sentiment analysis using sentimentr}
+\NormalTok{sentiments }\OtherTok{\textless{}{-}} \FunctionTok{sentiment}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{Content)}
+\NormalTok{sentiments }\OtherTok{\textless{}{-}}\NormalTok{ sentiments }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(element\_id) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{sentiment =} \FunctionTok{mean}\NormalTok{(sentiment))}
+
+\CommentTok{\# Combine topic probabilities with sentiment}
+\NormalTok{topic\_sentiment }\OtherTok{\textless{}{-}} \FunctionTok{bind\_cols}\NormalTok{(topic\_probs, }
+  \AttributeTok{sentiment =}\NormalTok{ sentiments}\SpecialCharTok{$}\NormalTok{sentiment, }
+  \AttributeTok{date =}\NormalTok{ topic\_probs}\SpecialCharTok{$}\NormalTok{date, }\AttributeTok{brand =}\NormalTok{ topic\_probs}\SpecialCharTok{$}\NormalTok{brand)}
+\end{Highlighting}
+\end{Shaded}
+
+The next step is to add the temporal data along with aggregating
+data on a monthly basis. For demonstration purposes, we have selected only two
+topics; in the exercise section we have proposed a series of tasks for you to complete.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Aggregate data on a monthly basis}
+\FunctionTok{library}\NormalTok{(lubridate)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\CommentTok{\# Ensure date is of Date type}
+\NormalTok{topic\_sentiment}\SpecialCharTok{$}\NormalTok{month }\OtherTok{\textless{}{-}} \FunctionTok{as.Date}\NormalTok{(topic\_sentiment}\SpecialCharTok{$}\NormalTok{date...}\DecValTok{6}\NormalTok{)}
+
+\CommentTok{\# Aggregate data on a monthly basis}
+\NormalTok{topic\_sentiment }\OtherTok{\textless{}{-}}\NormalTok{ topic\_sentiment }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{month =} \FunctionTok{floor\_date}\NormalTok{(month, }\StringTok{"month"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(month, brand...}\DecValTok{7}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{topic1 =} \FunctionTok{mean}\NormalTok{(topic1 }\SpecialCharTok{*}\NormalTok{ sentiment, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{topic2 =} \FunctionTok{mean}\NormalTok{(topic2 }\SpecialCharTok{*}\NormalTok{ sentiment, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  )}
+
+\CommentTok{\# Reshape data to long format for faceting}
+\NormalTok{topic\_sentiment\_long }\OtherTok{\textless{}{-}}\NormalTok{ topic\_sentiment }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(topic1, topic2), }
+        \AttributeTok{names\_to =} \StringTok{"topic"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"sentiment\_score"}\NormalTok{)}
+
+\CommentTok{\# Plot the sentiment of topics over time, colored by brand, faceted by topic}
+\FunctionTok{ggplot}\NormalTok{(topic\_sentiment\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ month, }
+          \AttributeTok{y =}\NormalTok{ sentiment\_score, }\AttributeTok{fill =}\NormalTok{ brand...}\DecValTok{7}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_area}\NormalTok{(}\AttributeTok{position =} \StringTok{"stack"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Date"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Sentiment Score"}\NormalTok{,}
+       \AttributeTok{fill =} \StringTok{"Brand"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Apple"} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\StringTok{"Samsung"} \OtherTok{=} \StringTok{"red"}\NormalTok{, }
+                               \StringTok{"Amazon"} \OtherTok{=} \StringTok{"green"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{facet\_grid}\NormalTok{(}\AttributeTok{rows =} \FunctionTok{vars}\NormalTok{(topic), }\AttributeTok{scales =} \StringTok{"free\_y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{strip.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{8.Chapter_files/figure-pdf/fig-topicsentdate3-1.pdf}
+
+}
+
+\caption{\label{fig-topicsentdate3}Sentiment of Topics Over Time by
+Brand}
+
+\end{figure}%
+
+In the visualization of the changes in the topic across time (see
+Figure~\ref{fig-topicsentdate3}), we can see that the sentiment score
+associated with Topic 1 gradually increases over time. Amazon, shows a
+rise in sentiment towards the end of the timeline because the product reaches the market during that period. Apple and Samsung show a
+relatively stable sentiment line, but with some fluctuations, showing lower levels of sentiment than for Apple and Amazon. The sentiment scores for
+Topic 2 show more variation over time compared to Topic 1. Amazon has
+a more pronounced fluctuation pattern, whereas Apple sees a steady
+increase, and Samsung has a consistent sentiment score with noticeable
+dips. The stacked area shows the cumulative sentiment for each brand
+over time, indicating which brand dominates the sentiment for each topic
+at a given point in time. Apple seems to have the most stable and
+positive sentiment across both topics, while Amazon and Samsung
+display more variability.
+
+\section{Vulgar words in negative
+reviews}\label{vulgar-words-in-negative-reviews}
+
+Profanity is the use of vulgar words which are considered
+socially unacceptable, especially in formal contexts. These terms are often
+an expression of extreme emotional arousal (Stephens and Zile 2017) and,
+in turn, will elicit emotions in the reader, who might consider reviews
+including such words to be more credible (Rassin and Heijden 2005). Interestingly
+enough, such language is positively related to honesty (Feldman
+et al. 2017). This information is not an incentive for you swear, or
+swear more. If you ever review this book and leave comments, we will
+appreciate your honesty anyway, so there is no need to use profanity.
+There are several effects of the use of vulgar words in online reviews, for example, never receiving an answer back from the
+management of a hotel (Dan 2023), a product line, or customer service.
+Profanity has an effect on the credibility on the usefulness of the
+review, and this has been researched (Hair and Ozcan 2018). Let us take
+two brands and check the negative reviews to see which brand accumulates more
+vulgar words.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter and sample the reviews}
+\NormalTok{sampled\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Apple"}\NormalTok{, }\StringTok{"Samsung"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Split sentences and unnest}
+\NormalTok{sampled\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ sampled\_reviews }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{review\_sentences =} \FunctionTok{map}\NormalTok{(target, get\_sentences)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest}\NormalTok{(review\_sentences) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Apply profanity\_by}
+\NormalTok{profanity\_result }\OtherTok{\textless{}{-}} \FunctionTok{profanity\_by}\NormalTok{(sampled\_reviews}\SpecialCharTok{$}\NormalTok{review\_sentences, }
+\NormalTok{                                 sampled\_reviews}\SpecialCharTok{$}\NormalTok{Review\_id)}
+
+\CommentTok{\# Filter for reviews that contain profanity}
+\NormalTok{profanity\_reviews }\OtherTok{\textless{}{-}}\NormalTok{ profanity\_result }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(profanity\_count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# Compare profanity counts by brand}
+\NormalTok{profanity\_comparison }\OtherTok{\textless{}{-}}\NormalTok{ profanity\_reviews }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(sampled\_reviews, }\AttributeTok{by =} \StringTok{"Review\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_profanity\_count =} \FunctionTok{sum}\NormalTok{(profanity\_count))}
+
+\CommentTok{\# Display the comparison results}
+\NormalTok{profanity\_comparison}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 2 x 2
+  Brand   total_profanity_count
+  <chr>                   <int>
+1 Apple                       6
+2 Samsung                     9
+\end{verbatim}
+
+It is your duty to understand better which brand collects more
+unacceptable but apparently honest words, and to understand why this
+is happening. In giving you an example of such a review, we do not take any
+responsibility for the text because these words are not ours,
+but in a real-world scenario you will encounter them online. Using a profanity count, we
+have filtered out at least one such word.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display an example review containing profanity}
+\NormalTok{example\_review }\OtherTok{\textless{}{-}}\NormalTok{ profanity\_reviews }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(sampled\_reviews, }\AttributeTok{by =} \StringTok{"Review\_id"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(profanity\_count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(Brand, review\_sentences, profanity\_count) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(profanity\_count) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# Display the results as a table}
+\FunctionTok{kable}\NormalTok{(example\_review, }\AttributeTok{format =} \StringTok{"markdown"}\NormalTok{)  }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{width =} \StringTok{"4em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}   
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{2}\NormalTok{, }\AttributeTok{width =} \StringTok{"25em"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}    
+  \FunctionTok{column\_spec}\NormalTok{(}\DecValTok{3}\NormalTok{, }\AttributeTok{width =} \StringTok{"5em"}\NormalTok{)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable*}[t]{>{\raggedright\arraybackslash}p{4em}>{\raggedright\arraybackslash}p{25em}>{\raggedleft\arraybackslash}p{5em}}
+\toprule
+Brand & review\_sentences & profanity\_count\\
+\midrule
+Apple & Spent 15 minutes in the store playing on this thing, trying to figure out why the hell I would want to buy this.                                                                                  , I found myself awkwardly going through the "features" trying to find something to distinguish this product as something worth buying.                                                             , It goes on the internet?                                                                                                                                                                          , Wow.                                                                                                                                                                                              , I've got at least 3 different devices that do that.                                                                                                                                               , It has a book?                                                                                                                                                                                    , So what?                                                                                                                                                                                          , I have a Nook that does that.                                                                                                                                                                     , Even if I didn't, I'd sooner just buy a paperback than drop \$600.                                                                                                                                 , I knew this product was useless when I handled it in the store, come to find out it's more useless than I thought.                                                                                , Can't print?                                                                                                                                                                                      , It'd be bad enough if it were no different from a laptop.                                                                                                                                         , Come to find out, it does LESS than most laptops and netbooks, but for more money.                                                                                                                , Oh, and THIS IS NOT PORTABLE.                                                                                                                                                                     , It's heavy.                                                                                                                                                                                       , I shortly tired of holding it and put it down.                                                                                                                                                    , This thing doesn't even do much more than my IPOD.                                                                                                                                                , At least you can throw the IPOD in a purse.                                                                                                                                                       , Even your laptop can go in your backpack without too many worries since the screen is enclosed.                                                                                                   , Not the case with this item that has a fragile, glass screen with no protection.                                                                                                                  , This is a device for those tools who go to Starbucks to be seen writing their manuscript and have to ice their boners whenever Steve Jobs announces a new scam **cough** sorry, I meant "product.", A more discerning buyer will not purchase something so frivolous. & 1\\
+\bottomrule
+\end{longtable*}
+
+You may obtain different results regarding the polarity of a sentence
+or review depending on the package used, some of which miss the
+target completely. Nevertheless, \texttt{sentiment.ai} and
+\texttt{sentimentr} seem to deliver reliable results.
+
+\emph{Exercise starts}
+
+\textbf{Exercise 1}: Select several reviews and compare the sentiment
+scores obtained using different packages. What can you observe?
+
+\textbf{Exercise 2}: Use sentiment over a timeline, at sentence level.
+
+\textbf{Exercise 3}: Calculate how many reviews have a correct
+correlation between polarity scores and ratings. How many of them are
+coherent in the data set?
+
+\textbf{Exercise 4}. Use topic modeling, with seeded words, at
+sentence level, to extract a sentiment score over a timeline. Compare two
+brands of your choice using this information.
+
+\textbf{Exercise 5}. Create a new category of emotion, for example
+``blame''. Find some related keywords and carry out an emotion
+classification, trying to understand how this concept is perceived.
+
+\emph{Exercise ends}
+
+\emph{Conclusion starts}
+
+The chapter began with an introduction to sentiment analysis,
+discussing the difference between fact and opinion in extracting
+information from reviews, and outlining the methods used to perform it.
+We introduced several packages for sentiment analysis in R and the explored and compared their results. Sentiment trends over
+time were tackled to identify shifts in public opinion due to specific
+events. Emojis are part of modern communication, so we have provided an overview of these. Bi-gram pairs of consecutive words were analyzed to improve the extraction of
+information from word-network graphs. We demonstrated the
+process of correlating sentiment scores with user ratings, understanding
+the relationship between them, and providing insights into customer
+feedback. Topic modeling, sentiment analysis, brands, and time were
+considered together, to enrich the tools at our disposal when it
+comes to multifaceted comparison. Sentiment is more nuanced when it is
+expressed as emotion, so extracting the former makes our understanding of a
+text richer. Finally, we addressed the delicate topic of profanity in
+reviews and how to handle this information effectively. This chapter has
+provided a detailed walk-through of sentiment analysis from a number of perspectives, allowing the marketing analyst to extract
+information which can be used to inform future actions.
+
+\emph{Conclusion ends}

@@ -1,0 +1,1295 @@
+\chapter{Obtaining Textual Data}\label{obtaining-textual-data}
+
+\textbf{Learning Objectives} After reading this chapter, you should be
+able to:
+
+\emph{Overview starts}
+
+. Understanding where to look for texts to analyze\\
+. Downloading datasets from the internet and import them in R\\
+. Collecting unstructured data and put them into a structured form\\
+. Scraping data with APIs\\
+. Scraping data with a web browser's plugins\\
+. Programming a script that downloads data for you\\
+. Understanding other ways of obtaining text
+
+\emph{Overview ends}
+
+\section{Handling electronic text}\label{handling-electronic-text}
+
+\subsection{Introduction}\label{introduction-1}
+
+Text mining and analytics provide marketing analysts with various tools for
+analyzing large volumes of textual data (Guyt, Datta, and Boegershausen
+2024). These applications and the important role they play were 
+outlined in the introduction. In this section, we will focus on
+the technical aspects of text acquisition, which typically takes a 
+considerable length of time, and it is important to acknowledge that data
+collection and preparation represent a significant portion of a
+project's duration, often up to 80\%. Efficiently managing these
+processes can significantly reduce the frustration and inefficiency inherent in the acquisition of textual data (Frye
+and Schmitt 2020).
+
+A large proportion of data available on the internet is unstructured,
+(cf., Gandomi and Haider 2015; Wedel and Kannan 2016; and Boegershausen
+et al. 2022). This means it is not organized in a tabular format or
+within a database, and lacks a predefined structure. The primary types of
+data requiring transformation are text and images. Since computers
+operate more effectively with structured data, converting them from
+unstructured to structured formats is critical in the analytical
+process. Therefore, before commencing data collection, it is essential
+to consider several fundamental questions. The foremost concerns the format of the data to be collected. This leads to the
+realization that data, in our case text, can be stored in various file
+types, such as comma separated value (CSV) files, which are appropriate for
+this task. Additionally, it is good to understand the relationships
+within the data, the number of sources, and their acquisition methods.
+We speak using words, but it is through written text that we leave
+our imprint on the future.
+
+Humans continuously generate text in various forms, ranging from
+physical mediums such as letters, articles, diaries, books, and other
+written formats, to virtual ones stored in file types such as
+.\textbf{txt}, .\textbf{doc}, .\textbf{docx}, .\textbf{pages},
+.\textbf{pdf}, and .\textbf{odt} files, among others. Additionally, there are file
+formats with more or less familiar extensions. In text analysis or
+analytics, having documents in an electronic format is imperative, as it
+allows the text to be structured and manipulated easily. Consequently, acquiring
+virtual text is preferable, but there are methods to convert printed
+text into electronic documents. Electronic text can be derived from
+printed material through a two-step process. The initial step involves
+digitization, achieved by scanning or photographing the documents. The
+subsequent step is to extract text from these images, using
+optical character recognition (OCR) systems. This process is often
+lengthy and prone to errors (Srihari 1985), requiring specific
+software and human intervention for quality assurance. Proofreading is
+critical, requiring meticulous attention to detail to ensure the transformed text
+accurately reflects the original. This procedure applies to
+standard printed text, but the challenge intensifies with handwritten
+documents.
+
+Mass digitization projects have been, and continue to be, significant
+endeavors. Official initiatives like Europeana, backed by the European
+Union, have created digital platforms housing millions of items. Another notable project is that of
+Google Books, launched with the ambitious goal of digitizing
+the world's books and making them accessible online (Thylstrup 2019). A
+significant aspect of this project was the use of OCR technology, which converted the scanned images of
+books into machine-readable text. However, this project faced legal
+challenges from authors and publishers until 2016, when Google won a series of important legal battles and it was allowed to proceed with
+its scanning efforts (Rimmer 2017). Today, a number of projects and
+partnerships give research groups access to this extensive database
+to carry out in-depth text analysis.
+
+For those not requiring access to rare or non-digital textual sources,
+using existing electronic versions is a practical approach.
+However, although there are official repositories, shadow libraries do exist and it is
+important to be mindful of the copyright laws in your region, as not all
+digitized texts are freely available for research or other purposes.
+
+Some ways to obtain electronic text are the following: (i)
+self-generated text, (ii) manual copy and paste, (iii) direct text
+downloads, (iv) web scraping, and (v) utilizing ready-to-use datasets. These
+are among the most common approaches, see Figure~\ref{fig-textdata}.
+Manual copy and paste is a straightforward yet time-consuming method,
+ideal for small amounts of text. Directly downloading text files, such
+as in \textbf{pdf} format, \textbf{docx} format, or plain text files, is
+efficient for accessing large documents or books already in a digital
+format. Scraping text from documents with various file extensions often
+requires specialized software or scripts, especially when handling large
+volumes of data or complex formats. On the other hand, web scraping ranges from the
+simple extraction of specific pieces of text from web pages to more
+advanced scraping that navigates web pages and handles dynamic
+content. Lastly, ready-to-use datasets from online
+repositories are a convenient source, as these are often
+well-structured and ideal for analysis without extensive preprocessing.
+Next we describe these common ways to obtain textual
+data.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{figure/chapter3/obtain_textual_data.png}
+
+}
+
+\caption{\label{fig-textdata}Obtain textual data \newline Authors' own
+figure}
+
+\end{figure}%
+
+\subsection{Copy and paste}\label{copy-and-paste}
+
+The simplest method of obtaining text that is not self-generated is
+through copy-and-paste. This involves copying text from
+various sources and pasting it into a simple text file stored locally on
+your computer. It is a three-step process: selecting the text, mainly
+with the help of your mouse, copying it, and then pasting it into a
+recipient file. You can paste different portions of text consecutively 
+onto the same text file, making this procedure a primitive form of
+scraping. The procedure is similar in all operating systems, such as
+MacOS, Windows, or Linux, with minor differences in the commands and
+text editing applications used. Here you have the procedure detailed for
+the most common commercial operating systems:
+
+\emph{First, open the source document or webpage from which you wish to
+copy text.\\
+}Click and drag your mouse over the text to highlight it.\\
+\emph{On OSX, press Command + C to copy the highlighted text; on
+Windows, use Ctrl + C.\\
+}Next, open a text editing application. For MacOS, use TextEdit; for
+Windows, use Notepad. Note that TextEdit defaults to rich text mode. To
+save your file as a .txt file, convert it to plain text by going to
+Format in the menu bar and selecting Make Plain Text (or use the
+shortcut Shift + Command + T).\\
+\emph{Click inside the document and press Command + V on MacOS, or Ctrl + V
+on Windows, to paste the copied text.\\
+}To save the file, click File \textgreater{} Save (or use Command + S on
+MacOS, or Ctrl + S on Windows). Name your file, for instance,
+``copied\_text.txt''. Navigate to the desired folder within your working
+directory. If you're looking for a specific folder such as `data' and it
+does not exist, create it. Finally, click Save.
+
+This method is straightforward and does not require specialized
+software, making it an excellent starting point for anyone new to data
+collection.
+
+This is how you import the file into R and visualize the text.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Read the text file from the \textquotesingle{}data\textquotesingle{} folder}
+\NormalTok{text\_data }\OtherTok{\textless{}{-}} \FunctionTok{readLines}\NormalTok{(}\StringTok{"data/copied\_text.txt"}\NormalTok{)}
+
+\CommentTok{\# Display the content of the text file}
+\FunctionTok{print}\NormalTok{(text\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Downloaded text}\label{downloaded-text}
+
+For a marketing practitioner, sourcing documents which are ready for analysis is
+not always straightforward. For example, literature students have the
+advantage of accessing many out-of-copyright texts available on the
+internet. Alongside well-known resources like Google Books and
+Europeana, they (or anyone else) can explore sites like the Gutenberg Project,
+Internet Archive, Open Culture, Hathi Trust, ACLS Humanities E-Book,
+National Digital Library of India, Gallica, Wikisource, Runiverse, as well as
+many others. These platforms offer extensive collections of books and
+freely accessible texts, ideal for downloading and importing into R. The
+benefit of using simple text is that it allows for imports from these
+websites, providing an excellent opportunity to start developing text
+analytics skills. The goal is to have the text in a format that lends itself
+to structured analysis.
+
+Fortunately, collections of documents are already prepared in structured
+formats such as CSV or zipped CSV files. These are often found on platforms
+like Kaggle, GitHub, and the repositories of various research institutes. When
+dealing with documents in compressed formats like \textbf{.gz} or
+\textbf{.zip}, it is advisable to decompress them first before importing
+them into R. Conversely, files in formats like \textbf{.csv} or
+\textbf{.xlsx} can be imported directly from the internet via a secure
+HTTPS connection. Downloading files over an insecure HTTP protocol is
+not recommended for security reasons. Direct-internet import can be
+cumbersome and prone to errors for files with substantial amounts of data. Hence,
+it is preferable to download these files to your local machine first and
+then import them into R.
+
+Let us demonstrate this by  importing a dataset directly. This method is suitable for smaller files: Downloading the files first 
+is recommended for larger ones. The ``sample.csv'' file, an excerpt from
+the larger ``Product Reviews.csv,'' contains the first 250 observations.
+This file is an example of a structured document. As shown in
+Table~\ref{tbl-csvtable}, the first row, which is the header, lists the
+column names or features. Each subsequent row represents an observation,
+encompassing all the data related to a single purchase.
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Table Sample, Excel-like}\label{tbl-csvtable}\tabularnewline
+\toprule\noalign{}
+Review ID & Item ID & Base Item ID & Review Date & \ldots{} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Review ID & Item ID & Base Item ID & Review Date & \ldots{} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+R100E6MT94PK6L & B0051VVOB2 & & 1/8/2012 & \ldots{} \\
+R100HU42LKLLD0 & B0057O9O6K & & 4/10/2012 & \ldots{} \\
+R100PBXP49AU0B & B0051VVOB2 & & 3/26/2012 & \ldots{} \\
+\ldots{} & \ldots{} & \ldots{} & \ldots{} & \ldots{} \\
+\end{longtable}
+
+The \texttt{read.csv} function in R is used to import the
+\texttt{sample.csv} file and automatically transform it into a
+dataframe. Remember, in R, a dataframe is a term used to describe a
+tabular data structure. The parameter \texttt{header\ =\ TRUE} within
+the \texttt{read.csv} function specifies that the first row of the CSV
+file should be treated as the header containing the column names rather
+than regular data.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# URL of the file}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://danieldanlab.github.io/data/sample.csv"}
+
+\CommentTok{\# Read CSV into dataframe}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(url, }\AttributeTok{header =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Check dataset in viewer, uncomment}
+\CommentTok{\# View(df)}
+
+\CommentTok{\# Keep only first 5 columns}
+\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ df[, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{]}
+
+\CommentTok{\# Display first 6 rows}
+\FunctionTok{head}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  X      Review_ID    Item_ID Base_item_ID Review_date
+1 1 R100E6MT94PK6L B0051VVOB2                 1/8/2012
+2 2 R100HU42LKLLD0 B0057O9O6K                4/10/2012
+3 3 R100PBXP49AU0B B0051VVOB2                3/26/2012
+4 4 R100U020EZR95F B0051VVOB2                6/14/2012
+5 5 R101ANBUYVZCUM B004U9USEA                5/21/2011
+6 6 R101MUGRC35UWS B001UHPRSW                1/29/2010
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display last 6 rows}
+\FunctionTok{tail}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      X      Review_ID    Item_ID Base_item_ID Review_date
+245 245 R10VM77VD3D76X B004Q1P0S6               12/25/2011
+246 246 R10VXS69HI0F1X B0044UAQMY                6/21/2011
+247 247 R10W6FDN5GFTK4 B004U78J1G   B004U78J1G  10/24/2011
+248 248 R10WG1DINHPFRU B0051VVOB2               12/12/2011
+249 249 R10WJVG8HFG133 B0051VVOB2               11/30/2011
+250 250  R10WL5UATT2QP B004PGMFG2   B0067XX3AI   6/30/2011
+\end{verbatim}
+
+\emph{Program code ends}
+
+The \texttt{df} dataframe can be sliced both horizontally and vertically
+to suit your needs. The general syntax for this operation is
+\texttt{df{[}rows,\ columns{]}}. In this structure, the brackets
+encompass the entire dataframe, and the comma separates the rows from
+the columns, in specific order. To select the first row along with
+all its columns, you would use d\texttt{f{[}1,\ {]}}, where the (empty)
+space after the comma signifies the inclusion of all the columns. Similarly,
+to select specific rows and columns, for example, rows 3 to 5 and
+columns 2 to 9, you would use \texttt{df{[}3:5,\ 2:9{]}}.
+
+\subsubsection{Common file-type
+extensions}\label{common-file-type-extensions}
+
+What if the file you need to analyze does not have a \texttt{.csv}
+extension? In such instances, the \texttt{readtext} package (Benoit and
+Obeng 2020) is handy. It is designed to read and extract text from a
+variety of file formats, including \textbf{.doc}, \textbf{.docx},
+\textbf{.html}, \textbf{.json}, \textbf{.pdf}, \textbf{.rtf},
+\textbf{.tab}, \textbf{.xls}, \textbf{.xlsx}, \textbf{.xml}, and several
+other related extensions. This versatile function not only extracts the
+text but also retrieves the document's metadata, and it can handle
+multiple file types simultaneously. The data extracted is stored in a
+dataframe, our preferred tabular data format. As a side note, when
+importing data into R, it is not uncommon to encounter issues with
+character encoding. In such cases, check the solutions suggested in the
+introduction.
+
+The \texttt{readtext} package relies on other packages for specific file
+types: \texttt{pdftools} (Ooms 2020) for \textbf{.pdf} files and
+\texttt{antiword} for \textbf{.doc} documents. Installation on Windows
+and MacOS is typically straightforward. However, Linux users might face
+challenges, particularly with \texttt{pdftools}, which requires a
+development library. On Debian/Ubuntu and similar systems, this issue
+can be resolved by installing the \texttt{libpoppler} development
+library. Other Linux distributions with different package management
+systems, like those using \texttt{rpm} package management, have
+similar solutions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Installs the libpoppler{-}cpp{-}dev library on Debian/Ubuntu systems}
+\FunctionTok{sudo}\NormalTok{ apt install libpoppler{-}cpp{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+Text files are often unstructured. This means
+that the data are not stored in a tabular form, making them difficult to
+work with. To illustrate this, in the next example we have created a
+\textbf{.pdf} file that simulates a real-world scenario. This file
+consists of two pages. The first page contains text divided into
+paragraphs, generated using Lorem Ipsum (2024), a
+commonly used placeholder text which imitates Latin. The second page features a table filled with
+randomly generated data (Random Data Generator 2024). While this
+text appears structured to our eyes, this is not the case for a computer. We
+will show how to extract and format this information into a structure
+suitable for basic text analytics. The goal is to organize the data into
+a simple table, with one column for each sentence and another for an
+incremental number to track the paragraphs, similar to the structure
+shown in Table~\ref{tbl-csvtable}. It is important to know, a
+\textbf{.pdf} file is a container rather than a specific format. If the
+document contains text in an image format instead of selectable text,
+you should use the \texttt{ocr\ =\ TRUE} option with the
+\texttt{pdf\_text()} function to read it.
+
+Let us now download the
+file and extract the text from the first page of the \textbf{.pdf}. To
+understand its content and structure, it is advisable to open and
+inspect the PDF file, as well as any other text file, before working with it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load necessary libraries}
+\FunctionTok{library}\NormalTok{(pdftools)}
+\FunctionTok{library}\NormalTok{(stringr)}
+
+\CommentTok{\# Define URL of the PDF file}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://danieldanlab.github.io/data/sample.pdf"}
+
+\CommentTok{\# Download PDF file}
+\FunctionTok{download.file}\NormalTok{(url, }\StringTok{"sample.pdf"}\NormalTok{, }\AttributeTok{mode =} \StringTok{"wb"}\NormalTok{)}
+
+\CommentTok{\# Read PDF; each page becomes an element in \textquotesingle{}text\textquotesingle{}}
+\NormalTok{text }\OtherTok{\textless{}{-}} \FunctionTok{pdf\_text}\NormalTok{(}\StringTok{"sample.pdf"}\NormalTok{)}
+
+\CommentTok{\# Remove \textquotesingle{}Sample text\textquotesingle{} from the text}
+\NormalTok{text }\OtherTok{\textless{}{-}} \FunctionTok{str\_replace}\NormalTok{(text, }\StringTok{"Sample text"}\NormalTok{, }\StringTok{""}\NormalTok{)}
+
+\CommentTok{\# Replace newline characters with space in page 1}
+\NormalTok{text[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{str\_replace\_all}\NormalTok{(text[}\DecValTok{1}\NormalTok{], }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }\StringTok{" "}\NormalTok{)}
+
+\CommentTok{\# Split text at periods in page 1}
+\NormalTok{text[}\DecValTok{1}\NormalTok{] }\OtherTok{\textless{}{-}} \FunctionTok{str\_split}\NormalTok{(text[}\DecValTok{1}\NormalTok{], }\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{."}\NormalTok{)}
+
+\CommentTok{\# Convert to dataframe}
+\NormalTok{mytext }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(text[}\DecValTok{1}\NormalTok{])}
+
+\CommentTok{\# Name the column as \textquotesingle{}Sentence\textquotesingle{}}
+\FunctionTok{colnames}\NormalTok{(mytext) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Sentence"}\NormalTok{)}
+
+\CommentTok{\# Display first six rows}
+\FunctionTok{head}\NormalTok{(mytext)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                                                       Sentence
+1       Lorem ipsum dolor sit amet, consectetur adipiscing elit
+2                                      Quisque sed venenatis mi
+3  Mauris eget lectus luctus, molestie enim nec, tincidunt urna
+4                              Nulla iaculis ut lorem a blandit
+5             Etiam non arcu et magna tempor iaculis ac at erat
+6          Quisque non malesuada augue, sit amet vulputate enim
+\end{verbatim}
+
+Having achieved the primary goal of extracting the data, you can
+refine the appearance of the content in the dataset further. This can be done
+using regular expressions and string manipulation functions to tailor
+the data to your specific needs.
+
+The table on the second page of the \textbf{.pdf} file is already in a
+tabular format, which we will aim to keep. To accomplish this, we will
+use the \texttt{extract\_tables()} function, which efficiently extracts
+the table's content and places it in a dataframe. It is worth noting that in scenarios
+where a PDF page contains multiple tables, possibly in various
+locations, these can also be extracted. For more advanced options and the
+handling of such cases, refer to the \texttt{tabulapdf} package, which
+offers additional tools for extracting PDF tables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load tabulapdf library}
+\FunctionTok{library}\NormalTok{(tabulapdf)}
+
+\CommentTok{\# Extract table from second page of PDF}
+\NormalTok{atable }\OtherTok{\textless{}{-}} \FunctionTok{extract\_tables}\NormalTok{(url, }\AttributeTok{pages =} \DecValTok{2}\NormalTok{, }\AttributeTok{guess =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{output =} \StringTok{"tibble"}\NormalTok{)}
+
+\CommentTok{\# Assign first table to mytable}
+\NormalTok{mytable }\OtherTok{\textless{}{-}}\NormalTok{ atable[[}\DecValTok{1}\NormalTok{]]}
+
+\CommentTok{\# Display top six rows of the table}
+\FunctionTok{head}\NormalTok{(mytable)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 6 x 5
+  `First Name` `Last Name` Gender Education Occupation   
+  <chr>        <chr>       <chr>  <chr>     <chr>        
+1 Kate         Jones       Female Bachelor  Scientist    
+2 Adele        Barnes      Female Doctoral  Social Worker
+3 Sofia        Campbell    Female Primary   Mathematician
+4 Oscar        Parker      Male   Master    Mathematician
+5 Andrew       Armstrong   Male   Bachelor  Mathematician
+6 Sawyer       Taylor      Male   Doctoral  Social Worker
+\end{verbatim}
+
+All in all, our primary goal is to extract the most crucial element for
+our analysis, which is text, regardless of the file format in which it is encoded. The \textbf{.pdf} file type we just discussed is only one example of a
+source from which we can obtain information. As you have learned,
+importing text data into R from common file formats is a (relatively)
+straightforward process. This procedure is similar to that used when
+extracting information from other file types, such as Excel formats
+(\textbf{.xls} or \textbf{.xlsx}). There are several packages in R
+designed for this purpose. For instance, the \texttt{readxl} package is
+an excellent choice for reading Excel files. When it comes to reading
+files from the internet, the file's extension guides us to choose the
+appropriate function. For \textbf{.dat}, \textbf{.txt}, or \textbf{.csv}
+files, we can use the \texttt{read.table()} function. R can also import various file types from other software, such as
+SPSS. This is made possible with the foreign package and its
+\texttt{read.spss()} function. In the next section, we will
+tackle more advanced procedures to structure data from the internet
+effectively within R.
+
+\subsection{Scraping for data}\label{scraping-for-data}
+
+It usually requires a more elaborate procedure to collect customer opinions and other user-generated content, as they are typically embedded
+within specific web pages. How do we collect reviews about a
+specific product or service? Many companies, such as Airbnb, Amazon, Booking.com, TripAdvisor, Trustpilot,
+and Yelp, host these data on their websites. Similarly, opinion-based text from social-media platforms like
+Twitter, Facebook, and Instagram can be valuable. We can access this
+data through a process known as web scraping (Khder 2021). As
+the term suggests, this involves extracting data from a surface. In a
+digital context, it refers to the technique of copying data embedded in
+an unstructured way within HTML tags to a structured format which suits the needs of data analysts, such as a
+CSV file. What can we scrape
+from web pages? Essentially anything digital: text, numbers, images, and
+metadata. For instance, in the context of online product feedback, we
+can collect customer reviews, product ratings, customer nicknames,
+labels, dates, and other related data or metadata. All this can be
+transformed into useful information for analysis and knowledge
+extraction. Researchers in a number of fields such as economics
+(Cavallo 2012; Hillen 2019), psychology (Landers et al. 2016),
+agriculture (Yang, Wilson, and Wang 2010), and the hotel industry (Han and Anderson 2021), as well as geographic data acquisition (Brenning
+and Henn 2023), obtain data through scraping. Web scraping for consumer
+research (Boegershausen et al. 2022) plays a significant role too. There
+are several methods and tools which facilitate the downloading and collection of data. Some of them must be built specifically for
+the fields in which they are used (Bonifacio et al. 2015), while others
+are more generic, such as Outwit (2024), Fminer
+(2024), or Parsehub (2024). Some methods need to be tailored to specific projects and
+frequently use computer languages such as Java, Python, or R to carry out their
+data crawling. These tools change data from an unstructured into
+a structured form, making them ready for further analysis. It is important to
+note that data, mainly text data, are often the core business of some
+companies, and they may try to block or hinder automatic parsers or
+robots from scraping and collecting information (Hirschey 2014; Poggi et
+al. 2007). Technically, there are two main ways to scrape internet data:
+an application programming interface (API), for example {[}sturm2017{]},
+or document-object-model (DOM) parsing (Radilova et al. 2022). APIs,
+provided by platforms such as Twitter, Facebook, and TripAdvisor, offer
+well established procedures for obtaining data in predefined formats such as
+\textbf{.csv}, \textbf{.xls}, or \textbf{.xlsx}. On the other hand, DOM
+parsing is carried out through programming with scripts and requires
+considerable effort. Additionally, some programs or plugins facilitate
+the retrieval of information without an extensive knowledge of programming.
+
+\subsubsection{Data from social media, the API
+concept}\label{data-from-social-media-the-api-concept}
+
+In the land of social media, there have been winners and losers. Some social-media platforms, once ubiquitous, have now turned into little more than
+websites, such as Myspace, or were entirely discontinued by their
+creators, like Orkut and Google+. A few, however, have stood the test of
+time: X (formerly Twitter), one of the most scraped social-media
+platforms, Facebook, LinkedIn, Reddit, are just a few of these. Others are new or
+emerging, such as TikTok. No matter their current status, their content
+can be a valuable source of data. Let us briefly
+consider them and the collection of their data through an API.
+
+Twitter's name was inspired by how birds communicate, with short,
+high-pitched calls or sounds directed to an audience which understands
+those messages. The titular company debuted in 2006. Now rebranded as X,
+it is well known for its micro-blogging consisting of short and concise messages (Murthy 2018). This model of
+communication is both efficient and information-dense. Messages, called
+tweets, have several key elements: \textbf{addresses}
+(usernames marked by @), \textbf{text} (limited to \textbf{280}
+characters), \textbf{hashtags} (marked by \textbf{\#} to denote topics),
+and types of interaction like \textbf{replies}, \textbf{mentions}, and
+\textbf{retweets}.
+
+Data from X and other social media are particularly interesting for
+marketing analysts because it has been, and continues to be,
+used extensively for viral advertising (Tellis et al. 2019). It has strong user
+engagement, a solid user base, and supports many languages. Moreover, it
+contains vast amounts of real-time data. The mix of user behavior and
+competitor strategy is crucial for understanding and analyzing marketing. It is an
+ideal place to monitor influencers' ideas and opinions, understand why they are followed, and use this information for marketing purposes: for example, knowing how
+your brand is perceived on this social-media platform. Learning this can
+help you stay aware of potential discontent. Understanding how people
+``feel'' about your brand and how this sentiment changes in response to
+your actions is vital. This type of analysis, known as ``sentiment
+analysis'', will be discussed in more detail in
+Chapter~\ref{sec-sentiment-analysis}. Some R packages that
+help you scrape data from X through APIs are \texttt{rtweet}
+(Kearney 2019), \texttt{streamR} (Barbera 2018), and
+\texttt{academictwitteR} (Barrie and Ho 2021).
+
+With its massive user base, Facebook has been seen as an ideal platform for
+promoting products, ideas, or projects. The connection between
+users and the ''like'' system made it an easy way to collect personal data for free. These can be harnessed for
+marketing analysis, especially for segmentation, where targeting by
+geographical regions can enhance communication and promote specific
+products. Two important R packages for dealing with data on Facebook
+are: \texttt{Rfacebook} (Barbera et al. 2017) and \texttt{fbRads}
+(Daroczi, Gopal, and Nagy 2023).
+
+LinkedIn, a popular social-media platform for professionals, was set up to aid networking. Finding a job through LinkedIn has become a viable
+option, and the personal pages can contain a lot of interesting
+information, mainly about what occupies most of our time: work.
+This can be extracted to check for who might be important partners or
+influencers in marketing campaigns. Other analyses could be done to
+understand market dynamics, emerging trends, and information about
+competitors, including their workforce size or skill sets. To access
+data through LinkedIn's APIs via R, you can use \texttt{Rlinkedin}
+(Piccirilli 2016).
+
+Reddit, a very popular platform for sharing opinions and asking
+questions about products, recipes, medicines, supplements, and much
+more, has become a rich source of data. The impressive quantity of data and
+opinions make this social-media platform extremely useful for
+marketing analysis. The R package to interact with this platform is \texttt{RedditExtractoR} (Rivera 2023).
+
+All the platforms mentioned above offer, or offered, the opportunity for researchers to scrape their
+data through an API. An API consists
+of definitions and communication protocols that allow a person with a
+computer to connect to a server providing this technology. It is a
+privileged gateway to data that needs to be first identified and then
+transferred to your computer. APIs generally use a
+username and password system, plus or minus other related values, also known
+as keys. These alphanumeric sequences are generated for a specific user and work
+like credentials. APIs are interfaces; they open a door through which the user can
+access data directly from the service's backend. However, it is rare that you are able to do this immediately, and collecting data through APIs can be
+problematic. Significant issues arise due to constant changes in
+authorization modes, data access limitations, and managerial decisions
+which can restrict access. Several R packages written for this purpose
+become obsolete after a few years, or even months, due to internal changes
+in social-media data-accessibility policies and parameters. As such,
+although scraping with APIs might seem a good way forward, other methods of
+obtaining data may be more suitable for the task you have in front of you. Remember, while
+working with R packages that do API scraping, two components must be
+stable: the politics of the API provider and the R package.
+
+\subsection{Scraping with your
+browser}\label{scraping-with-your-browser}
+
+Having tools that simplify the data-collection process without requiring
+deep technical know-how can be useful and comforting. Take the Web
+Scraper plugin for Google Chrome, for example. It is a user-friendly
+tool for web scraping, requiring only a basic understanding of HTML and
+CSS. You can install it easily from the Chrome store, and, as with most
+plugins, a browser restart is needed post-installation. Web Scraper stands out for its:
+
+\begin{itemize}
+\tightlist
+\item
+  Ability to navigate and scrape multiple pages with a defined
+  structure, like
+  ``\href{http://www.example.com/pages/\%5B1-10\%5D\%22.}{http://www.example.com/pages/{[}1-10{]}``.}\\
+\item
+  Versatility in scraping different data types.\\
+\item
+  Ability to extract dynamically generated text from client-side
+  scripts, including AJAX and JavaScript.\\
+\item
+  The possibility of reviewing and exporting the local storage of scraped data to a
+  CSV file.\\
+\item
+  The ease in switching between exportable and importable sitemaps
+  which detail the scope of a scraping project.
+\end{itemize}
+
+Setting it up involves defining the sitemap (which pages to visit) and the
+data to be scraped. During the scraping process, Chrome will display a
+series of pop-up windows showing its progress. You will receive a
+notification once the scraping is complete. All the data can be
+browsed and exported as a \textbf{.csv} file, ready to be imported into
+R for further analysis. The plugin also allows you to export the sitemap for
+future use. Check out the plugin's official webpage for a comprehensive
+guide on using this tool. To see the scraping results in action, visit this
+book's accompanying website.
+
+\subsubsection{Other Plugins}\label{other-plugins}
+
+The world of Chrome plugins for data scraping is vast and varied. Take
+Instant Data Scraper, for example, a plugin that simplifies the scraping
+process, requiring minimal technical know-how. It uses AI analysis to see
+what data can be extracted from an HTML page, bringing something unique
+to your scraper's toolbox. And for those interested in specific sites,
+Amazon Reviews Exporter and Amazon Data Scraper are  plug-ins designed
+for collecting data from Amazon. Wherever the data are, it is lkely there is
+a tool ready to help you harvest them. This is true for a range of sites
+that are well-known to be rich in data, from Parlor to Gab, and Yelp to
+Trustpilot. And it is not just Chrome that offers these tools, Data Miner, for instance, works with both
+Chrome and Microsoft Edge.
+
+Focusing on something more practical, using Amazon Reviews Exporter's
+free version, you can download about 10 reviews at a time (be
+aware that these parameters might change over time). For example, we could grab
+reviews for ``The Lord of the Rings Hardcover - Box set, March 3, 1988''
+from Amazon, save them as a CSV file, and then dive into the data
+using R.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set global options to limit text width}
+
+\CommentTok{\# Load tibble package}
+\FunctionTok{library}\NormalTok{(tibble)}
+
+\CommentTok{\# Read CSV as dataframe}
+\NormalTok{tolkien }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data/LordOR\_amzn.csv"}\NormalTok{, }\AttributeTok{header =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{stringsAsFactors =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Convert dataframe to tibble for readability}
+\NormalTok{tolkien\_t }\OtherTok{\textless{}{-}} \FunctionTok{as\_tibble}\NormalTok{(tolkien)}
+
+\CommentTok{\# Display tibble structure}
+\FunctionTok{str}\NormalTok{(tolkien\_t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+tibble [50 x 16] (S3: tbl_df/tbl/data.frame)
+ $ id             : chr [1:50] "R177MIRDIAB6HL" "R1AD5LS9CM4L0R" "R1PI73EA3XE8F0" "R1LU51BWLGZ07S" ...
+ $ username       : chr [1:50] "Karen Reynolds" "Julian F Waldby" "ScifiEtronica" "Matt" ...
+ $ profileURL     : chr [1:50] "https://www.amazon.com/gp/profile/amzn1.account.AE7EARUOMHKHUILDESDXVYENQNUQ/ref=cm_cr_arp_d_gw_btm?ie=UTF8" "https://www.amazon.com/gp/profile/amzn1.account.AGKZU2BT3FHOUHWKGATWIWVMBS4Q/ref=cm_cr_arp_d_gw_btm?ie=UTF8" "https://www.amazon.com/gp/profile/amzn1.account.AHH32XFUTXOW33GVBF3FW6RYMZ5A/ref=cm_cr_arp_d_gw_btm?ie=UTF8" "https://www.amazon.com/gp/profile/amzn1.account.AHHRZF6OXT5UYFW44TPWFKXUUOPQ/ref=cm_cr_arp_d_gw_btm?ie=UTF8" ...
+ $ rating         : int [1:50] 5 5 5 5 5 5 5 5 5 5 ...
+ $ title          : logi [1:50] NA NA NA NA NA NA ...
+ $ review_url     : chr [1:50] "https://www.amazon.com/gp/customer-reviews/R177MIRDIAB6HL/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8&ASIN=0395489326" "https://www.amazon.com/gp/customer-reviews/R1AD5LS9CM4L0R/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8&ASIN=0395489326" "https://www.amazon.com/gp/customer-reviews/R1PI73EA3XE8F0/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8&ASIN=0395489326" "https://www.amazon.com/gp/customer-reviews/R1LU51BWLGZ07S/ref=cm_cr_arp_d_rvw_ttl?ie=UTF8&ASIN=0395489326" ...
+ $ asin           : int [1:50] 395489326 395489326 395489326 395489326 395489326 395489326 395489326 395489326 395489326 395489326 ...
+ $ content        : chr [1:50] "Such a nice looking collection. So nice that it can be used as room decor when not being read. Hey its Lord of "| __truncated__ "All the books together.  Gave me something to do whenever I got depressed over holidays." "I was looking for an edition in three volumes that included all the corrections of mistakes made in prior publi"| __truncated__ "This is a review of the hardcover boxed set of The Lord of the Rings, which includes the three volumes of the o"| __truncated__ ...
+ $ date           : chr [1:50] "Reviewed in the United States on January 2, 2024" "Reviewed in the United States on January 4, 2024" "Reviewed in the United States on November 11, 2023" "Reviewed in the United States on April 21, 2021" ...
+ $ format_strip   : logi [1:50] NA NA NA NA NA NA ...
+ $ verified       : chr [1:50] "Verified Purchase" "Verified Purchase" "Verified Purchase" "Verified Purchase" ...
+ $ helpful        : chr [1:50] "One person found this helpful" "" "14 people found this helpful" "112 people found this helpful" ...
+ $ videoURL       : logi [1:50] NA NA NA NA NA NA ...
+ $ video_cover_url: logi [1:50] NA NA NA NA NA NA ...
+ $ imgs           : chr [1:50] "[]" "[]" "[]" "[\"https://images-na.ssl-images-amazon.com/images/W/MEDIAX_792452-T2/images/I/811XmQymqDL._SY88.jpg\",\"https:/"| __truncated__ ...
+ $ normalImgs     : chr [1:50] "[]" "[]" "[]" "[\"https://images-na.ssl-images-amazon.com/images/W/MEDIAX_792452-T2/images/I/811XmQymqDL.jpg\",\"https://image"| __truncated__ ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Show first 2 entries}
+\FunctionTok{head}\NormalTok{(tolkien\_t}\SpecialCharTok{$}\NormalTok{content, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Such a nice looking collection. So nice that it can be used as room"    
+[2] "decor when not being read. Hey its Lord of the Rings and a perfect set."
+[3] "All the books together.  Gave me something to do whenever I got"        
+[4] "depressed over holidays."                                               
+\end{verbatim}
+
+\emph{Program code ends}
+
+As you can see, even from a small dataset, as in the one above, you can
+extract a lot of information and save it in a structured form. And,
+the more data you have access to, the better and more accurate the analysis will be. All in
+all, there there is no one size fits all in the scraping-plugins world.
+Some will work better than others, some new tools will appear on the market and others will cease to exist. But it is important that you
+know, as a data analyst, that you can always find another plugin for your data-scraper tool box. Most of these services are not free or have a free version that
+allows you to collect a limited number of pages or items. Alternatively,
+if you need to have full control over the downloaded content, you can be
+creative and use your programming skills to collect information, for which, see
+next section.
+
+\subsection{Scraping by programming}\label{scraping-by-programming}
+
+To the non-specialist, a webpage appears as a blend of text, images,
+and videos, all presented on a web browser. However, beneath
+this surface lies a more complex reality of a double-language presence
+made of a markup language and a style sheet that instructs the browser on what
+and how to display the content. The structure of the page is governed
+by hyper text markup language (HTML), while its visual presentation is
+run by cascading style sheets (CSS). HTML has an easy-to-understand
+syntax. It gives directives to the web browser and embeds text in HTML
+pages. The text displayed on a webpage is (nearly) always enclosed in
+HTML tags such as \texttt{tag\textgreater{}}Some
+Text\texttt{\textless{}tag\textgreater{}}. The text inside the angular
+brackets \texttt{\textless{}\textgreater{}} can be any HTML keyword such
+as \texttt{\textless{}html\textgreater{}},
+\texttt{\textless{}body\textgreater{}},
+\texttt{\textless{}h1\textgreater{}},
+\texttt{\textless{}p\textgreater{}}, among others. The slash inside the brackets
+\texttt{\textless{}/\textgreater{}} signifies the end of an element. In
+technical jargon, the term ``element'' defines the opening and closing
+of two tags and the content between them. Once a tag is open, it must
+also be closed, like a bracket in mathematics. There are some
+exceptions, though, where the tags are self-contained and do not require
+closing, such as \texttt{\textless{}br\textgreater{}} for a line break.
+Some HTML tags contain attributes, such as \texttt{id} or
+\texttt{class}. They link HTML elements to the CSS for
+the aesthetic styling of the webpage. An important tag in HTML is
+\texttt{\textless{}div\textgreater{}}, used in web design and layout, and is essential for structuring the site. It is commonly used together with CSS
+for styling and JavaScript for functionality, so pay attention to it
+whenever you find it. Figure~\ref{fig-paragraphelement} shows the main
+components of an HTML element.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter3/paragraphelement.png}
+
+}
+
+\caption{\label{fig-paragraphelement}HTML, paragraph element}
+
+\end{figure}%
+
+A simplified example of an HTML code, that also includes an element like that
+in Figure~\ref{fig-paragraphelement}, can be seen in the snippet
+below:
+
+\emph{Programming code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+   \DataTypeTok{\textless{}!DOCTYPE}\NormalTok{ html}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}}\KeywordTok{html}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}}\KeywordTok{head}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{title}\DataTypeTok{\textgreater{}}\NormalTok{Book}\DataTypeTok{\textless{}/}\KeywordTok{title}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{meta}\OtherTok{ name}\OperatorTok{=}\StringTok{"description"}\OtherTok{ content}\OperatorTok{=}\StringTok{"Marketing"}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{script}\OtherTok{ type=}\StringTok{"text/javascript"}\DataTypeTok{\textgreater{}} 
+    \CommentTok{// JavaScript code can go here}
+    \DataTypeTok{\textless{}/}\KeywordTok{script}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{link}\OtherTok{ rel}\OperatorTok{=}\StringTok{"stylesheet"}\OtherTok{ href}\OperatorTok{=}\StringTok{"style.css"}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}/}\KeywordTok{head}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}}\KeywordTok{body}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{h1}\DataTypeTok{\textgreater{}}\NormalTok{Scraping}\DataTypeTok{\textless{}/}\KeywordTok{h1}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{article}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{p}\DataTypeTok{\textgreater{}}
+\NormalTok{            Paragraph with }\DataTypeTok{\textless{}}\KeywordTok{sub}\DataTypeTok{\textgreater{}}\NormalTok{subscript}\DataTypeTok{\textless{}/}\KeywordTok{sub}\DataTypeTok{\textgreater{}}\NormalTok{ and }\DataTypeTok{\textless{}}\KeywordTok{sup}\DataTypeTok{\textgreater{}}\NormalTok{superscript}\DataTypeTok{\textless{}/}\KeywordTok{sup}\DataTypeTok{\textgreater{}}\NormalTok{ text.}
+        \DataTypeTok{\textless{}/}\KeywordTok{p}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{p}\OtherTok{ id}\OperatorTok{=}\StringTok{"par2"}\DataTypeTok{\textgreater{}}
+\NormalTok{            Paragraph with }\DataTypeTok{\textless{}}\KeywordTok{i}\DataTypeTok{\textgreater{}}\NormalTok{italic}\DataTypeTok{\textless{}/}\KeywordTok{i}\DataTypeTok{\textgreater{}}\NormalTok{ and }\DataTypeTok{\textless{}}\KeywordTok{b}\DataTypeTok{\textgreater{}}\NormalTok{bold}\DataTypeTok{\textless{}/}\KeywordTok{b}\DataTypeTok{\textgreater{}}\NormalTok{ text.}
+        \DataTypeTok{\textless{}/}\KeywordTok{p}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}/}\KeywordTok{article}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{table}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}}\KeywordTok{tr}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}}\KeywordTok{td}\DataTypeTok{\textgreater{}}\NormalTok{Tablets}\DataTypeTok{\textless{}/}\KeywordTok{td}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}/}\KeywordTok{tr}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}/}\KeywordTok{table}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{ul}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{li}\DataTypeTok{\textgreater{}}\NormalTok{API}\DataTypeTok{\textless{}/}\KeywordTok{li}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{li}\DataTypeTok{\textgreater{}}\NormalTok{DOM}\DataTypeTok{\textless{}/}\KeywordTok{li}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}/}\KeywordTok{ul}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}}\KeywordTok{footer}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{p}\DataTypeTok{\textgreater{}}\NormalTok{This is a footer paragraph.}\DataTypeTok{\textless{}/}\KeywordTok{p}\DataTypeTok{\textgreater{}}
+        \DataTypeTok{\textless{}}\KeywordTok{a}\OtherTok{ href}\OperatorTok{=}\StringTok{"https://www.danieldanlab.com"}\OtherTok{Link to a page}\ErrorTok{\textless{}/}\OtherTok{a}\DataTypeTok{\textgreater{}}
+    \DataTypeTok{\textless{}/}\KeywordTok{footer}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}/}\KeywordTok{body}\DataTypeTok{\textgreater{}}
+\DataTypeTok{\textless{}/}\KeywordTok{html}\DataTypeTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Programming code ends}
+
+Using programming languages, for example, R, Python, or Java, we can
+navigate through the internal elements of these web pages and retrieve valuable
+information. This process involves parsing the pages into a document-object-model (DOM) tree structure (Keith and Sambells 2011). Let us
+demystify the link between HTML and DOM. When a
+browser loads a webpage, it parses the web page sequentially, reading
+the HTML tags in sequence. While parsing, it builds the DOM, and the
+HTML tags are transformed into DOM nodes. If, during the parsing
+process, there are scripts, JavaScripts, for example, or external
+elements such as CSS directives and images that might interrupt the
+process, the DOM building still goes ahead. Most of the time, in
+parallel, with little or no interruptions. So, the DOM represents a
+model of a page, while HTML is a language that allows you to create the
+DOM. After its creation, scripts can manipulate it to change a page's
+content, structure, or style after it has been loaded. This procedure
+allows for it to be interactive, making pages dynamic and accessible alike. It is
+easier to locate specific data on a webpage through the hierarchical
+tree structure of the DOM, and scraping tools can use the DOM to identify
+\texttt{ids}, \texttt{classes}, and \texttt{tag\ names} to extract the information you need. For a visual representation of how a basic HTML
+page, like that in the previous example, is organized by the DOM, refer to
+Figure~\ref{fig-DOMTree}. Be aware that only the opening
+tags are represented, the closing section is, for the most part, a mirror of these.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter3/html_2.png}
+
+}
+
+\caption{\label{fig-DOMTree}DOM Structure}
+
+\end{figure}%
+
+The \texttt{\textless{}html\textgreater{}} node is the \textbf{root} of
+the tree, it has two branches: the \texttt{\textless{}head\textgreater{}}
+and \texttt{\textless{}body\textgreater{}}. It tells the browser that it
+encapsulates all the  elements of the page. The
+\texttt{\textless{}head\textgreater{}} node is like the preface of a book. As well as other elements, it
+provides meta-information about what lies underneath the page.
+The \texttt{\textless{}meta\textgreater{}} tag adds information about
+the HTML page. It does not have a closing counterpart.
+\texttt{\textless{}title\textgreater{}},
+\texttt{\textless{}script\textgreater{}}, and
+\texttt{\textless{}link\textgreater{}} are just some of the tags you might encounter in a header. The \texttt{\textless{}body\textgreater{}} node
+contains the main content, structured into headers, such as
+\texttt{\textless{}h1\textgreater{}}, the main content, which can be made up of
+articles \texttt{\textless{}article\textgreater{}}, tables,
+\texttt{\textless{}table\textgreater{}}, and unordered lists
+\texttt{\textless{}ul\textgreater{}}, and ends with the footer
+\texttt{\textless{}footer\textgreater{}}.
+\texttt{\textless{}h1\textgreater{}} is the heading tag with the
+largest dimensions. If you want to create smaller headings,
+\texttt{\textless{}h2\textgreater{}} to
+\texttt{\textless{}h6\textgreater{}} offer progressively smaller sizes.
+\texttt{\textless{}li\textgreater{}...\textless{}/li\textgreater{}}
+show that we will enclose a \textbf{li}st between the tags. To make an
+\textbf{u}nordered \textbf{l}ist, you use the
+\texttt{\textless{}ul\textgreater{}} tag. Of course, there is a tag for
+an \textbf{o}rdered \textbf{l}ist too which adds numbers or letters in
+front of \texttt{\textless{}ol\textgreater{}}. You can create
+a table with a unique element that has a table row
+\texttt{\textless{}tr\textgreater{}}, within which is a \textbf{t}able
+\textbf{c}ell not defined by the
+\texttt{\textless{}tc\textgreater{}} tag, but
+\texttt{\textless{}td\textgreater{}}, which stands for \textbf{t}able
+\textbf{d}ata (or cell). For more information on HTML and CSS, check the
+additional material on the https://danieldanlab.github.io webpage.
+
+In the following example, we have imported a webpage into R and removed the
+unnecessary part by stripping away the code and liberating the embedded
+text.
+
+The \texttt{rvest} package (Wickham 2022a) provides functions that allow
+us to scrape (or ha\textbf{rvest}) data by parsing the HTML content of
+the webpage. \texttt{rvest} integrates with the
+\texttt{magrittr} package seamlessly, using the pipe operator
+\texttt{\%\textgreater{}\%} to pass output easily from one function to
+the next. This approach is detailed in the introductory chapter, but let us
+explore how things work in practice with an example.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load necessary library}
+\FunctionTok{library}\NormalTok{(rvest)}
+
+\CommentTok{\# Define the URL to scrape}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://webscraper.io/test{-}sites/e{-}commerce/allinone"}
+
+\CommentTok{\# Read and parse the HTML from the URL}
+\NormalTok{parsed\_html }\OtherTok{\textless{}{-}} \FunctionTok{read\_html}\NormalTok{(url)}
+
+\CommentTok{\# Extract product titles}
+\NormalTok{titles }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_html }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_nodes}\NormalTok{(}\StringTok{"h4 .title"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_text}\NormalTok{()}
+
+\CommentTok{\# Extract product descriptions}
+\NormalTok{descriptions }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_html }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_nodes}\NormalTok{(}\StringTok{".description"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_text}\NormalTok{()}
+
+\CommentTok{\# Extract product prices as text}
+\NormalTok{prices\_text }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_html }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_nodes}\NormalTok{(}\StringTok{".caption .pull{-}right"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_text}\NormalTok{()}
+
+\CommentTok{\# Clean and convert prices to numeric}
+\NormalTok{prices }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{gsub}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{$"}\NormalTok{, }\StringTok{""}\NormalTok{, prices\_text))}
+
+\CommentTok{\# Combine extracted data into a data frame}
+\NormalTok{product\_data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(titles, descriptions, prices)}
+
+\CommentTok{\# Preview the first few rows of the data frame}
+\FunctionTok{head}\NormalTok{(product\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+The \texttt{read\_html()} function is designed to parse the content of
+an HTML file. Once the file is parsed and stored in a variable, such as
+\texttt{titles}, we need to pass this variable containing the entire
+structure of the page and the text to the \texttt{html\_nodes()}
+function. This will extract the text using various HTML
+and CSS selectors, in this case, \texttt{h4} and \texttt{.title}. If you
+were wondering why we use more than one selector, it is because this allows us to be specific and pinpoint the content we
+need to extract. It is important to be able to identify these selectors visually. An easy
+way to access and inspect them is through the developer's web tools. All
+modern browsers can show a page's source and unveil its DOM. On some
+browsers, in the settings, which are usually represented by three vertical dots or
+lines, you need to select \textbf{More tools}, then \textbf{Developer
+tools}. A menu for the developer tools will appear either at the bottom
+of the page or on the right-hand side. The first step is to select an element
+on the page. Let us identify the \textbf{title} of the first item whose
+data we want to have downloaded. Given the repetitive nature of the code
+structure, identifying the pattern for one item is usually sufficient
+as the other items will likely follow the same pattern. Click on the
+icon depicted in Figure~\ref{fig-icon} and then click on the title of
+one product, see Figure~\ref{fig-product}. Usually, such a procedure is
+applied to all the elements to be harvested from a page, regardless of
+the number of products. The code above is sufficient to harvest all the features you want of all the products on a page. Be aware that what you
+see in the developer tools of a browser is the DOM, not just the raw
+HTML, as it displays the current state of the DOM as it is interpreted
+and rendered by the browser being used.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.1\textwidth,height=\textheight]{figure/chapter3/selector.png}
+
+}
+
+\caption{\label{fig-icon}Icon to select elements on a webpage, image
+from a Chrome browser, compiled by the authors}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.3\textwidth,height=\textheight]{figure/chapter3/product.png}
+
+}
+
+\caption{\label{fig-product}Title selection of a product, image from a
+web page, compiled by the authors}
+
+\end{figure}%
+
+The HTML snippet code
+will be displayed in the \textbf{Developer tools} frame underneath,  allowing you to detect the path where the title is
+situated, see Figure~\ref{fig-snippet}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter3/snippet.png}
+
+}
+
+\caption{\label{fig-snippet}Code snippet underlining the path to follow
+to obtain the title's text}
+
+\end{figure}%
+
+When examining the code, you can build an imaginary path going through
+both elements, \texttt{h4} and \texttt{.title}, to locate a specific
+title, such as ``Acer Aspire 3 A315-15 Black''. The function is designed
+to extract a node containing text but does not know the path to follow.
+This is why we have to inspect the code and supply the function with the right elements. Essentially, it selects only the desired node,
+removing all the unnecessary information. This output is then passed to
+the \texttt{html\_text()} function, which extracts the text from
+the node. This approach is applied in the same way to all the other variables.
+Note that the \textbf{prices\_text} variable has a character sign before
+the numerical value. With the help of a regular expression you have
+studied, {[}here{]}, we can remove that sign and convert the remaining
+string made by character digits into an integer. This step is always
+needed for subsequent mathematical computations: mathematical operations
+are done using numbers, not characters.
+
+\subsection{Scraping by programming +}\label{scraping-by-programming-1}
+
+Sometimes, scraping web pages based on a static pattern is very
+challenging, especially when actions like clicking a link or navigating
+to a ``next'' page are required. In such cases, we need a tool which can
+mimic and automate human actions on a webpage. Selenium (2024) has a set
+of various open-source software tools, each with a distinct
+method, to help do this. Primarily used for automatizing tests concerning the
+functionality of websites, Selenium can also be used as a remote control. It
+makes it possible for the interface elements on web pages, for example,
+links or pop-ups, to be accessed via scripting rather than through clicking with a mouse.
+It can even handle JavaScript processes as well (Garcı́a et al. 2020).
+The procedures mentioned above are usually tricky to execute without
+Selenium due to the problem of integrating JavaScript with the browser.
+
+Another component is Selenium's ability to identify the agent,
+essentially the browser used for scraping. Common choices include Google
+Chrome (the default option), Firefox, or Edge, and these can be used in
+their standard or headless versions. A headless browser provides
+automated web-page interaction without a graphical user interface. It
+can be chosen in lieu of commonly used web browsers to minimize
+interactions, and so maximizing the user's anonymity. The key packages used for
+this task are \texttt{RSelenium} (Harrison 2022) and \texttt{rvest}. The
+former ensures that R and Selenium interact and provides a set
+of R bindings from the Selenium WebDriver (Garcı́a et al. 2021), while
+the latter handles the scraping. The script starts the
+Selenium server sequentially and pauses the system for two seconds, allowing it to be
+loaded. Then, it links the driver to the browser, which opens a session and loads the external file. Eventually, the data is
+stored in a data frame and then saved in CSV format. However, be aware
+of potential compatibility issues between Chrome and the versions of its driver.
+In such cases, switching to Firefox or another browser might resolve the
+issue. Also, if a script fails due to a communication port being busy,
+consider closing the current session or choosing a different
+port. For more detailed guidance, visit our website.
+
+Let us use this tool on a page we are already familiar with from the
+webscraper.io website, starting from a general page. The function
+\texttt{rsDriver()} may default to using the Chrome browser if not
+specified by the user or the user's environment. The option
+\texttt{verbose\ =\ FALSE} suppresses the system messages. Its default
+value is TRUE. We suggest experimenting with the code and its various
+attributes in order to understand better the true potential of these
+functions.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load RSelenium}
+\FunctionTok{library}\NormalTok{(RSelenium)}
+
+\CommentTok{\# Set URL}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{"https://webscraper.io/test{-}sites/e{-}commerce/allinone"}
+
+\CommentTok{\# Initialize Selenium driver}
+\NormalTok{driver }\OtherTok{\textless{}{-}} \FunctionTok{rsDriver}\NormalTok{(}\AttributeTok{verbose =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Create client}
+\NormalTok{remote\_driver }\OtherTok{\textless{}{-}}\NormalTok{ driver}\SpecialCharTok{$}\NormalTok{client}
+
+\CommentTok{\# Navigate to URL}
+\NormalTok{remote\_driver}\SpecialCharTok{$}\FunctionTok{navigate}\NormalTok{(url)}
+
+\CommentTok{\# Wait for page load}
+\FunctionTok{Sys.sleep}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# Click element by XPath}
+\NormalTok{button\_element }\OtherTok{\textless{}{-}}\NormalTok{ remote\_driver}\SpecialCharTok{$}\FunctionTok{findElement}\NormalTok{(}\AttributeTok{using =} \StringTok{"xpath"}\NormalTok{, }
+                    \AttributeTok{value =} \StringTok{\textquotesingle{}//*[@id="side{-}menu"]/li[3]/a\textquotesingle{}}\NormalTok{)}
+\NormalTok{button\_element}\SpecialCharTok{$}\FunctionTok{clickElement}\NormalTok{()}
+
+\CommentTok{\# Get and print new URL}
+\NormalTok{url1 }\OtherTok{\textless{}{-}}\NormalTok{ remote\_driver}\SpecialCharTok{$}\FunctionTok{getCurrentUrl}\NormalTok{()}
+\FunctionTok{print}\NormalTok{(url1)}
+
+\CommentTok{\# Scrape data (code for scraping goes here)}
+
+\CommentTok{\# Close driver and stop server}
+\NormalTok{remote\_driver}\SpecialCharTok{$}\FunctionTok{close}\NormalTok{()}
+\NormalTok{driver}\SpecialCharTok{$}\NormalTok{server}\SpecialCharTok{$}\FunctionTok{stop}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+To sum up, the code starts by loading the necessary library and
+setting a target URL. It then identifies and follows a path to a
+specific element on the webpage, simulating a click. This action leads
+us to a new page with an updated URL. Effectively, this code automates the process of navigating through web pages, enabling important
+information to be scraped without the need for manual interaction, such as clicking on
+links.
+
+\subsection{Data from databases: SQL,
+NoSQL}\label{data-from-databases-sql-nosql}
+
+Structured Query Language (SQL) is a programming language designed for
+accessing and managing databases, regardless of their physical location.
+It is used to retrieve, write, or update inherently structured data which
+are stored in tables linked through a relational scheme. As
+has been highlighted above, structured data is the preferred format for
+analysts and SQL has a distinctive syntax, which can be used to interact
+directly with databases. While direct SQL commands can be complex,
+wrapper functions are available to ``conceal'' the SQL jargon and
+simplify these commands into more user-friendly terms. To illustrate,
+consider a hypothetical SQL query: In the \texttt{users} table, for the
+\texttt{user\_id} identified by number 25, select columns like
+\texttt{name}, \texttt{familyname}, and \texttt{address}. This example,
+though not connected to an actual database, demonstrates the fundamental
+power of SQL for manipulating data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT}\NormalTok{ name, familyname, address }\KeywordTok{FROM}\NormalTok{ users }\KeywordTok{WHERE}\NormalTok{ user\_id }\OperatorTok{=} \DecValTok{25} 
+\end{Highlighting}
+\end{Shaded}
+
+If we replace \texttt{name}, \texttt{familyname}, and \texttt{address}
+with an asterisk (*) in the SQL query, it will select all the fields from
+the table. Additionally, omitting the WHERE clause will result in the
+selection of all users, not just those matching a specific condition.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{SELECT} \OperatorTok{*} \KeywordTok{FROM}\NormalTok{ users}
+\end{Highlighting}
+\end{Shaded}
+
+The indisputable strength of R lies in its built-in functions, which
+enable the quick analysis of data and the ability to visualize results through
+graphs for immediate comprehension. Moreover, R, with its extensive
+range of packages, offers drivers for connecting to various types of
+databases, including MySQL, ORACLE, PostgreSQL, Impala, Amazon RedShift,
+and Spark, to name just a few.
+
+You can either use the SQL syntax embedded in simple R code or you can
+use packages like \texttt{dplyr}. For the first
+approach, you might use a command like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tbl}\NormalTok{(mydatabase, }\FunctionTok{sql}\NormalTok{(}\StringTok{"SELECT name, familyname, address FROM users WHERE }
+\StringTok{                    user\_id = 25"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+For the second:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{myselection }\OtherTok{\textless{}{-}} \FunctionTok{tbl}\NormalTok{(mydatabase, }\StringTok{"users"}\NormalTok{)}
+\NormalTok{myselection }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\AttributeTok{user\_id =} \DecValTok{25}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(name, familyname, address)}
+\end{Highlighting}
+\end{Shaded}
+
+In either case, whether using SQL directly or via \texttt{dplyr},
+the richness and complexity of the dplyr package can work like a charm,
+offering a vast array of analytical possibilities.
+
+The approach to accessing data differs slightly for NoSQL databases but
+retains some similarities. In NoSQL, data are often stored in JSON
+format with embedded attributes. For instance, in a users table within a
+\texttt{mydatabase} database, fields like \texttt{name},
+\texttt{familyname}, and \texttt{address} are stored as attributes
+within a single document. This helps horizontal scalability,
+allowing for large amounts of data to be contained within a single
+table.
+
+This brief foray into the world of databases is intended to provide a
+more comprehensive view of the diverse sources from which data can be
+acquired. However, it is important to note that throughout this book, we
+will primarily focus on other methods of data acquisition.
+
+\subsection{Using services based on AI to obtain
+data}\label{use-services-based-on-ai-to-obtain-data}
+
+Because scraping using traditional software or self-produced code can be
+problematic due to changing website layouts, developments in
+AI---especially Large Language Models (LLMs)---offer new ways to improve
+web scraping, as described in Posedaru et al. (2024). The authors propose a
+solution involving a JavaScript application that uses natural language
+to extract information and save the scraped results to a JSON file. The
+steps include providing a URL address and description of the data that
+needs to be extracted. The HTML structure is then collected, cleaned, and
+transferred to ChatGPT in several chunks. ChatGPT is used to detect the
+appropriate selectors corresponding to the data in the HTML structure,
+after which it generates a scraper based on these elements.
+Once the scraper is executed, the data is saved in a JSON file.
+
+There are other ChatGPT-based tools, such as the gpt-automated-web-scraper,
+which generates code based on user inputs and website analysis (Breeuwer
+2024), or the ChatGPT Web Scraper API plugin (OpenAI 2024). These
+tools enable autonomous data collection using LLMs, though ChatGPT-like
+tools cannot scrape websites directly (as of now). Additionally, several
+web services use AI to scrape data without the need for any coding,
+such as browser.ai, bardeen.ai, and kadoa.com.
+
+All these tools are very promising, although some will endure and others may
+fade away. The important thing to understand is how to collect
+data while taking into account privacy and ethics.
+
+\section{Other sources for obtaining text data
+sets}\label{other-sources-to-obtain-text-data-sets}
+
+Gathering data for analysis, whether through web scraping or utilizing
+existing datasets, can be daunting. However, readily available resources
+on the web can ease this process. Notable among these are well-known
+dataset aggregators like Kaggle and GitHub. These platforms host various
+datasets covering various topics, including numerical data, categorical
+data, and combinations thereof. In this book, we are particularly
+interested in datasets suitable for natural language processing (NLP)
+and analysis.
+
+We have compiled a list of datasets from the Elite Data Science website
+(\url{https://elitedatascience.com/datasets),} which are excellent for
+honing your text analytics skills. We encourage you to explore these
+datasets and consider their potential application for marketing:
+
+\begin{itemize}
+\tightlist
+\item
+  Game of Thrones: Explore the political landscape, characters, and
+  battles of the popular TV series, based on George R.R. Martin's `A
+  Song of Fire and Ice.'\\
+\item
+  World University Rankings: Analyze three global university rankings,
+  each with a unique methodology and different insights.\\
+\item
+  IMDB 5000 Movie Dataset: Can a movie's popularity be predicted before
+  its release?\\
+\item
+  Enron Dataset: Email data from Enron's senior management, a resource
+  for understanding corporate communication. This dataset was originally
+  made public and posted to the web by the Federal Energy Regulatory
+  Commission during its investigation.\\
+\item
+  Amazon Reviews: Examine around 35 million Amazon reviews, a rich
+  source for sentiment analysis and customer feedback studies.\\
+\item
+  Newsgroup Classification: Practice text classification and topic
+  modeling with 20,000 documents from 20 newsgroups.
+\end{itemize}
+
+Check our website for more links to usable datasets.
+
+\emph{Exercise starts}
+
+\textbf{Exercise 1}: Inspect the Amazon dataset's first 20 and last
+20 review elements. Hint: type help(head) in the R console to learn how
+to do it.\\
+\textbf{Exercise 2}: Make a search on the Internet and extract
+unstructured data from pdf, doc, or docx files. Then, save them into a
+dataframe.\\
+\textbf{Exercise 3}: Choose a popular online forum or discussion board.
+Extract and analyze the most recent ten posts from a subreddit
+which relates to your interests. Hint: investigate the structure of the forum's URLs
+and how posts are displayed to determine your scraping strategy.\\
+\textbf{Exercise 4}: Find a website of your choice and use the Web
+Scraper plugin to extract data.\\
+\textbf{Exercise 5}: Find a website of your choice and use RSelenium and
+rvest to download a usable dataset. Consider websites requiring
+interaction, such as clicking buttons or filling forms, to navigate to
+the data.\\
+\emph{Exercise ends}
+
+\textbf{Conclusion}
+
+\emph{Conclusion starts}
+
+This chapter is a resource for those beginning their journey in text
+data acquisition and analysis in R. It offers practical insights into, and a
+tangible foundation in, various methods of and tools for data acquisition. Text
+is present in various file formats, and it has covered methods for handling PDFs, Word
+documents (doc, docx), and plain text files, demonstrating
+how to convert these formats into structured forms suitable for analysis
+in R. APIs were another point of interest, particularly for collecting
+data from social-media platforms and other online services. Web scraping
+techniques were tackled, using R packages such as \texttt{rvest} and
+\texttt{RSelenium} to extract data from both static and dynamic web
+content, including handling pages that require user interaction. The
+discussion then shifted to working with databases and how to access
+structured data from both SQL and NoSQL databases. Online platforms such
+as Kaggle and GitHub were mentioned as valuable sources for ready-to-use
+datasets. The chapter also provides practical exercises that range from basic
+data inspection to advanced web-scraping techniques. These exercises are
+designed to enhance the reader's hands-on experience with a variety of
+data sources and tools.
+
+\emph{Conclusion ends}

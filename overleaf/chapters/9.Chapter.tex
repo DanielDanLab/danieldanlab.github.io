@@ -1,0 +1,1305 @@
+\chapter{Named Entity Recognition and
+Summarizing}\label{sec-named-entity-recognition-and-summarization}
+
+\textbf{Learning Objectives}
+
+\emph{Overview starts}
+
+\begin{itemize}
+\tightlist
+\item
+  Understanding what named entity recognition (NER) is.
+\item
+  Understanding how NER works.
+\item
+  Understanding workflow in NER.
+\item
+  Learning how to apply NER in R.
+\item
+  Learning how to extract information using spacyr().
+\item
+  Understanding and selecting parts-of-speech (POS) tagging.
+\item
+  Analyzing POS over a timeline.
+\item
+  Measuring language complexity.
+\item
+  Tackling summarizing.
+\end{itemize}
+
+\emph{Overview ends}
+
+Named entity recognition (NER) is used in NLP to find important
+information in documents. Its goal is to identify and classify basic
+text elements and their interactions. Named entities (NE) are important
+for a specific purpose or topic, determining their type and boundary.
+Although NEs do not have a direct and precise definition, maybe because
+there are too many of them, they can be defined from a more practical point of
+view. They are elements which describe categories, such as people,
+organizations, locations, dates, times, percentages, and monetary
+amounts, among others. For example, a person can be identified by a name
+or an alias, and a location could be a city, village, or forest. These
+two categories, person and location, might be related by the place of
+birth of someone identified by its name. NER is a branch of NLP and helps us understand text questions such as ''who?'', ''what?'', ''where?'', and ''when?'',
+through simple principles (Nouvel, Ehrmann, and Rosset 2016).
+
+As we have already demonstrated in the previous chapter when tracking the
+evolution of brand sentiment over time, in marketing this information
+can be used to monitor several aspects of a product or brand. A company might want to know the
+opinion of their customers (''who''), what they think about their products or
+brands (''what''), in which region or country they are located (''where''), and at which point in
+time they bought the product (''when''). They might also want to check on competitors for their development of technologies, national or international marketing strategies, or the pain
+points of a brand's customer perceptions. Some reviewing platforms,
+ranging in their focus from general topics (e.g., Yelp) to more
+specialized areas, such as traveling (e.g., TripAdvisor) or movie review
+platforms (e.g., IMDb), aim to collect information on products and link
+them to consumer feedback (Popescu and Etzioni 2007). If well
+extracted, NEs can be considered the building blocks of a summary,
+giving insights into the information contained in documents (Hassel
+2003).
+
+An important application of NER is the possibility to anonymize the
+personal data contained in a document; this is very important as data privacy is paramount. Personal information can be
+hidden while the related data and the possibility of interpreting them can
+be used for statistical purposes or the development of segment-specific
+marketing campaigns.
+
+\section{How does NER work?}\label{how-does-ner-work}
+
+There are several ways of using NER, such as through rule-based systems,
+statistical models, and neural-network models. Rule-based systems use
+predefined lists of entities, for example, gazetteers,\footnote{A
+  gazetteer is akin to a geographical dictionary or directory} and
+regular expressions, like the ones we presented in
+Chapter~\ref{sec-textual-data}. This is relatively simple to set up,
+but it is not very scalable or flexible if you have large heterogeneous sets of 
+data. Statistical methods and machine-learning algorithms use
+methods, like those we discussed for classification in
+Chapter~\ref{sec-classification}. Some other frequently used approaches
+include hidden Markov models (HMM; Morwal, Jahan, and Chopra 2012),
+conditional random fields (CRF; Sun et al. 2006), and maximum entropy
+(ME) methods (Chieu and Ng 2003). These are more accurate than
+the rule-based systems, but the data used for training must be of a
+substantial size. The most accurate methods are the neural-network
+models. They use techniques such as recurrent neural networks (RNN; Li
+et al. 2015), convolutional neural networks (CNN; Zhu, Wang, and
+Karlsson 2019), and transformers (Arkhipov et al. 2019). The computational power required by such models is high, and
+they also need large annotated data sets. Even then, however, results are not
+always perfect, and the process of identifying and classifying can be
+faulty, especially with entities that are ambiguous or
+context-dependent. Take, as an example, Amazon, which can be connected with
+a forest (location) or a company (organization). Disambiguation is a
+complex task, but most recent transformer technologies understand
+context well and have made this more and more precise. It is necessary to
+mention that variability introduces misclassification, for example, in
+cases where an entity is referred to in different ways, like CR7 or
+Cristiano Ronaldo: This task is called co-reference resolution, sometimes
+called named entity resolution, and is extremely useful in text analytics.
+
+\subsection{Workflow}\label{workflow}
+
+In an NER task, raw text must undergo several transformations, from
+pre-processing to the final NER output. Here, we will explain a generic
+NER method. Pre-processing helps transform the text into a more
+suitable format for the subsequent NER procedures. It starts by segmenting
+the text into sentences, which are represented by lists of strings. This
+is followed by tokenization, which helps to break down text to the desired level of detail and becomes a list of strings. Next is the
+parts-of-speech (POS) tagging, which identifies which parts of speech
+specific words belong to: Tokens can be nouns, verbs, adjectives, and so
+on, and are very useful for entity recognition. In modern contexts,
+tokens can be transformed into word embedding; we will discuss this in
+Chapter~\ref{sec-extracting-information-from-embeddings}. Next comes the
+entity detection, which helps classify the tokens into categories
+using one of the models discussed above. During this step, the model identifies the boundaries of the
+entity and its type. Then, relation detection comes into
+action, with the final result being in the form of text tuples associated with
+entities and relationships. See Figure~\ref{fig-ner}, inspired by Dias
+et al. (2020), for a visual representation of the process.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=\textheight]{figure/chapter9/ner.png}
+
+}
+
+\caption{\label{fig-ner}Named Entity Recognition Task}
+
+\end{figure}%
+
+The landscape of linguistic annotations is made more complex by the use
+of various formats, two of them being more common than others: conference of natural
+language learning universal dependencies (CoNNL-U; cf. Project 2022; Schuster and Manning 2016) and text interchange format (TIF; Mullen
+et al. 2018). The former represents a highly standardized and widespread
+format for dependency structures across various languages. Its form is a
+plain text file containing several fields for each token, and it becomes
+useful when universal dependencies are needed. The latter,
+used in R especially, offers a flexible structure for text package objects, such as objects from
+corpora and tokens. All R packages which support this standard will
+be able to interact between them nicely; two R packages are
+\texttt{spacyr} and \texttt{quanteda}.
+
+The choice of model depends on several factors, for example, the
+dimension of the data set, the presence of labeled data, the computational
+capacity available, or the degree of precision and accuracy needed from the results.
+
+\section{NER using R}\label{ner-using-r}
+
+There are several packages which can be used in R. Each package might use
+a different model to annotate the text. One of them is
+\texttt{nametagger}, another is \texttt{OpenNLP}, which is based on the
+Apache OpenNLP library. Related to the latter is \texttt{entity},
+which is a wrapper for \texttt{NLP} and \texttt{OpenNLP}. Another is
+\texttt{crfsuite}, providing an interface with CRF. Yet another
+is \texttt{udpipe}, a package developed by the Belgium Network of Open
+Source Analytical Consultants (BNOSAC). Packages like
+\texttt{nametagger}, \texttt{crfsuite}, or \texttt{udpipe} use CoNLL-U
+models \footnote{CoNLL-U format:
+  https://universaldependencies.org/format.html} while \texttt{OpenNLP}
+has its own annotator. Last but not least, an important package,
+\texttt{spacyr} (Benoit and Matsuo 2023), is used in R through an
+interface with the Python \texttt{SpaCy} library (Vasiliev 2020).
+\texttt{SpaCy} uses neural-network models and tries to predict entities
+based on them. The models are trained using large data sets.
+Depending on the need, they are optimized for speed, sm (small), for a
+balance between speed and accuracy, md (medium), and for higher accuracy
+but with more computational power needed, lg (large). These models exist
+for several languages, such as English, German, French, and many others. A
+pipeline for how \texttt{Spacy} carries out annotations is provided in
+Figure~\ref{fig-pipeline}. The first component, ``tok2vec'', transforms
+tokens into embedded vectors (there is more about this in
+Chapter~\ref{sec-extracting-information-from-embeddings}) which represent
+semantic meaning in a numerical space. These vectors are used by both
+the ``tagger'', which assigns POS tags, and the ``parser'' which analyzes
+the grammatical structure of the sentence. The ``attribute\_ruler''
+applies rules to elements such as lemma, POS, etc., and helps the
+``lemmatizer'' standardize words as their root form. The last
+component, ``ner'', identifies named entities. It might loop back,
+however, to ``tok2vec'' for better detection.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.9\textwidth,height=\textheight]{figure/chapter9/pipeline-design.png}
+
+}
+
+\caption{\label{fig-pipeline}SpaCy pipeline design \newline (Source:
+spaCy website)}
+
+\end{figure}%
+
+The entities (or categories) for NER that \texttt{SpaCy} extracts are basic; some names are intuitive, while others might need an
+explanation. The examples below are not exhaustive.
+
+\begin{itemize}
+\tightlist
+\item
+  PERSON: People, including fictional, aliases, former names
+\item
+  NORP (Nationalities, or Religious or Political): Nationalities or
+  religious or political groups
+\item
+  FAC (Facility): Buildings, airports, highways, bridges, hospitals
+\item
+  ORG: Companies, agencies, institutions, NGOs
+\item
+  GPE (Geopolitical Entity): Countries, states, cities, rural areas
+\item
+  LOC: Non-GPE locations, mountain ranges, bodies of water, deserts
+\item
+  PRODUCT: Objects, vehicles, food (not services.)
+\item
+  EVENT: Named hurricanes, battles, wars, sports events, political
+  events, cultural events, scientific events, economic events
+\item
+  WORK\_OF\_ART: Titles of books, songs, paintings
+\item
+  LAW: Named documents made into laws
+\item
+  LANGUAGE: Any named language
+\end{itemize}
+
+SpaCy includes some extended categories, too:
+
+\begin{itemize}
+\tightlist
+\item
+  DATE: Absolute or relative dates or periods
+\item
+  TIME: Times smaller than a day
+\item
+  PERCENT: Percentage, including ``\%''
+\item
+  MONEY: Monetary values, including units
+\item
+  QUANTITY: Measurements, e.g., of weight or distance
+\item
+  ORDINAL: ``first'', ``second'', etc.
+\item
+  CARDINAL: Numerals, such as 1, 10, 100, three, seventeen
+\end{itemize}
+
+The previous categories might have a letter assigned after them, for
+example, DATE\_B. This is because it follows the BILUO tagging scheme,
+which stands for:
+
+\begin{itemize}
+\tightlist
+\item
+  B: Beginning of an entity
+\item
+  I: Inside of an entity (continuation of an entity started with B)
+\item
+  L: Last token of an entity
+\item
+  U: Unit entity (a single-token entity)
+\item
+  O: Outside of any entity
+\end{itemize}
+
+This is used when the entity spans multiple tokens, and the current
+token is the first, inside, the last, etc., token in that sequence.
+
+\section{NER Information extraction using
+spacyr}\label{ner-information-extraction-with-spacyr}
+
+In this subsection we illustrate the functionalities of the NER process by using the R package \texttt{spacyr}, along with
+the sentiment dataset we already familiar with from
+Chapter~\ref{sec-sentiment-analysis}. We will extract the most frequent
+entities for two brands and compare their counts. Then we will
+focus on the negative reviews and check how often specific entities are
+mentioned. Adjectives are often related to emotions, and checking them gives us
+more insights into how brands are perceived. However, adjectives can be related to
+other words, so we will also explore the part-of-speech (POS) dependencies.
+Tracking adjectives over time is a very useful way to measure the levels of
+satisfaction or dissatisfaction with products. Language complexity is
+another metric which can be calculated, and is potentially important for
+understanding and comparing how people express their opinions about
+specific brands, and also gives a hint to managers for how to respond and match
+the users' styles.
+
+\subsection{Identifying and describing
+entities}\label{identifying-and-describing-entities}
+
+After loading the \texttt{spacyr} library, the package
+introduces a function called \texttt{spacy\_initialize()} to open the
+connection between R and Python, and which detects if the library exists and, if so,
+initializes it. Frequently, the cohabitation of R and Python can be
+problematic due to the environments Python might exist in and the versions or
+way it was installed on your operating system. For this
+data set, we suggest installing the model \texttt{en\_core\_web\_lg.}
+
+We will use the \texttt{comparison\ dataset} from
+Chapter~\ref{sec-sentiment-analysis}, which is a reduced version of the
+initial data set of product reviews. It contains the sentiment scores
+already assigned to each document, and we will select those which have a
+sentiment.ai score \(<-0,7\), an empirical threshold, so we can focus on the
+most negative reviews to identify the problems with
+the brands. We have also dropped some fields which we will not need, such as
+sentimentAnalysis, vader, sentimentr, or syuzhet, and selected two brands.
+In the example below we chose Samsung and Apple.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(spacyr)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(lubridate)}
+
+\CommentTok{\# Initialize spaCy with a large English model}
+\FunctionTok{spacy\_initialize}\NormalTok{(}\AttributeTok{model =} \StringTok{"en\_core\_web\_lg"}\NormalTok{)}
+
+
+\CommentTok{\# Clean and filter data, then add row numbers as Review\_id}
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{sentimentAnalysis, }\SpecialCharTok{{-}}\NormalTok{sentimentr, }\SpecialCharTok{{-}}\NormalTok{vader, }\SpecialCharTok{{-}}\NormalTok{syuzhet) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(sentiment.ai }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\FloatTok{0.7}\NormalTok{, Brand }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Samsung"}\NormalTok{, }\StringTok{"Apple"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Review\_id =} \FunctionTok{row\_number}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+Next we use the \texttt{spacy\_parse()} function in the text column to
+perform some initial linguistic analysis. The parsed text is summarized
+as a table using the \texttt{parsedtxt} variable which contains the text
+identifier (the number of the review), the sentence's position in the
+text, the token's position in the sentence, the actual word and its base
+(root) form, the grammatical category (e.g., noun, verb, adjective), and
+the NER labels as classifications for organizations, products,
+and so on.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Parse text to extract syntactic dependencies}
+\NormalTok{parsedtxt }\OtherTok{\textless{}{-}} \FunctionTok{spacy\_parse}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{target)}
+\FunctionTok{head}\NormalTok{(parsedtxt)}
+\end{Highlighting}
+\end{Shaded}
+
+By carrying out this operation, we have lost some information from the original
+data set, but if we want to have a correspondence between each document
+we still can merge this new data frame with an enhanced
+version of the original data set. Because it is helpful for
+the subsequent processing to separate the text into sentences, we transform
+each review's identification in the \texttt{data} frame by adding
+``text'' to the numerical value of the ``doc\_id'' field. After
+performing this operation, we save the data set to a new variable called
+\texttt{sent\_df}. We then merge this with the original data set to
+include the Brand column. Finally, we combine this data set with the
+\texttt{parsedtxt} data frame to create a new structure ready for
+analysis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{\# Create doc\_id, remove Review\_id}
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{doc\_id =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"text"}\NormalTok{, }\FunctionTok{as.character}\NormalTok{(Review\_id))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{Review\_id)}
+
+\CommentTok{\# Tokenize text into sentences and assign sentence IDs}
+\NormalTok{sent\_df}\OtherTok{\textless{}{-}} \FunctionTok{spacy\_tokenize}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{target, }\AttributeTok{what =} \StringTok{"sentence"}\NormalTok{, }
+                         \AttributeTok{output =} \StringTok{"data.frame"}\NormalTok{, }
+                         \AttributeTok{doc\_id =}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{doc\_id) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{sentence =}\NormalTok{ token) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(doc\_id) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{sentence\_id =} \FunctionTok{row\_number}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+
+\CommentTok{\# Merge back with original data to include the Brand and R\_date}
+\NormalTok{sent\_df }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(data }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(doc\_id, Brand, R\_date), }\AttributeTok{by =} \StringTok{"doc\_id"}\NormalTok{ )}
+
+\NormalTok{sentence\_data }\OtherTok{\textless{}{-}}\NormalTok{ parsedtxt }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(sent\_df , }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"doc\_id"}\NormalTok{, }\StringTok{"sentence\_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The following code filters out invalid entity values, identifies unique
+\texttt{doc\_id} and \texttt{entity} pairs, groups by brand and entity,
+counts the frequency of each entity for each brand, sorts by brand by the
+ascending number of appearances, and then selects the top 10 most
+frequent entities per brand. A plot visualizes the frequency difference of the entities for each brand. For the meaning of the entities, check the
+beginning of this chapter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\CommentTok{\# Count top 10 unique entities per brand}
+\NormalTok{entity\_counts }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(entity) }\SpecialCharTok{\&}\NormalTok{ entity }\SpecialCharTok{!=} \StringTok{""}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{distinct}\NormalTok{(doc\_id, entity, }\AttributeTok{.keep\_all =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand, entity) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{count =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(Brand, }\FunctionTok{desc}\NormalTok{(count)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_max}\NormalTok{(count, }\AttributeTok{n =} \DecValTok{10}\NormalTok{) }
+
+\CommentTok{\# Plot top entities for each brand}
+\FunctionTok{ggplot}\NormalTok{(entity\_counts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(entity, }\SpecialCharTok{{-}}\NormalTok{count), }
+                          \AttributeTok{y =}\NormalTok{ count, }\AttributeTok{fill =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Most Frequent Entities for Each Brand"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Entity"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Count"}\NormalTok{,}
+       \AttributeTok{fill =} \StringTok{"Brand"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{9.Chapter_new_files/figure-pdf/ner4-1.pdf}
+
+Now, we want to to find which ORG or PRODUCT entities are present in
+the negative reviews and how often. First, we filter for specific entities,
+such as ``PRODUCT\_B'', ``ORG\_B'', ``ORG\_I'', then we capitalize the
+tokens for both ORG and PRODUCT to ensure uniformity in the results. Then we
+group the tokens by brand, count the occurrences, filter tokens with
+more than 5 occurrences, and sort by descending counts. In the plot of
+the most frequent entities for each of the two brands we can see how
+often competitors are mentioned in these reviews. For example, in the
+Samsung or Galaxy or Android reviews, there is no mention of an iPad or Apple product, while for Apple, Samsung is mentioned.
+Amazon is mentioned for both brands because it is the vendor.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter and capitalize specific entities}
+\NormalTok{op\_entities }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(entity }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"PRODUCT\_B"}\NormalTok{, }\StringTok{"ORG\_B"}\NormalTok{, }\StringTok{"ORG\_I"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{token =} \FunctionTok{ifelse}\NormalTok{(}\FunctionTok{startsWith}\NormalTok{(entity, }\StringTok{"ORG"}\NormalTok{) }\SpecialCharTok{|} 
+    \FunctionTok{startsWith}\NormalTok{(entity, }\StringTok{"PRODUCT"}\NormalTok{), }\FunctionTok{toupper}\NormalTok{(token), token))}
+
+\CommentTok{\# Count occurrences, filter, and sort}
+\NormalTok{op\_counts }\OtherTok{\textless{}{-}}\NormalTok{ op\_entities }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(token, Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{count =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(count))}
+
+\CommentTok{\# Plot most frequent entities by brand}
+\FunctionTok{ggplot}\NormalTok{(op\_counts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(token, }\SpecialCharTok{{-}}\NormalTok{count), }\AttributeTok{y =}\NormalTok{ count, }\AttributeTok{fill =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Most Frequent ORG/PROD Entities Subdivided by Brand"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Organization"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Count"}\NormalTok{,}
+       \AttributeTok{fill =} \StringTok{"Brand"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{9.Chapter_new_files/figure-pdf/ner5-1.pdf}
+
+\subsection{Extracting adjectives}\label{extracting-adjectives}
+
+The \texttt{pos} field identifies which category a word, or its lemma,
+belongs to, and uses a tag set that is generally well understood and
+useful across various applications. For a more detailed treatment,
+especially in English, \texttt{spaCy} uses the OntoNotes 5 version
+of the Penn Treebank tag set, while other languages may use different
+Treebanks. \footnote{spaCy's POS Tagging Documentation:
+  https://spacy.io/docs/usage/pos-tagging\#pos-tagging-english} More
+details can be found in spaCy's documentation. With this understanding
+of the text structure, we can now proceed to extract specific
+elements from the analyzed content.
+
+Emotions and sensory perceptions are often expressed in language through adjectives, and it
+is useful to understand this because they help us to
+differentiate a brand and to detect underlying pain points. Repeated use
+of adjectives in reviews, or their appearance in slogans (Ke and Wang
+2013), might be persuasive (Ebaid 2018) for how a product or a
+service is perceived and emphasize strengths or weaknesses. Adjectives are commonly
+used in commerce, whether they appear in a simple basic form, or as comparatives
+or superlatives (Hakkarainen 2016). They can elicit emotions and help people remember a specific attribute of a brand (Berger, Kim, and
+Meyer 2021). We have selected the ADJ part of the reviews, grouped them by adjective
+token and brand, counted the occurrences, filtered adjectives with more than
+one occurrence, and then sorted by descending counts. After this, we have listed the
+20 most frequent adjectives and the brands they are related to.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyr)}
+
+\CommentTok{\# Filter adjectives from sentence data and lowercase token}
+\NormalTok{adj\_entities }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(pos }\SpecialCharTok{==} \StringTok{"ADJ"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{token =} \FunctionTok{tolower}\NormalTok{(token))}
+
+\CommentTok{\# Count occurrences of adjectives by brand}
+\NormalTok{adj\_counts }\OtherTok{\textless{}{-}}\NormalTok{ adj\_entities }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(token, Brand) }\SpecialCharTok{\%\textgreater{}\%}  
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{count =} \FunctionTok{n}\NormalTok{(), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)  }\CommentTok{\# Count occurrences per brand}
+
+\CommentTok{\# Create columns for Apple and Samsung brands and counts}
+\NormalTok{adj\_counts\_wide }\OtherTok{\textless{}{-}}\NormalTok{ adj\_counts }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ Brand, }\AttributeTok{values\_from =}\NormalTok{ count, }\AttributeTok{values\_fill =} \FunctionTok{list}\NormalTok{(}\AttributeTok{count =} \DecValTok{0}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Brand Apple}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ Apple, }\StringTok{\textasciigrave{}}\AttributeTok{Count Apple}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ Apple, }
+         \StringTok{\textasciigrave{}}\AttributeTok{Brand Samsung}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ Samsung, }\StringTok{\textasciigrave{}}\AttributeTok{Count Samsung}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ Samsung) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Count Apple}\StringTok{\textasciigrave{}} \SpecialCharTok{+} \StringTok{\textasciigrave{}}\AttributeTok{Count Samsung}\StringTok{\textasciigrave{}}\NormalTok{))}
+
+\CommentTok{\# Display the top 20 most frequent adjectives}
+\NormalTok{top\_20\_adj }\OtherTok{\textless{}{-}}\NormalTok{ adj\_counts\_wide }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice\_max}\NormalTok{(}\AttributeTok{order\_by =}\NormalTok{ (}\StringTok{\textasciigrave{}}\AttributeTok{Count Apple}\StringTok{\textasciigrave{}} \SpecialCharTok{+} \StringTok{\textasciigrave{}}\AttributeTok{Count Samsung}\StringTok{\textasciigrave{}}\NormalTok{), }\AttributeTok{n =} \DecValTok{20}\NormalTok{)}
+
+\CommentTok{\# Print results}
+\FunctionTok{print}\NormalTok{(top\_20\_adj)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 20 x 3
+   token        `Count Apple` `Count Samsung`
+   <chr>                <int>           <int>
+ 1 other                   17              14
+ 2 new                     23               7
+ 3 same                     7              17
+ 4 bad                      4              16
+ 5 disappointed            11               8
+ 6 good                     8              11
+ 7 few                      6              12
+ 8 first                   11               6
+ 9 great                    6              11
+10 more                    10               7
+11 able                     4              10
+12 many                     7               6
+13 annoying                 1               9
+14 long                     8               2
+15 much                     2               8
+16 sure                     5               4
+17 unable                   6               3
+18 dead                     5               3
+19 most                     2               6
+20 slow                     1               7
+\end{verbatim}
+
+Basic adjectives describe a quality in a simple form without making any
+comparison. Comparative adjectives often end in ``-er'' and might appear
+together with ``more'', ``much'', or ``less''. One such example is
+``better'' or ``much better''. Superlative adjectives go to the extreme,
+they often end in ``-est'' and are used with words like ``most'',
+``least'', such in the ``best'' or ``least useful''. In our data set, of the
+20 adjectives, two are comparative, ``more'' and ``much'', the
+others are basic. As an exercise, we have left you the task of viewing all the
+adjectives and categorizing them.
+
+\subsection{Dependencies and POS
+highlighting}\label{dependencies-and-pos-highlighting}
+
+It is interesting and useful to obtain additional information from the
+text and better understand how parts of speech contribute to meaning.
+\texttt{spacyr}, in conjunction with the package \texttt{rsyntax}, help
+us to plot a tree of POS, highlighting the dependencies between words. If you
+want another example, you can substitute ``text1'' and assign a document of your choice to
+``doc\_id''; see Figure~\ref{fig-ner7} to
+visualize a syntactic-dependency parse tree and understand the
+grammatical structure of a sentence. The words are related to one another
+and this is indicated by the branches. The arrows points from a head
+word to a dependent word. The numbers correspond to the word order in a
+sentence to keep track of the order of appearance. The ROOT of the tree
+is the main verb, representing the central action, while other words are
+linked through different dependency relations. There are several labels
+in the image, such as ``nsubjh'', ``dobj'', and ``punct'', which come from
+the universal-dependencies (UD) annotation scheme. For example, ``nobj''
+represents a nominal subject (who or what performs an action), ``dobj''
+represents a direct object (the person or object that is the recipient of the action of a verb),
+``punct'' is a punctuation mark. For a more complete list and definition of
+the labels, see De Marneffe et al. (2021) . This type of analysis is
+also suitable for chatbots, search engines, or grammar-correction tools.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(rsyntax)}
+
+\CommentTok{\# Parse the text considering the dependencies}
+\NormalTok{parsedtxt }\OtherTok{\textless{}{-}} \FunctionTok{spacy\_parse}\NormalTok{(data}\SpecialCharTok{$}\NormalTok{target, }\AttributeTok{dependency =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Plot the dependency tree for a specific document}
+\FunctionTok{plot\_tree}\NormalTok{(}
+  \FunctionTok{as\_tokenindex}\NormalTok{(parsedtxt),}
+  \AttributeTok{doc\_id =} \StringTok{"text1"}\NormalTok{, }
+\NormalTok{  token,}
+\NormalTok{  lemma,}
+\NormalTok{  pos,}
+  \AttributeTok{viewer\_size =} \FunctionTok{c}\NormalTok{(}\DecValTok{110}\NormalTok{, }\DecValTok{150}\NormalTok{),}
+  \AttributeTok{textsize =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{spacing =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{viewer\_mode =} \ConstantTok{FALSE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{9.Chapter_new_files/figure-pdf/fig-ner7-1.pdf}
+
+}
+
+\caption{\label{fig-ner7}POS dependencies}
+
+\end{figure}%
+
+It is a useful to visualize some of the POS elements, especially those you are
+interested in. In the next example, we will select the first text in the
+data set and highlight the adjectives and nouns that refer to a number of
+specific entities. Although printed using shades of gray, we have encoded the entities in blue, the
+adjectives in red, and the nouns in green. Nouns are excellent
+candidates for product features (Kauffmann et al. 2019) and will allow
+you to capture the link between the adjectives and the
+nouns immediately. For the entities we are trying to understand more about,
+see the color-annotated text after the code.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(htmltools)}
+
+\CommentTok{\# Filter for a specific document}
+\NormalTok{doc\_id\_nr }\OtherTok{\textless{}{-}} \StringTok{"text1"}
+\NormalTok{parsed\_data }\OtherTok{\textless{}{-}}\NormalTok{ parsedtxt }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(doc\_id }\SpecialCharTok{==}\NormalTok{ doc\_id\_nr)}
+
+\CommentTok{\# Create a function to highlight annotations in text}
+\NormalTok{highlight\_annotations }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(text, parsed\_data) \{}
+\NormalTok{  tokens }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_data}\SpecialCharTok{$}\NormalTok{token}
+\NormalTok{  entities }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_data}\SpecialCharTok{$}\NormalTok{entity}
+\NormalTok{  pos\_tags }\OtherTok{\textless{}{-}}\NormalTok{ parsed\_data}\SpecialCharTok{$}\NormalTok{pos}
+  
+  \CommentTok{\# Initialize an empty string to store the highlighted text}
+\NormalTok{  highlighted\_text }\OtherTok{\textless{}{-}} \StringTok{""}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \FunctionTok{seq\_along}\NormalTok{(tokens)) \{}
+\NormalTok{    token }\OtherTok{\textless{}{-}}\NormalTok{ tokens[i]}
+\NormalTok{    entity }\OtherTok{\textless{}{-}}\NormalTok{ entities[i]}
+\NormalTok{    pos\_tag }\OtherTok{\textless{}{-}}\NormalTok{ pos\_tags[i]}
+    
+    \CommentTok{\# Highlight based on entity and POS tag}
+    \ControlFlowTok{if}\NormalTok{ (entity }\SpecialCharTok{!=} \StringTok{""}\NormalTok{) \{}
+\NormalTok{      highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(highlighted\_text, }
+                      \StringTok{"\textless{}span style=\textquotesingle{}color: blue;\textquotesingle{}\textgreater{}"}\NormalTok{, token, }\StringTok{"\textless{}/span\textgreater{}"}\NormalTok{)}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (pos\_tag }\SpecialCharTok{==} \StringTok{"ADJ"}\NormalTok{) \{}
+\NormalTok{      highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(highlighted\_text, }
+                      \StringTok{"\textless{}span style=\textquotesingle{}color: red;\textquotesingle{}\textgreater{}"}\NormalTok{, token, }\StringTok{"\textless{}/span\textgreater{}"}\NormalTok{)}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (pos\_tag }\SpecialCharTok{==} \StringTok{"NOUN"}\NormalTok{) \{}
+\NormalTok{      highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(highlighted\_text, }
+                      \StringTok{"\textless{}span style=\textquotesingle{}color: green;\textquotesingle{}\textgreater{}"}\NormalTok{, token, }\StringTok{"\textless{}/span\textgreater{}"}\NormalTok{)}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(highlighted\_text, token)}
+\NormalTok{    \}}
+    
+    \CommentTok{\# Add a space after each token}
+\NormalTok{    highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(highlighted\_text, }\StringTok{" "}\NormalTok{)}
+\NormalTok{  \}}
+
+  \FunctionTok{return}\NormalTok{(highlighted\_text)}
+\NormalTok{\}}
+
+\CommentTok{\# Apply the function to the parsed text}
+\NormalTok{highlighted\_text }\OtherTok{\textless{}{-}} \FunctionTok{highlight\_annotations}\NormalTok{(text, parsed\_data)}
+
+\CommentTok{\# Display inline}
+\FunctionTok{browsable}\NormalTok{(}\FunctionTok{HTML}\NormalTok{(highlighted\_text))}
+\end{Highlighting}
+\end{Shaded}
+
+{\color{darkgreen} Display} of {\color{darkgreen} brand} {\color{red} new} {\color{darkgreen} unit} bought from {\color{blue} amazon.com} has an {\color{red} oily like} {\color{darkgreen} film spot} under the {\color{darkgreen} screen}. It seems to be a {\color{darkgreen} manufacturing defect}, according to {\color{darkgreen} internet research} {\color{darkgreen} lots} of {\color{darkgreen} users} do experience the {\color{red} same} {\color{darkgreen} problem} with their {\color{darkgreen} units}. Waiting for {\color{blue} Samsung} to fix that {\color{darkgreen} problem} or {\color{darkgreen} recall} of the {\color{red} affected} {\color{darkgreen} units}, cause {\color{red} most} {\color{darkgreen} customers} still have this {\color{darkgreen} screen problem}, even after they have had their {\color{darkgreen} units} exchanged. {\color{darkgreen} Btw} that {\color{darkgreen} problem} on my {\color{darkgreen} tab} is {\color{red} visible} even when the {\color{darkgreen} unit} is {\color{red} cold} - so I do not think that it is necessarily {\color{darkgreen} heat} related. Otherwise, it is really a {\color{red} great} {\color{blue} Tab} - but {\color{red} sorry} {\color{blue} Samsung} - for {\color{blue} 600 \$} I would like to own a {\color{darkgreen} unit} without a {\color{darkgreen} flaw}. {\color{darkgreen} Hope} that there will be soon a {\color{darkgreen} solution} or a {\color{red} worldwide generous} {\color{darkgreen} recall / replacement offer} to satisfy {\color{blue} Galaxy users \& fans}.
+
+Explore this review and run the code again to visualize another review
+by simply substituting ``text1'' with another value, such as ``text2'',
+``text10'', or ``tex42''. You can create several combinations by
+extracting not only the adjectives and nouns, but also adverbs. Adverbs can
+be classified as being of time, frequency, location, manner, degree, or
+as conjunctive adverbs. In sentiment analysis, the adverbs of degree, such
+as ``extremely'', ``absolutely'', ``really'', and so on, are the most
+relevant ones. These adverbs have a further classification, as found in
+(Benamara et al. 2007), and a few examples of each class are given below:
+
+\begin{itemize}
+\tightlist
+\item
+  Adverbs of affirmation: certainly, definitely, absolutely,
+  surely, indeed, undoubtedly, clearly, obviously
+\item
+  Adverbs of doubt,: possibly, maybe, possibly, apparently,
+  likely, conceivably, arguably, supposedly, uncertainly
+\item
+  Strong intensifying adverbs: extremely, incredibly,
+  absolutely, totally, completely, remarkably, exceptionally, amazingly,
+  terribly, deeply
+\item
+  Weak intensifying adverbs: somewhat, fairly, slightly,
+  moderately, rather, mildly, partly, relatively
+\item
+  Negation and minimizers are those that negate or diminish sentiments: never, nowhere, nothing, hardly, barely, rarely, little,
+  infrequently
+\end{itemize}
+
+Adverbs, ADV, can be extracted in a similar manner to adjectives, and
+the detection of both adjectives and adverbs in text (Roy et al. 2015)
+can be used to shape targeted marketing messages.
+
+\subsection{Tracking adjective usage over
+time}\label{tracking-adjective-usage-over-time}
+
+Marketers are interested in assessing the performance of their
+efforts by analyzing the prevalence of adjectives in consumer reviews
+before, during, and after marketing campaigns or product launches. A
+successful campaign might be reflected in an increase in the use of positive
+adjectives and a decrease in negative ones. We next demonstrate the
+tracking over time of the frequency of negative reviews for a brand, together with
+those containing a competitor. If the information is
+extracted properly from the dataset, such tracking can also be helpful in
+acquiring seasonal insights and supporting crisis management. The
+following code filters the \texttt{comparison} dataset to include only
+adjectives related to two brands (Apple and Samsung). Then it groups and
+counts the adjectives by date and brand, creates a line chart to display
+the adjective usage over time, and adds a smoothing curve to show the trends.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter for adjectives and the two brands}
+\NormalTok{adjective\_data }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(pos }\SpecialCharTok{==} \StringTok{"ADJ"} \SpecialCharTok{\&}\NormalTok{ Brand }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Apple"}\NormalTok{, }\StringTok{"Samsung"}\NormalTok{))}
+
+\CommentTok{\# Group by date and brand, then count the number of adjectives}
+\NormalTok{adjective\_counts }\OtherTok{\textless{}{-}}\NormalTok{ adjective\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(R\_date, Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{count =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Plotting the data with both lines and smoothing}
+\FunctionTok{ggplot}\NormalTok{(adjective\_counts, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ R\_date, }\AttributeTok{y =}\NormalTok{ count, }\AttributeTok{color =}\NormalTok{ Brand, }\AttributeTok{linetype =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"loess"}\NormalTok{, }\AttributeTok{span =} \FloatTok{0.3}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Number of Adjectives Over Time for Apple and Samsung"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Date"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Number of Adjectives"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{color =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{override.aes =} \FunctionTok{list}\NormalTok{(}\AttributeTok{size =} \DecValTok{1}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{9.Chapter_new_files/figure-pdf/fig-ner9-1.pdf}
+
+}
+
+\caption{\label{fig-ner9}}
+
+\end{figure}%
+
+The graph in Figure~\ref{fig-ner9} plots the frequency of adjectives
+associated with two brands, Apple and Samsung. The trend for Apple shows
+fluctuations, with a general increase in the use of adjectives from 2010
+to around mid-2012. A smooth trend line can also be seen. Samsung
+showed more variability between mid-2011 and late 2012. There is a
+general increase in variability over time, with peaks becoming more
+extreme. This might indicate more varied public and media reactions
+through a spike in adjective usage. Consumers expressed negative feelings
+about Apple's products through the steady use of adjectives. Given that
+customers express their anger differently for the two brands, marketers
+can use this information to shape their communication strategies. The language used
+can be targeted at different segments of the population. It is possible to modify the
+previous code to add more brands, use a different smoothing method (for
+example a linear model, ``lm'') or use a stacked bar chart instead:
+replace \texttt{geom\_line()} with
+\texttt{geom\_bar(stat\ =\ "identity",\ position\ =\ "stack")}.
+
+\subsection{Language complexity}\label{language-complexity}
+
+Sometimes researchers are interested in studying the syntactic
+complexity in relation to the language proficiency shown
+in texts, and the overall (or ``objective'') proficiency in a target
+language (Ortega 2003). When conducting these measurements, it is important to
+compare them against a benchmark or another unit, for example, unit A
+compared to unit B on a specific index can provide insights into
+accuracy and applicability (Szmrecsanyi 2004). There are several metrics
+used to calculate syntactic complexity, and they are mainly used in
+linguistics, language acquisition, and computational linguistics. In
+this section, we demonstrate the use of a simple metric, which is
+based on the measurement of the density of verbs called Fichtner's C
+(Fichtner 1980; Samples, Ireland, and Kraczon 2024), which is defined
+as:
+
+\[
+\text{Fichtner's C} = \frac{\text{Number of Verbs}}{\text{Number of Sentences}} \times \frac{\text{Number of Words}}{\text{Number of Sentences}}
+\]
+
+Using syntactic complexity in marketing allows for a detailed comparison of
+the language used to describe different brands. By analyzing metrics
+like Fichtner's C, marketers can gain insights into how brands are
+perceived and what level of complexity is used to describe them, thus
+tailoring their communication styles to specific audiences. The code
+below computes the index for Fichtner's C and compares the linguistic complexity
+between the brands on a table.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load necessary libraries}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\CommentTok{\# Calculate linguistic complexity for each document and brand}
+\NormalTok{syn\_com }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(doc\_id, Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{verb\_num =} \FunctionTok{sum}\NormalTok{(pos }\SpecialCharTok{==} \StringTok{"VERB"}\NormalTok{),}
+            \AttributeTok{sent\_num =} \FunctionTok{n\_distinct}\NormalTok{(sentence\_id),}
+            \AttributeTok{word\_num =} \FunctionTok{n}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{F\_C =}\NormalTok{ (verb\_num }\SpecialCharTok{/}\NormalTok{ sent\_num) }\SpecialCharTok{*}\NormalTok{ (word\_num }\SpecialCharTok{/}\NormalTok{ sent\_num)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{()}
+
+\CommentTok{\# Compare linguistic complexity between the two brands}
+\NormalTok{brand\_comparison }\OtherTok{\textless{}{-}}\NormalTok{ syn\_com }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(Brand) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{avg\_F\_C =} \FunctionTok{mean}\NormalTok{(F\_C, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+            \AttributeTok{sd\_F\_C =} \FunctionTok{sd}\NormalTok{(F\_C, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+            \AttributeTok{median\_F\_C =} \FunctionTok{median}\NormalTok{(F\_C, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+            \AttributeTok{n =} \FunctionTok{n}\NormalTok{())}
+
+\CommentTok{\# Display the result}
+\FunctionTok{print}\NormalTok{(brand\_comparison)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  Brand   avg_F_C sd_F_C median_F_C     n
+  <chr>     <dbl>  <dbl>      <dbl> <int>
+1 Apple      55.2   89.0       37.7    87
+2 Samsung    42.8   44.1       26.5    71
+\end{verbatim}
+
+From the table, we can see that reviews containing Apple
+exhibit, on average, higher linguistic complexity, with a greater
+than average Fichtner's C index (\texttt{avg\_F\_C}) and a greater
+variability than Samsung, as shown by the higher standard deviation
+(\texttt{sd\_F\_C}). This could imply that content about Apple ranges
+from very simple to very complex, possibly depending on the type of
+document or context. In contrast, documents about Samsung are more
+consistent in terms of linguistic complexity, as indicated by the lower
+standard deviation (\texttt{sd\_F\_C}). This suggests that reviews about
+Samsung maintain a more uniform style across its documents. Both brands
+have median values (\texttt{median\_F\_C}) values lower than their
+respective averages (\texttt{avg\_F\_C}), indicating a right-skewed
+distribution. This means that most reviews have moderate levels of complexity but
+there are some documents with very high complexity which raise the
+average. Notice that differences in reviews (in this case across brands)
+can also reflect the heterogeneity in language used by the
+clientele and not necessarily is attributable to the brand as such. To
+visualize this, we can also plot the linguistic complexity measures.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot the density of linguistic complexity for the two brands}
+\FunctionTok{ggplot}\NormalTok{(syn\_com, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ F\_C, }\AttributeTok{fill =}\NormalTok{ Brand)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Comparison of Linguistic Complexity for Apple and Samsung"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Linguistic Complexity (F\_C)"}\NormalTok{,}
+       \AttributeTok{y =} \StringTok{"Density"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Apple"} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\StringTok{"Samsung"} \OtherTok{=} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{9.Chapter_new_files/figure-pdf/ner11-1.pdf}
+
+The visualization confirms out previous discussion. At the lower end of
+the linguistic complexity scale, both brands show a peak, and this shows
+that a larger proportion of their documents have low linguistic complexity.
+Apple reviews have a higher peak density compared to Samsung, meaning
+they have greater linguistic complexity. The brands have long tails which reach higher levels of
+linguistic complexity, with Samsung having a more pronounced
+tail. This indicates that some documents have higher levels of complexity. Across
+the negative reviews, customers refer to Apple with more consistent
+linguistic complexity, so its documents are more homogenous. Customers who
+write about Samsung in a negative context use a slightly more varied
+writing style. Nevertheless, both brands, when they are described in
+negative terms, have a low level of linguistic complexity, indicating a precise
+focus and clear, straightforward communication.
+
+\subsection{A final technical note}\label{a-final-technical-note}
+
+Several advanced techniques can be employed to enhance an NER task. An example is the use of consolidation functions to
+merge multi-word entities into a single token, or the concatenation of
+words into noun phrases, also called noun chunks. \texttt{SpaCy} can use
+language models which are not limited to English, but also include
+German, Spanish, Portugues, French, Italian, and Dutch, among others.
+\texttt{spacyr} can be integrated with other R text-analysis packages,
+for example, \texttt{quanteda}, or \texttt{tidytext}, thus simplifying
+text manipulation and analysis tasks.
+
+Additionally, as we have seen in Chapter~\ref{sec-textual-data}, regular
+expressions can be helpful when extracting preposition-noun combinations
+from the corpus, and checking the most frequent noun for each preposition
+or other parts of speech. A clear understanding of the annotations
+and the meanings of the tags at different levels, as well as the tag sets
+present in various languages, is essential because these could influence
+your approach to NER and text analysis in general.
+
+Using Python in the background of an R session can be very
+memory-intensive. Once your analysis is done, it is strongly recommended to
+use the \texttt{spacy\_finalize()} function which terminates Python
+and frees up the memory it was using.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Clean up and release spaCy resources}
+\FunctionTok{spacy\_finalize}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Summarizing}\label{summarization}
+
+The word summary relates to something which is brief
+and concise. The word comes from the Latin word \textit{summa}, which means
+``totality, gist''. One will find summaries everywhere, such as a
+summary of a book, in the workplace, in the minutes of meetings, in news
+articles, and in customer reviews. Because we focus on the latter,
+we have to understand that this allows for an aggregated view of opinions,
+delivering something similar to''the wisdom of the crowd''. Many texts
+are too long to read, and we often have too little time, and so the comment ``too long, did not read''. The abbreviation for this is TL;DR (again
+a shorter version of something), which is commonly used in online
+discussions, social media, etc., indicating content that is lengthy and that a
+summary is provided for whoever does not have time to read the whole
+text. TL;DR can be used as a label for the summary itself, or as a
+comment to indicate that the text is too long. Summaries are also
+useful for information retention and enhance the ability to learn
+something (Reder and Anderson 1980), implying that they conveying
+information in a very abridged form, creating a shortened version that
+retains only the essential information and main points. But
+how much can one summarize? In NLP, summarizing can, generally, be achieved by
+using three approaches: extractive (Moratanch and Chitrakala 2017),
+abstractive (Gupta and Gupta 2019), or hybrid (El-Kassas et al.
+2021). The first approach uses a selection (and extraction) of key
+sentences, or phrases, from the original text that act as a summary.
+This selection is typically based on statistical features such as
+importance scores, term frequency, or position. Abstractive summarizing is a
+generative process that uses the rephrasing or paraphrasing of words which
+might not exist in the original text. This last approach involves
+understanding the context of a text and producing an abridged version that
+captures the gist of the original. The hybrid method is a
+combination of the first two. Below we will focus on extractive
+summarization because it can be accomplished relatively quickly, although
+it might be computationally intensive. It also fits nicely with the NER
+elements we have discussed so far.
+
+\subsection{Summarizing in R}\label{summarization-in-r}
+
+There are a few packages that help with the task of summarizing in R,
+either directly or indirectly. One is \texttt{lexRankr}, another is
+LSAfun, and yet another one is \texttt{textrank}. The simplest one to
+work with is \texttt{lexRankr}. The implementation of the algorithm in R
+uses a stochastic graph-based method to assess the importance of a unit of text, such as a sentence, in a corpus (Erkan and Radev 2004). The basic
+idea is that if the algorithm finds sentences with are similar to other
+sentences, it means that they are important. In this graph-base
+approach, sentences are nodes and edges represent the similarity between
+sentences. To illustrate, let us take the ``data'' data frame and apply
+the algorithm.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lexRankr)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{\# Tokenize text data into sentences}
+\NormalTok{tokenized\_data }\OtherTok{\textless{}{-}}\NormalTok{ data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unnest\_sentences}\NormalTok{(sentence, target)}
+
+\CommentTok{\# Apply LexRank to rank sentences based on importance}
+\NormalTok{ranked\_sentences }\OtherTok{\textless{}{-}} \FunctionTok{bind\_lexrank}\NormalTok{(tokenized\_data, sentence,}
+\NormalTok{                                 doc\_id, }\AttributeTok{level =} \StringTok{"sentences"}\NormalTok{)}
+
+
+\CommentTok{\# Filter and get top 3 sentences for Apple}
+\NormalTok{top\_apple }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_sentences }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Apple"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(lexrank)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Filter and get top 3 sentences for Samsung}
+\NormalTok{top\_samsung }\OtherTok{\textless{}{-}}\NormalTok{ ranked\_sentences }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Samsung"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(lexrank)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Display the results, for Apple}
+\FunctionTok{print}\NormalTok{(top\_apple}\SpecialCharTok{$}\NormalTok{sentence)}
+
+\CommentTok{\# Display the results, for Samsung}
+\FunctionTok{print}\NormalTok{(top\_samsung}\SpecialCharTok{$}\NormalTok{sentence)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "the ipad in ?"                            
+[2] "But it is not an iPad2."                  
+[3] "No more apple products for us after this."
+\end{verbatim}
+
+\begin{verbatim}
+[1] "Its slower than ipad."                                                                   
+[2] "I did a lot of research on this tablet before buying and saw nothing about this problem."
+[3] "I will never buy a samsung product again!"                                               
+\end{verbatim}
+
+Considering that the data set was selected from negative reviews, the
+customers who talk about the Apple products express themselves in
+negative terms but not in a vehement way. The customers who talk about
+the Samsung tablets, however, seem to prefer Apple products.
+
+To illustrate the use of another package to summarize text let us take a
+look at \texttt{LSAfun}, which uses latent semantic analysis (Gong and Liu 2001). The basic idea is to decompose the text
+into sentences and then choose a few \texttt{k}-candidate sentences to
+form the summary. Let us imagine a simple example, where we extract two
+sentences from the negative reviews data set, and try to understand the customers' reviews for
+both Apple and Samsung products from two sentences each. The
+function that performs this task is called \texttt{genericSummary()} and
+has several arguments. The first, is the set of documents to analyze.
+The second is the number of sentences it needs to extract. And the
+third, called \texttt{split}, is a character vector which allows you to
+chose what symbols indicate the end of a sentence. \texttt{min}
+indicates the minimum amount of words a sentence should contain. Here we
+will use only the first two arguments.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#install.packages("LSAfun")}
+\FunctionTok{library}\NormalTok{(LSAfun)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{\# We can recycle the sent\_df dataframe because it contains all the elements we need.}
+
+\NormalTok{apple\_data }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Apple"}\NormalTok{)}
+
+\NormalTok{samsung\_data }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Samsung"}\NormalTok{)}
+
+\CommentTok{\# Summarize to 2 sentences}
+\NormalTok{summary\_apple }\OtherTok{\textless{}{-}} \FunctionTok{genericSummary}\NormalTok{(apple\_data}\SpecialCharTok{$}\NormalTok{sentence, }\AttributeTok{k =} \DecValTok{2}\NormalTok{)  }
+\NormalTok{summary\_samsung }\OtherTok{\textless{}{-}} \FunctionTok{genericSummary}\NormalTok{(samsung\_data}\SpecialCharTok{$}\NormalTok{sentence, }\AttributeTok{k =} \DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# Display the results, for Apple}
+\FunctionTok{print}\NormalTok{(summary\_apple)}
+
+\CommentTok{\# Display the results, for Samsung}
+\FunctionTok{print}\NormalTok{(summary\_samsung)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "I don't know why this P.O.S. has trouble with so many sites but here are some examples of things I've run into (and these are condensed): 1) just now while on Tripadvisor.com, I was trying to access the second page on the list of 'Local Attractions' and it froze while loading, showing the message \"Updating your results\" 2) I am unable to scroll down on certain drop-down boxes on websites 3) occasionally while doing a Google search I am unable to modify my search terms and it just defaults back to my original search no matter how I attempt to enter it"
+[2] "when i looked at the box, the original serial number was scratched off the barcode label, telling me that the vendor had sent another (broken) device instead of the one that was originally in the box"                                                                                                                                                                                                                                                                                                                                                                       
+\end{verbatim}
+
+\begin{verbatim}
+[1] "Im very disappointed of the touch screen sensitivity, nothing compared with the ipod touch i had, there are sometimes that i have to touch more than 4 or 5 times to get a response It is a big oroblem when i try to logouton facebook always is the same i have to zoom out the screen to make big buttons and not only in facebook, in all web pages is the same, i tried many web browsers and tje tablet is always calibrated but always i have problems with the screen i think this is a software problem, because there is a program to test the sensitivity and it seems that the screens response ok, I hope they will fix this soon because this is very annoying, I like other companies than apple make tablets because I was tired of itunes and all that, that is why i tried other brand."
+[2] "Of course it shouldn't be hard to change this to my preferred language (English UK) but it was sort of annoying to see that and have to correct it."                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+\end{verbatim}
+
+With this approach, we can see that the documents extracted are much
+longer, but are they really representative of the two brands?
+
+Another graph-based ranking method (Mihalcea and Tarau 2004) used to extract
+sentences or keywords is \texttt{textrank} (Wijffels 2020). The nodes of
+the graph represent a sentence, and the edges between them are
+computations of the number of words adjacent nodes have in common. This
+structure is passed on to the PageRank algorithm (Xing and Ghorbani
+2004; implemented in Google's search engine, Brin and Page 1998, and
+named after one of its founders, Larry Page) to find the most important
+sentences which will form the summary of the text. In other words, the
+summary is made out of the most important sentences. A summary can also be
+created by using keywords. These represent documents and have the
+capability to distill their content and express concepts, themes, or
+topics in just a few words, making the process of information indexing,
+searching, and retrieval easier. In the \texttt{textranking} algorithm, a
+word network is built in a similar way to those that you have already encountered in
+Chapter~\ref{sec-sentiment-analysis},
+Section~\ref{sec-sentiment-word-networks}, for example. The link between
+words becomes important when two words frequently follow one another.
+In this case, PageRank is used as well, and the top third of
+the keywords is considered important. Finding which words are
+relevant can be done through the POS tagging we have seen in the
+NER part of this chapter using \texttt{spacyr}. Let us set this up
+and extract the important keywords. We have created a table that contains the
+sentences, lemmas, and parts of speech. We can look at the newly created
+data frame which contains all the information we need by selecting the fields ``sentence\_id'', ``lemma'', and ``upos''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add a unique identifier to each sentence and select relevant columns}
+\NormalTok{sent\_df\_all }\OtherTok{\textless{}{-}}\NormalTok{ sentence\_data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{textrank\_id =} \FunctionTok{paste}\NormalTok{(doc\_id, sentence\_id, }\AttributeTok{sep =} \StringTok{"\_"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(textrank\_id, doc\_id, sentence\_id, sentence, token, lemma, pos, Brand)}
+
+\CommentTok{\# Filter the data for sentences related to Apple}
+\NormalTok{sent\_df\_apple }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df\_all }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Apple"}\NormalTok{)}
+
+\CommentTok{\# Filter the data for sentences related to Samsung}
+\NormalTok{sent\_df\_smsng }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df\_all }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Brand }\SpecialCharTok{==} \StringTok{"Samsung"}\NormalTok{)}
+
+\CommentTok{\# Display the first 10 rows of selected columns for Samsung sentences}
+\FunctionTok{head}\NormalTok{(sent\_df\_smsng[, }\FunctionTok{c}\NormalTok{(}\StringTok{"sentence\_id"}\NormalTok{, }\StringTok{"lemma"}\NormalTok{, }\StringTok{"pos"}\NormalTok{)], }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   sentence_id      lemma   pos
+1            1    display  NOUN
+2            1         of   ADP
+3            1      brand  NOUN
+4            1        new   ADJ
+5            1       unit  NOUN
+6            1        buy  VERB
+7            1       from   ADP
+8            1 amazon.com PROPN
+9            1       have  VERB
+10           1         an   DET
+\end{verbatim}
+
+Now, we can extract the most important keywords for both brands. For this
+example we will choose nouns and adjectives and subset the datasets for
+multi-word frequencies. For space reasons, we have chosen different
+frequencies for the brands, but it is possible to play around and select a
+frequency threshold of \(>0\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(textrank)  }\CommentTok{\# Load library}
+
+\CommentTok{\# Extract keywords for Apple (nouns/adjectives)}
+\NormalTok{tr\_kw\_a }\OtherTok{\textless{}{-}} \FunctionTok{textrank\_keywords}\NormalTok{(sent\_df\_apple}\SpecialCharTok{$}\NormalTok{lemma, }
+                             \AttributeTok{relevant =}\NormalTok{ sent\_df\_apple}\SpecialCharTok{$}\NormalTok{pos }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"NOUN"}\NormalTok{, }\StringTok{"ADJ"}\NormalTok{))}
+\CommentTok{\# Filter: multi{-}word, freq \textgreater{}= 2}
+\FunctionTok{subset}\NormalTok{(tr\_kw\_a}\SpecialCharTok{$}\NormalTok{keywords, ngram }\SpecialCharTok{\textgreater{}} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ freq }\SpecialCharTok{\textgreater{}=} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+              keyword ngram freq
+33           e---mail     3    9
+34             --mail     2    9
+49   customer-service     2    5
+57            new-one     2    4
+72   first-generation     2    3
+74           usb-port     2    3
+77         list-price     2    3
+80        apple-store     2    3
+83      apple-product     2    3
+93      serial-number     2    3
+95       tech-support     2    3
+97           web-site     2    3
+104          year-old     2    2
+105         many-site     2    2
+107        long-story     2    2
+109          next-day     2    2
+110   wifi-connection     2    2
+111         long-time     2    2
+112         first-one     2    2
+114        wifi-issue     2    2
+116        same-thing     2    2
+118     free-shipping     2    2
+123  software-problem     2    2
+124       credit-card     2    2
+125 electronic-device     2    2
+128      day-warranty     2    2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract keywords for Samsung (nouns/adjectives)}
+\NormalTok{tr\_kw\_s }\OtherTok{\textless{}{-}} \FunctionTok{textrank\_keywords}\NormalTok{(sent\_df\_smsng}\SpecialCharTok{$}\NormalTok{lemma, }
+                             \AttributeTok{relevant =}\NormalTok{ sent\_df\_smsng}\SpecialCharTok{$}\NormalTok{pos }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"NOUN"}\NormalTok{, }\StringTok{"ADJ"}\NormalTok{))}
+\CommentTok{\# Filter: multi{-}word, freq \textgreater{}= 4}
+\FunctionTok{subset}\NormalTok{(tr\_kw\_s}\SpecialCharTok{$}\NormalTok{keywords, ngram }\SpecialCharTok{\textgreater{}} \DecValTok{1} \SpecialCharTok{\&}\NormalTok{ freq }\SpecialCharTok{\textgreater{}=} \DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+        keyword ngram freq
+62 same-problem     2    4
+65 model-number     2    4
+66 touch-screen     2    4
+67     web-page     2    4
+80    same-loop     2    4
+\end{verbatim}
+
+We can do the same procedure for sentences, but this time for
+both brands, applying the textrank function to them. We can also
+plot the ranking of one of the brands to see this visually. The
+ranking procedure might take a long time for larger data sets, but there
+are dimensionality reduction algorithms which are useful in such cases,
+for example, Minhash (Broder et al. 1998).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract unique sentences for Apple and Samsung}
+\NormalTok{sentences\_apple }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(sent\_df\_apple[, }\FunctionTok{c}\NormalTok{(}\StringTok{"textrank\_id"}\NormalTok{, }\StringTok{"sentence"}\NormalTok{)])}
+\NormalTok{sentences\_smsng }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(sent\_df\_smsng[, }\FunctionTok{c}\NormalTok{(}\StringTok{"textrank\_id"}\NormalTok{, }\StringTok{"sentence"}\NormalTok{)])}
+
+\CommentTok{\# Filter terms by POS tags for noun and adjective, select relevant columns}
+\NormalTok{term\_apple }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df\_apple[sent\_df\_apple}\SpecialCharTok{$}\NormalTok{pos }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"NOUN"}\NormalTok{, }\StringTok{"ADJ"}\NormalTok{), }
+                            \FunctionTok{c}\NormalTok{(}\StringTok{"textrank\_id"}\NormalTok{, }\StringTok{"lemma"}\NormalTok{)]}
+\NormalTok{term\_smsng }\OtherTok{\textless{}{-}}\NormalTok{ sent\_df\_smsng[sent\_df\_smsng}\SpecialCharTok{$}\NormalTok{pos }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"NOUN"}\NormalTok{, }\StringTok{"ADJ"}\NormalTok{), }
+                            \FunctionTok{c}\NormalTok{(}\StringTok{"textrank\_id"}\NormalTok{, }\StringTok{"lemma"}\NormalTok{)]}
+
+\CommentTok{\# Apply textrank to find relevant sentences}
+\NormalTok{tr\_apple }\OtherTok{\textless{}{-}} \FunctionTok{textrank\_sentences}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sentences\_apple, }\AttributeTok{terminology =}\NormalTok{ term\_apple)}
+\NormalTok{tr\_smsng }\OtherTok{\textless{}{-}} \FunctionTok{textrank\_sentences}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sentences\_smsng, }\AttributeTok{terminology =}\NormalTok{ term\_smsng)}
+
+\CommentTok{\# Plot pagerank for Apple\textquotesingle{}s textrank results}
+\FunctionTok{plot}\NormalTok{(}\FunctionTok{sort}\NormalTok{(tr\_apple}\SpecialCharTok{$}\NormalTok{pagerank}\SpecialCharTok{$}\NormalTok{vector, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{type =} \StringTok{"b"}\NormalTok{, }
+     \AttributeTok{ylab =} \StringTok{"Pagerank"}\NormalTok{, }\AttributeTok{main =} \StringTok{"Textrank"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{9.Chapter_new_files/figure-pdf/sum5a-1.pdf}
+
+We have extracted the top three sentences for Apple, although we could have
+extracted as many as we wanted. They appear in ranking order.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Top 3 sentences for Apple}
+\NormalTok{sum\_apple }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(tr\_apple, }\AttributeTok{n =} \DecValTok{3}\NormalTok{, }\AttributeTok{keep.sentence.order =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(sum\_apple)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Got the product and had problems with it right away."                                
+[2] "Just after I ordered and received this product, Apple released their newest IPad II."
+[3] "Nor can I review all the items I purchased to use with the product."                 
+\end{verbatim}
+
+Here we have extracted the top three sentences for Samsung.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Top 3 sentences for Samsung}
+\NormalTok{sum\_smsng }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(tr\_smsng, }\AttributeTok{n =} \DecValTok{3}\NormalTok{, }\AttributeTok{keep.sentence.order =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(sum\_smsng)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Problem solved with the tablet."     
+[2] "At first the tablet works just fine."
+[3] "Love this tablet."                   
+\end{verbatim}
+
+Interestingly, sentences with \texttt{textrank} are shorter than in the
+results obtained using the previous package. We can see that a comparison with other brands is made very often, especially in negative
+reviews. As an exercise, plot pagerank for Samsung's textrank results
+
+\subsection{A note}\label{a-summarization-note}
+
+Abstractive summarizing is a more complex form
+compared to extractive summarizing. It involves generating new
+sentences that convey the main ideas of the original text. In R,
+abstractive summarizing is not straightforward due to the lack of direct support for complex neural-network models within R itself. However, you can use R to interface with
+other tools or libraries which support abstractive summarizing, such as
+Python libraries via reticulate or external APIs. But in the next
+chapter, we will discuss more advanced tools for carrying out text
+analysis, and these will allow us to generate text, too.
+
+\subsection{Conclusion and exercises}\label{conclusions-and-exercises}
+
+Exercise 1: Select all the entities which refer to a person's name. Are
+they related to the data set?\\
+Exercise 2: Visualize a series of nouns for two brands over a
+timeline.\\
+Exercise 3: Create a model of linguistic complexity over a timeline.\\
+Exercise 4: Read \texttt{spacyr}'s documentation and use a
+consolidation function to merge multi-word entities.\\
+Exercise 5: Visually plot the relative importance of sentences in the
+\texttt{tr\_smsng} variable.
+
+\emph{Conclusion starts}
+
+The chapter began with an introduction to named entity recognition, its
+definition, and why this method is useful in marketing. We discussed several packages used for
+NER, with \texttt{spacyr} being the package of
+choice for performing analysis. The package is discussed in detail,
+and its types of annotation are also presented. 
+We have focused on the extraction of entities, along with other parts of speech. We discussed
+the information extraction based on specific POS, such as
+adjectives whose frequency is also presented as a timeline on a brand-comparison plot. Continuing with visual representation, we used this to examine parts of speech dependencies, as well as entity,
+nouns, and highlighting adjectives. A special mention was given to the
+text complexity, which can offer insights into how customers express
+their frustration in negative reviews. Summarizing is related to NER,
+especially via the keywords which are parts-of-speech. We also introduced three R packages
+which perform extractive summarizing. This chapter has
+provided an overview of NER and summarizing, and complements the methods of
+text analysis discussed in previous chapters.

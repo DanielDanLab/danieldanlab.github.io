@@ -1,0 +1,2124 @@
+
+\chapter{Textual Data}\label{sec-textual-data}
+
+\textbf{Learning Objectives}
+
+\emph{Overview starts}
+
+\begin{itemize}
+\tightlist
+\item
+  Understanding the fundamental concepts of representing, manipulating, and
+  working with text, such as data structures (vectors, arrays, and data
+  frames), text strings, and characters.
+\item
+  Learning how to import a text dataset and display its strings, and handle
+  common issues in UGC, such as misspelling, typos, and non-standard
+  formats.
+\item
+  Acquiring the skills to obtain and analyze information about strings within
+  a dataset.
+\item
+  Developing an understanding of regular expressions in R and their
+  practical utility.
+\item
+  Practicing by using regular expression tools including quantifiers,
+  boundaries, operators, character classes, and sequences.
+\end{itemize}
+
+\emph{Overview ends}
+
+\section{Text manipulation}\label{text-manipulation}
+
+\subsection{Introduction}\label{introduction}
+
+It is rare for a marketing analyst to work with perfectly crafted texts.
+Since the focus of this book is on analyzing user-generated content
+(UGC), such as online reviews of products or services, blog entries, or
+social media posts, from a marketing perspective, we cannot expect any of
+these texts to be free from linguistic errors, typos, or misspellings.
+Unless they are revised or edited by professionals, these texts are
+likely to be imperfect (Moens, Li, and Chua 2014).
+
+Such linguistic errors in UCG can impact the analyses of
+these texts and, in turn, the marketing implications derived from them negatively.
+For instance, typos in reviews can shift the overall sentiment. Mistakes
+can lead to the misinterpretation of texts and potentially omit essential
+product information. Different spellings of the product name or features
+can make product comparisons inconsistent. Incorrectly spelled keywords
+might make it challenging for companies to track conversations and
+analyze customer sentiment (Berger et al. 2020). In some contexts,
+misspelling can even be used as an additional measure
+to reveal information about the communicator (Netzer, Lemaire, and
+Herzenstein 2019). These are not the only problems found in UGC.
+There are also punctuation errors, incorrect capitalization, nonstandard
+abbreviations and acronyms, misused emojis, homophones, slang, jargon,
+incomplete sentences, and many more elements which can be misinterpreted. All in all, there are countless ways to write a text which present problems for textual analysis.
+
+Thus, we often encounter situations when we need to search for, select,
+and partly modify or transform words, numbers, or whole phrases. This
+process, known as text manipulation, requires specific skills. It is
+necessary when aggregating text from different sources, such as from
+online product reviews with authors from different backgrounds,
+cultures, or with varying styles. The main goal of altering text in reviews is
+to create documents that are error-free, uniform, and ready to be
+analyzed. This is important because humans can correct
+misspelled words mentally but are slow, computers cannot make such a distinction
+but are fast. If the text is not polished, the resulting statistics will
+be flawed: for example, different spellings of the same word will be
+treated as separate words by the computer.
+
+To catch common spelling errors, most of us use a spell
+checker of some form when we compose a text document, or at least we
+should have it activated. A spell checker is a function built into
+common text writing programs that detect misspellings by comparing the
+words in a drafted document with a database containing standard
+spellings. Among others, a popular text-mining package that includes
+prepackaged spellers to correct mistakes is the Enchant speller
+(AbiWord Project 2024). Modern applications use artificial intelligence
+algorithms to do this, but although using such automatic tools for large-scale
+correction may seem convenient, it comes with risks. The main
+challenge is that these tools may only sometimes determine context. This
+can lead to incorrect changes and generate unwanted errors. With
+advancements in AI, though, contextual understanding is becoming more accurate, thereby reducing such risks (Hu et al. 2020).
+
+The discrepancy between English language variants that have a disparity
+in standardization, such as British English (GB) or American English
+(US) spelling, is another problem (Hitchings 2008). When dealing
+with aggregated data, the probability of encountering both in the same
+corpus is high. Thus, a method to make them uniform is desirable. We can create
+ad-hoc functions or procedures to manipulate text to overcome these
+difficulties. The operations we employ to achieve take three forms: additive, subtractive, and substitutive. In the first case,
+we can add characters, strings, or numbers to a specific string
+anywhere, such as at the beginning, in the middle or at the end of a word, and before or
+after a specific character. In the same way, we can subtract or
+substitute them to obtain the desired result. In essence,
+ \textbf{text is your data}, and managing it effectively is
+essential for accurate analysis.
+
+Now we will briefly introduce some basic concepts of how (textual) data are
+stored inside R. Readers who are merely interested in applications can
+skip this section. Later, we will delve into more advanced techniques
+and functions to help us manipulate textual data effectively.
+
+\subsection{Some basics on measurement representation in
+R}\label{some-basics-on-measurement-representations-in-r}
+
+Data is more than knowledge (Tuomi 1999). The Oxford dictionary defines
+\textbf{data} (Coombs 1964) as: ``The quantities, characters, or symbols
+on which operations are performed by a computer, which may be stored and
+transmitted in the form of electrical signals and recorded on magnetic,
+optical, or mechanical recording media.'' It is easy to see the
+\textbf{quantities} as numbers, the \textbf{characters} as letters, and
+the \textbf{symbols} as images, and consider all these as \textbf{types of data}. In computer programming, we deal with two fundamental entities for
+accessing stored data: \textbf{variables} and \textbf{constants} (Ihaka
+and Gentleman 1996). Variables in programming are used to point to
+stored data by assigning them an understandable, meaningful, and concise
+name. For example, we could use the variable name \texttt{temperature} to refer
+to a sequence of temperature values that you have measured. Then, the
+variable can be referenced and modified as needed by other computer
+routines. The \textbf{constant} represents a fixed value that cannot be
+altered but can be used in other functions. A classic example is
+\textbf{pi}, the ratio of the circumference of a circle to its diameter,
+commonly rounded down to \textbf{3.14}. Data need to be structured
+(Arasu and Garcia-Molina 2003) to facilitate easy manipulation. For the
+sake of precision, you need to understand that a \textbf{variable}
+represents a reference to a structure which has been stored; it does not store the
+data, it just gives them a name.
+
+\subsubsection{Vectors}\label{vectors}
+
+A \textbf{vector} is the simplest form of data structure in R, commonly
+used alongside lists, matrices, arrays, and data frames. A vector can be
+\textbf{atomic}, meaning that it contains elements that are all of the
+same data type, for example logical, integer, double, or character data. It
+can contain a single value, or it can hold multiple values. In
+Figure~\ref{fig-array}, we can make an analogy between a vector, which
+contains variables of a single data type, and a single-column chest of
+drawers filled with socks. Each drawer represents an element in the
+vector, and we have named this vector \texttt{drawers}.
+
+To populate our vector, we assign values to it using the variable name
+(\texttt{drawers}) and a discrete number of differently colored socks:
+\textbf{23 red}, \textbf{32 blue}, \textbf{15 green}, \textbf{41
+yellow}, and \textbf{12 white}. We use the function, \texttt{c()}, which
+stands for \textbf{combine}, to group these ``socks'' together. The
+assignment is done using the \texttt{\textless{}-} operator:
+\texttt{drawers\ \textless{}-\ c(23,\ 32,\ 15,\ 41,\ 12)}.
+
+To access the content of any drawer, we simply use the variable name and
+specify the desired element(s) using \textbf{square brackets}. For
+instance, \texttt{drawers{[}3{]}} retrieves the content of the third
+element of the vector variable, which is \textbf{15 green socks}.
+Remember, what appears in the R console are numbers, not actual socks.
+If we want to know the contents of the second and fifth drawers, we
+type: \texttt{drawers{[}c(2,\ 5){]}}, which will return the number of
+socks in both the second and fifth elements of the vector. As you can
+see, our vector contains \textbf{only socks}, not shirts or pants.
+This shows that a vector can contain only elements of the same type
+(e.g., all numbers, all integers, or all characters). On top of that, it
+is \textbf{one-dimensional}, because it is flat and linear.
+
+\subsubsection{Arrays}\label{arrays}
+
+Let us introduce another piece of terminology: the \textbf{array}. In R, an
+\textbf{array} is like a vector but can have more than one dimension. An example of a two-dimensional array is a \textbf{matrix}.
+Technically, they are the same thing, but R likes to keep these two
+concepts separate due to the significant role matrices play in
+statistical computation. Obviously, we can have arrays with more than
+two dimensions, but visualizing these higher-dimensional structures can
+be challenging, if not impossible.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.99\textwidth,height=\textheight]{figure/chapter2/array.png}
+
+}
+
+\caption{\label{fig-array}An array of a chest of drawers
+\newline Authors' own figure}
+
+\end{figure}%
+
+In R, a \textbf{list} is a data structure that can store elements of varying types—such as numbers, strings, \textbf{vectors}, or even other lists. The key difference between a \textbf{list} and a \textbf{vector}
+lies in the types of data they can contain. While a \textbf{vector} must
+consist of elements of the \textbf{same data type}, a list can hold
+\textbf{heterogeneous data types}, including vectors, other lists, and
+even lists of lists. This flexibility makes lists a versatile data
+structure in R.
+
+\subsubsection{Vector Types in R}\label{vector-types-in-r}
+
+R language categorizes data into six basic atomic vector types: three
+numerical types (integer, numeric, complex), a logical type (true or
+false), a character type, and a raw type. For a more comprehensive
+understanding of these types, refer to the works of Kabacoff (2022) and
+Wickham (2019), which provide detailed explanations and examples.
+
+These types are named intuitively to reflect the kind of data
+they hold. For instance, \textbf{integer vectors} store whole numbers,
+\textbf{numeric vectors} can hold decimal numbers, \textbf{complex
+vectors} are for complex numbers, \textbf{logical vectors} contain
+Boolean values (TRUE or FALSE), \textbf{character vectors} store text,
+and \textbf{raw vectors} are used for raw bytes. As an analogy, think of
+the data type as the material from which each chest of drawers is made.
+For instance, some might be made of wood (representing integers), others
+of plastic (representing characters), and some others of metal
+(representing logical values like TRUE or FALSE).
+
+\subsubsection{Data Frames}\label{data-frames}
+
+A \textbf{data frame} in R is structured like a table, and is similar to a table in many standard spreadsheet programs
+such as Microsoft Excel, Google Sheets, Apple Numbers, or LibreOffice
+Calc.
+
+Just as a table in these programs is composed of rows and columns, an R
+\textbf{data frame} is structured in the same way. Each \textbf{column} in a
+data frame can be considered to be a vector, holding data of the same type,
+much like a spreadsheet column containing numbers, text, or dates. The
+\textbf{rows} in a data frame correspond to individual records or
+observations, similar to how each row in a spreadsheet represents a
+specific item, person, or event.
+
+To continue with our analogy between a data frame in R and a chest of
+drawers in the physical world, let us consider each row in the data
+frame to represent a person, see Figure~\ref{fig-dataframe}. In
+technical terms, the data in each \textbf{row} is called an
+\textbf{observation}. A \textbf{column} represents a specific feature,
+called an \textbf{attribute}. Each person, or row, is linked to various features,
+which in our analogy are items like socks, t-shirts, and pants. For
+instance, Aida might have 23 socks, 16 t-shirts, and 8 pairs of pants.
+
+\subsubsection{Manipulating Data Frames}\label{manipulating-data-frames}
+
+In this context, the chest of drawers can be thought of as our data
+frame in R. Each drawer or column represents a different item of
+clothing. We access these items in R in a similar way to opening a specific
+drawer of the piece of furniture. For example, if we want to check how many t-shirts
+Carl has, and Carl is the third person in our data frame, we would use
+the command \texttt{chest{[}3,\ 2{]}} in R. This command is akin to
+opening the second drawer (t-shirts) of the third row (Carl) of our
+chest of drawers.
+
+We can also `slice' this data frame, which is just like selecting specific
+drawers from our chest of drawers. If we want to see only the t-shirts and pants
+for everyone, we use \texttt{chest{[},\ c(2,\ 3){]}}. The empty space
+before the comma indicates that we are selecting all the rows or, in our
+analogy, all the people. After the comma, the \texttt{c(2,\ 3)} specifies
+that we only want to look at the second and third columns, which are
+t-shirts and pants.
+
+In this analogy, instead of actual socks, t-shirts, and pants, we are
+dealing with different types of data in our data frame. So, where you might
+imagine long socks in a drawer, in R, this could correspond to a column
+of strings or numbers representing that particular item or attribute.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.99\textwidth,height=\textheight]{figure/chapter2/dataframe.png}
+
+}
+
+\caption{\label{fig-dataframe}A data frame containing various items
+\newline Authors' own figure}
+
+\end{figure}%
+
+Imagine that your chest of drawers can be part of different sets of furniture. One chest might belong to a set for a bedroom (similar to a data frame
+\textbf{class}), another might be part of a set of office furniture
+(similar to a list \textbf{class}), and so on. The set of furniture
+(\textbf{class}) it belongs to determines how the chest of drawers is
+used. A bedroom chest of drawers might be used to store clothes, while an
+office version might be organized to store files and documents. In R,
+the \textbf{class} of an object determines how it behaves with different
+functions and operations. For example, functions treat a data frame
+(a bedroom set) differently than a basic vector (a standalone chest of
+drawers). The difference between \textbf{data type} and \textbf{class}
+is the following. The first refers to the \textbf{low-level internal
+structure} of how R stores data in memory. A variable can be checked for
+its type using the \texttt{typeof()} function. while the second is a
+\textbf{high-level} \textbf{abstraction} that focuses on how an object
+behaves in R. Because the word \textbf{class} is related to object
+oriented programming, it defines how functions and methods interact with
+an object. As a reminder, an \textbf{object} is an element which stores
+information, it is referenced by a name, which is the name of the variable.
+
+\subsubsection{Empty Strings and Character
+Vectors}\label{empty-strings-and-character-vectors}
+
+Just as we use a drawer to store garments, we can use specific
+structures in programming to store text strings. Let us imagine we have
+a chest of drawers, but we will leave these drawers empty. In the
+context of programming, particularly in R, text strings are categorized
+as belonging to a \textbf{character class}. So we use another data
+type now, a \textbf{character}, not an integer.
+
+Let us consider an \textbf{empty string}, which is similar to having a chest of
+drawers with only one column of drawers, and those drawers are empty. We
+can assign an \textbf{empty string} to a variable; let us call it
+\texttt{empty\_string}. This would be shown in R as
+\texttt{empty\_string\ \textless{}-\ ""}, signifying a string that
+contains no characters. Paradoxically, even though the string is empty,
+it belongs to the \textbf{character class} in R.
+
+When we are uncertain about the class type of a variable, we can easily
+check it using the \texttt{class()} function. For instance, typing
+\texttt{class(empty\_string)} would confirm that empty\_string is indeed
+a \textbf{character class} despite being empty. This is similar to
+confirming that an empty drawer is still a part of the chest of drawers,
+designed to hold items even when it currently does not.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Assign an empty string to the variable \textquotesingle{}empty\_string\textquotesingle{}}
+\NormalTok{empty\_string }\OtherTok{\textless{}{-}} \StringTok{""}
+
+\CommentTok{\# Display the value of \textquotesingle{}empty\_string\textquotesingle{}}
+\NormalTok{empty\_string}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] ""
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check and display the class of \textquotesingle{}empty\_string\textquotesingle{}}
+\FunctionTok{class}\NormalTok{(empty\_string)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "character"
+\end{verbatim}
+
+\emph{Program code ends}
+
+Similarly, we can create an empty character vector in R using the
+\texttt{character()} function by setting its length argument to zero. It
+is important to note that \texttt{empty\_character} is just a name we
+have assigned to our variable (object) for clarity and understanding. We
+could have named it anything, such as \texttt{john\_doe},
+\texttt{ala\_bama}, or \texttt{bugs\_bunny}. Choosing a descriptive name
+is beneficial. When we revisit the code later and need an immediate
+glimpse of what a specific variable might contain, the appropriate naming of
+variables makes them easier to read and understand.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create an empty character vector with a length of zero}
+\NormalTok{empty\_character }\OtherTok{\textless{}{-}} \FunctionTok{character}\NormalTok{(}\AttributeTok{length =} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# Display the content of \textquotesingle{}empty\_character\textquotesingle{}}
+\NormalTok{empty\_character}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+character(0)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check and display the class of \textquotesingle{}empty\_character\textquotesingle{}}
+\FunctionTok{class}\NormalTok{(empty\_character)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "character"
+\end{verbatim}
+
+\emph{Program code ends}
+
+What if we want to create a character vector in R that is initialized
+(meaning it occupies spots but contains only empty placeholder values)?
+The procedure can be thought of as preparing a chest of drawers, where
+each drawer is meant to hold a character string, but initially, all the
+drawers are empty. In programming terms, we are talking about
+initializing an empty character vector and we can set it to be a specific
+length, for example to have ten elements, precisely like a chest of drawers with
+ten drawers. At this stage, each `drawer' (or element in the vector)
+contains an \textbf{empty string} \texttt{("")} -- ready to hold data,
+but currently contains no values.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a character vector with 10 elements, initialized as empty strings}
+\NormalTok{character\_vector }\OtherTok{\textless{}{-}} \FunctionTok{character}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+\CommentTok{\# Display the contents of \textquotesingle{}character\_vector\textquotesingle{}}
+\NormalTok{character\_vector}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "" "" "" "" "" "" "" "" "" ""
+\end{verbatim}
+
+\emph{Program code ends}
+
+\subsubsection{Combining and Indexing
+Strings}\label{combining-and-indexing-strings}
+
+We can populate our newly created character vector with words or strings
+by assigning them to specific positions within the vector. This is done
+through indexing, which allows us to access and modify elements at
+particular locations in the vector. For example, if we want to place the
+word `five' in the fifth position of our vector, we use indexing. This is done by adding square brackets \texttt{{[}{]}} after
+the vector's name, \texttt{character\_vector}, and specifying the position we want with a number. In this case, we use the number 5 to
+indicate the fifth position. The corresponding R code would be
+\texttt{character\_vector{[}5{]}\ \textless{}-\ \textquotesingle{}five,\textquotesingle{}}
+which assigns the string `five' to the fifth element of the vector.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Assign the string "fifth" to the fifth element of the \textquotesingle{}character\_vector\textquotesingle{}}
+\NormalTok{character\_vector[}\DecValTok{5}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"fifth"}
+
+\CommentTok{\# Display the contents of \textquotesingle{}character\_vector\textquotesingle{}}
+\NormalTok{character\_vector}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] ""      ""      ""      ""      "fifth" ""      ""      ""      ""     
+[10] ""     
+\end{verbatim}
+
+\emph{Program code ends}
+
+As previously mentioned, a vector in R is designed for homogeneous
+storage, meaning it can only hold one type of data. For instance,
+if we add a string to a numerical vector, R will automatically convert
+all numerical values in the vector to strings. This is because a vector
+must maintain a consistent data type across all its elements, or
+`drawers', as we might metaphorically describe them. We can
+convert vector types manually if we require precise control over our types of data.
+To check if a vector is a character type, we use the function
+\texttt{is.character()}. Moving from one type to another, such as from
+numerical to character, is achieved using functions like
+\texttt{as.character()}. This operation might be performed when we want
+to transform numerical value types into character types. While number types
+are used for computations, numbers as text (character type) are
+interpreted as words.
+
+Consider the following example where two variables, \texttt{x} and
+\texttt{y}, hold different types of data: character and numerical,
+respectively. We can check if they are a character
+type, examine their class, convert one type to another, and then verify
+if the conversion was successful.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Assign a string to variable \textquotesingle{}x\textquotesingle{}}
+\NormalTok{x }\OtherTok{\textless{}{-}} \StringTok{"really, is this a character?"}
+
+\CommentTok{\# Assign the result of the sum 9+8 to variable \textquotesingle{}y\textquotesingle{}}
+\NormalTok{y }\OtherTok{\textless{}{-}} \DecValTok{9} \SpecialCharTok{+} \DecValTok{8}
+
+\CommentTok{\# Check if \textquotesingle{}x\textquotesingle{} is of character type}
+\FunctionTok{is.character}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check if \textquotesingle{}y\textquotesingle{} is of character type}
+\FunctionTok{is.character}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get the class of \textquotesingle{}x\textquotesingle{}}
+\FunctionTok{class}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "character"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get the class of \textquotesingle{}y\textquotesingle{}}
+\FunctionTok{class}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert \textquotesingle{}y\textquotesingle{} from numeric to character type}
+\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(y)}
+
+\CommentTok{\# Get the class of \textquotesingle{}y\textquotesingle{} after conversion}
+\FunctionTok{class}\NormalTok{(y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "character"
+\end{verbatim}
+
+\emph{Program code ends}
+
+When we need to combine (concatenate) different strings to create longer ones, the
+\texttt{paste()} function in R comes in handy. This has two
+primary arguments: \texttt{sep} and \texttt{collapse}. The \texttt{sep}
+argument specifies a separator to be placed between each pair of strings
+being brought together. This can be an empty space, a dot, a dash,
+or whichever symbol, word, or character you want to put between the
+strings. On the other hand, when set to something other than its default
+value of NULL, the collapse argument introduces an optional character
+string to separate the results. For example, if we
+bring together the string `My favorite book' with `has many chapters' using
+\texttt{paste()}, we can create a seamless single string from these two.
+In another scenario, we might use \texttt{paste()} to append the word
+`Chapter' to numbers generated from 1 to 5, separating each resulting
+string with a comma. Here is how it looks in R:
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Concatenating two strings}
+\NormalTok{x }\OtherTok{\textless{}{-}}\FunctionTok{paste}\NormalTok{(}\StringTok{"My favorite book"}\NormalTok{, }\StringTok{"has many chapters"}\NormalTok{, }\AttributeTok{sep =} \StringTok{" "}\NormalTok{)}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "My favorite book has many chapters"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Concatenating \textquotesingle{}Chapter\textquotesingle{} with numbers 1 to 5, separated by commas}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(}\StringTok{"Chapter"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{sep =} \StringTok{" "}\NormalTok{, }\AttributeTok{collapse =} \StringTok{", "}\NormalTok{)}
+\NormalTok{x}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Chapter 1, Chapter 2, Chapter 3, Chapter 4, Chapter 5"
+\end{verbatim}
+
+\emph{Program code ends}
+
+You may have noticed that we used the same variable name, \texttt{x}, as
+in the previous example. It is important to remember that reusing a
+variable name in your code will overwrite its previous content with the
+new data. Therefore, carefully tracking the names you assign to your
+variables is good practice. Overwriting variables can lead to
+confusion or errors, particularly in more complex scripts where the same
+variable name might be used multiple times unintentionally. Thus, using
+descriptive and unique names for your variables is advisable. This
+approach helps to identify their purpose clearly and significantly
+reduces the risk of accidental overwrites, thereby enhancing the
+longevity and readability of your code.
+
+\subsection{Working with strings}
+
+In text mining, strings are our bread and butter, and to enhance our
+understanding, in this section we will explore some simple examples of text
+manipulation. This will involve using functions that
+come with the base version of R, as well as additional functions that
+can be installed to further enhance R's text-processing capabilities. We
+will begin by importing the \textbf{Product Reviews} dataset, as
+described in the Introduction, focusing on the `title' column.
+To illustrate what the data looks like, we will display a small subset
+(20 items). A larger dataset would be impractical to show in a printed
+book. The data are selected randomly, but we ensure the reproducibility of
+the results by using the \texttt{set.seed()} function. This approach
+maintains a controlled randomness, ensuring consistent results across
+different runs on different computers. Throughout this chapter, we will
+demonstrate how the functions of the base version of R and the additional packages can
+be used effectively in text mining to extract meaningful insights from our data.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set global option to not automatically convert strings to factors}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{stringsAsFactors =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Read the CSV file \textquotesingle{}Product Reviews.csv\textquotesingle{} into a dataframe \textquotesingle{}prodreviews\textquotesingle{}}
+\NormalTok{prodreviews }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data/Product Reviews.csv"}\NormalTok{)}
+
+\CommentTok{\# Convert the \textquotesingle{}Title\textquotesingle{} column of \textquotesingle{}prodreviews\textquotesingle{} to character type }
+\CommentTok{\# and store in \textquotesingle{}prodtitle\textquotesingle{}}
+\NormalTok{prodtitle }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(prodreviews}\SpecialCharTok{$}\NormalTok{Title)}
+
+\CommentTok{\# Set a seed for random number generation to ensure reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# Sample 20 titles randomly from \textquotesingle{}prodtitle\textquotesingle{} and store them in \textquotesingle{}prodtitle20\textquotesingle{}}
+\NormalTok{(prodtitle20 }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(prodtitle, }\DecValTok{20}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "Best tech toy of 2010-2011"                              
+ [2] "Worked for one day!"                                     
+ [3] "Ignore the nonsense"                                     
+ [4] "Nonna162"                                                
+ [5] "Obviously only for the Tech Savvy"                       
+ [6] "eh.."                                                    
+ [7] "Excellent for what it is!"                               
+ [8] "Does not add up at all"                                  
+ [9] "Love the product!"                                       
+[10] "Good purchase"                                           
+[11] "Great Tablet"                                            
+[12] "Not what I expected"                                     
+[13] "Less than satisfaction"                                  
+[14] "Boss tablet."                                            
+[15] "Sweet Little Tablet"                                     
+[16] "I have learned my lesson."                               
+[17] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+[18] "Kindle?"                                                 
+[19] "The Kindle Fire is a great first effort"                 
+[20] "Wifi version inferior to the 3g version"                 
+\end{verbatim}
+
+\emph{Program code ends}
+
+As we can see, the system displays the titles in a reproducible
+pseudo-random sequence, thanks to the use of \texttt{set.seed()}. It is
+important to note that text in R is case-sensitive; a computer will consider 
+the words `great' and `Great' to be two distinct entities. This
+distinction is essential in text analysis and manipulation. To get a bit
+of practice, let us use the \texttt{substr()} function to select a part
+of these strings. For instance, our goal could be to extract the first
+four letters of each title string. Technically, we achieve this by
+specifying the start and end index positions in the \texttt{substr()}
+function. In our case, we start from index position 1 (the first
+letter of a word) and end at position 4.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extracting the first four letters of each title}
+\FunctionTok{substr}\NormalTok{(prodtitle20, }\AttributeTok{start =} \DecValTok{1}\NormalTok{, }\AttributeTok{stop =} \DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] "Best" "Work" "Igno" "Nonn" "Obvi" "eh.." "Exce" "Does" "Love" "Good"
+[11] "Grea" "Not " "Less" "Boss" "Swee" "I ha" "Ligh" "Kind" "The " "Wifi"
+\end{verbatim}
+
+\emph{Program code ends}
+
+By abbreviating the titles in our dataset, we might encounter a
+situation where some strings end up with identical sequences. These can be composed of a mix of lowercase or uppercase letters,
+spaces, and punctuation marks. To mitigate the potential confusion
+caused by such duplication, we can use the \texttt{abbreviate()}
+function. This creates abbreviations from each string,
+typically selecting the first letter of each word and ensuring a minimum
+of four letters are used. If a string has fewer than four words,
+\texttt{abbreviate()} automatically constructs abbreviations to match this
+length.
+
+Beyond reducing duplication, the \texttt{abbreviate()} function serves
+several other purposes. It can save time, reduce computer memory usage,
+and enhance data anonymity. It is also handy for creating concise labels
+for graphs or managing large datasets where conserving space is critical.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Apply the \textquotesingle{}abbreviate()\textquotesingle{} function to the \textquotesingle{}prodtitle20\textquotesingle{} vector}
+\FunctionTok{abbreviate}\NormalTok{(prodtitle20)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                              Best tech toy of 2010-2011 
+                                                 "Btto2" 
+                                     Worked for one day! 
+                                                  "Wfod" 
+                                     Ignore the nonsense 
+                                                  "Igtn" 
+                                                Nonna162 
+                                                  "N162" 
+                       Obviously only for the Tech Savvy 
+                                                "OoftTS" 
+                                                    eh.. 
+                                                  "eh.." 
+                               Excellent for what it is! 
+                                                 "Efwii" 
+                                  Does not add up at all 
+                                                "Dnauaa" 
+                                       Love the product! 
+                                                  "Ltp!" 
+                                           Good purchase 
+                                                  "Gdpr" 
+                                            Great Tablet 
+                                                  "GrtT" 
+                                     Not what I expected 
+                                                  "NwIe" 
+                                  Less than satisfaction 
+                                                  "Lsts" 
+                                            Boss tablet. 
+                                                  "Btb." 
+                                     Sweet Little Tablet 
+                                                  "SwLT" 
+                               I have learned my lesson. 
+                                                 "Ihlml" 
+Lightweight 10-inch Android 2.3 tablet with so-so screen 
+                                              "L1A2twss" 
+                                                 Kindle? 
+                                                  "Knd?" 
+                 The Kindle Fire is a great first effort 
+                                              "TKFiagfe" 
+                 Wifi version inferior to the 3g version 
+                                               "Wvitt3v" 
+\end{verbatim}
+
+\emph{Program code ends}
+
+In this example, each title in the \texttt{prodtitle20} vector is
+abbreviated, with each abbreviation having a minimum of four characters.
+
+The length of strings in a dataset is a valuable statistical item,
+particularly in text analysis. For instance, we might be curious about
+the number of characters in each review title within our sample, or we
+might want to identify the title with the highest character count. To
+accomplish this, we can use the \texttt{nchar()} function to determine
+the length of each string and the max function to find the maximum
+length in the \texttt{prodtitle20} dataset. Applying these functions is
+an important step for a marketing analyst examining text data: It helps them 
+understand how extensively people are talking about a product in the
+reviews. Longer titles might indicate more detailed discussions
+or descriptions, which can be insightful for understanding customer
+engagement and interest.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate the length of each title}
+\FunctionTok{nchar}\NormalTok{(prodtitle20)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ [1] 26 19 19  8 33  4 25 22 17 13 12 19 22 12 19 25 56  7 39 39
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find the maximum length among these titles}
+\FunctionTok{max}\NormalTok{(}\FunctionTok{nchar}\NormalTok{(prodtitle20))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 56
+\end{verbatim}
+
+\emph{Program code ends}
+
+We obtained two results from our analysis: firstly, a vector of numbers
+where each number represents the character count of each title in the
+sample dataset; and, secondly, a single number indicating the maximum
+length of the titles. The next step is determining which
+title(s) correspond to this maximum length. For this, we use the
+\texttt{which()} function in R, which identifies the position(s) of the
+string(s) with the longest length. It is possible to find more than one
+string sharing the same maximum number of characters, i.e., that of the
+title of the longest string in the dataset. In our case, the longest
+string has 56 characters.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extract the titles from \textquotesingle{}prodtitle20\textquotesingle{} that have the maximum length}
+\NormalTok{prodtitle20[}\FunctionTok{which}\NormalTok{(}\FunctionTok{nchar}\NormalTok{(prodtitle20)}\SpecialCharTok{==}\FunctionTok{max}\NormalTok{(}\FunctionTok{nchar}\NormalTok{(prodtitle20)))]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The code can be translated from R into plain English as follows: \textbf{which} is
+the string that has the \textbf{max}imum \textbf{n}umber of
+\textbf{char}acters in the \textbf{prodtitle20} sample dataset?
+
+We can also determine the total number of titles in the dataset and find out how
+many are unique. To do these, we can utilize R's
+\texttt{length()} and \texttt{unique()} functions. The \texttt{length()}
+function will tell us the total number of titles in the dataset, while
+\texttt{unique()} will help us identify the number of unique titles. We
+apply these functions to the entire dataset using \texttt{prodtitle}.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Count total titles in \textquotesingle{}prodtitle\textquotesingle{}}
+\FunctionTok{length}\NormalTok{(prodtitle)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 40741
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Count unique titles in \textquotesingle{}prodtitle\textquotesingle{}}
+\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(prodtitle))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 31405
+\end{verbatim}
+
+\emph{Program code ends}
+
+We can see a total of 40,741 titles in our dataset, out of which
+31,405 are unique. This shows that the remaining 9,336 titles are
+duplicates, i.e., they appear more than once.
+
+Having mentioned the relevance of statistics in relation to this
+dataset, we can gain a quick statistical overview using the
+\texttt{summary()} function. This function is particularly useful for
+analyzing the length of strings in the prodtitle dataset. By applying
+\texttt{summary()} to the character lengths of the titles, we shift our
+focus to a broader analysis of the entire dataset. This allows
+us to understand not just the count of titles but also the distribution
+of their lengths, providing insights into the dataset's characteristics.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get statistical summary of title lengths in \textquotesingle{}prodtitle\textquotesingle{}}
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{nchar}\NormalTok{(prodtitle))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1.00   13.00   21.00   24.64   32.00  128.00 
+\end{verbatim}
+
+\emph{Program code ends}
+
+We immediately notice that the lengths of strings in our dataset vary
+significantly: the shortest title has only 1 character, while the
+longest has 128 characters. The average (mean) number of
+letters per title is 24.64, with a median of 21. This range in string
+lengths could affect how we process and analyze our text data. For
+instance, very short titles might need a closer look to ensure they are
+meaningful, while the longer titles could be more descriptive or
+complex, and rich in information.
+
+But how are these string lengths distributed across our dataset?
+And, how many strings are there of each length? To answer these
+questions, let us plot a histogram, which is ideal for uncovering
+patterns in datasets. Histograms are very helpful for showing the frequency of
+groups, or `bins', of data. When creating our histogram, we will adjust
+the default bin width by setting the \texttt{breaks} argument. This will
+control the number of bins used to group our data. For our analysis, we
+aim to distribute the data across 20 bins. However, it is important to
+note that the number of breaks specified in R is treated as more of a
+guideline than a strict parameter. R's internal algorithms may adjust
+the number to produce a visually appealing histogram. While there are methods
+of forcing R to produce an exact number of bins, as discussed in Ogle (2018), the
+default behavior typically yields satisfactory results.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot a histogram of string lengths in \textquotesingle{}prodtitle\textquotesingle{}}
+\FunctionTok{hist}\NormalTok{(}\FunctionTok{nchar}\NormalTok{(prodtitle), }
+     \AttributeTok{main =} \StringTok{\textquotesingle{}Histogram of Title Lengths\textquotesingle{}}\NormalTok{,  }\CommentTok{\# Set the main title of the histogram}
+     \AttributeTok{breaks =} \DecValTok{20}\NormalTok{,                          }\CommentTok{\# Specify the number of bins as 20}
+     \AttributeTok{xlab =} \StringTok{\textquotesingle{}Number of Characters\textquotesingle{}}\NormalTok{,        }\CommentTok{\# Label for the x{-}axis}
+     \AttributeTok{ylab =} \StringTok{\textquotesingle{}Frequency of Titles\textquotesingle{}}\NormalTok{)         }\CommentTok{\# Label for the y{-}axis}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{2.Chapter_files/figure-pdf/fig-title-length-plot-1.pdf}
+
+}
+
+\caption{\label{fig-title-length-plot}Length of the titles in the
+Product Reviews dataset \newline{} Authors' own figure}
+
+\end{figure}%
+
+\emph{Program code ends}
+
+We can conclude from the histogram (see
+Figure~\ref{fig-title-length-plot}) that most of the review titles in
+this dataset, some 8,237, have lengths of between 10 and 15
+characters. Beyond this range, the frequency of string lengths gradually
+decreases. This trend indicates that shorter titles are more common; the
+longer the title, the less frequently it appears in the dataset.
+
+\emph{Exercise starts}
+
+\textbf{Exercise}: Try to find the longest title in the entire dataset
+using R. Determine whether there is only one or
+multiple titles of the maximum length. Hint: You can use the
+\texttt{nchar()} function to calculate the length of each title and then
+identify the title(s) with the maximum length. Once you find the longest
+title(s), explore it/them further: What do they have in common, and what
+might their length indicate about the content or nature of these titles?
+
+\emph{Exercise ends}
+
+\subsection{Regular expressions in R}\label{regular-expressions-in-r}
+
+The previous sections served as a warm-up, using R-based procedures to
+introduce you to the fascinating world of text analytics. Next, we will
+explore the basics of regular expressions, a powerful tool for
+searching, parsing, and manipulating text. All the examples in this
+section are designed to work with the base R functions, meaning you do not
+need to install any extra packages.
+
+Regular expressions, often abbreviated as regex or regexp, are used not
+only in search engines and by word processors, but are also integral to many
+programming languages for detecting, locating, or replacing information.
+This section will illustrate the basic concept and some elementary
+functions of regular expressions in the R computing environment
+(Sanchez 2013). For a more detailed exploration, see Friedl (2006)
+or Forta (2018).
+
+R supports two types of regular expression paradigms: POSIX and
+Perl-like. The POSIX standard, an acronym for `Portable Operating System
+Interface,' comprises a set of IEEE (Institute of Electrical and
+Electronics Engineers) standards. These standards aim to provide a
+consistent and portable interface for programming and user environments
+across various operating systems, including but not limited to
+Unix-based systems. The POSIX standard has two types of regular
+expressions: basic regular expressions (BRE) and extended regular
+expressions (ERE). R uses ERE by default in its regular
+expression functions, such as \texttt{grep}, \texttt{grepl}, \texttt{sub}, and \texttt{gsub}.
+
+Perl had a large community that has significantly contributed to the
+development of a rich set of regex libraries and documentation, and it was renowned for its early and robust integration of regular expressions. This
+makes Perl's regex particularly well-suited for complex pattern-matching
+tasks. In R, Perl-compatible regular expressions can be used by
+setting the perl = TRUE option, which allows for the use of advanced regex features
+within R's regex functions.
+
+For further reading and a deeper understanding of these topics, see the
+the following: Lewine (1991); Cicekli et al. (2010); and Gagolewski
+(2022).
+
+\subsection{The foundations of regular
+expressions}\label{foundations-of-regular-expressions}
+
+A regular expression is a sequence of characters and metacharacters
+which together form a search pattern. For instance, a simple pattern like
+\textbf{{[}a-z{]}+} is designed to find any lowercase letter. This
+pattern represents a concise string that tests for a specific pattern
+capable of extracting or replacing substrings. Regular expressions can
+search for a variety of elements, including letters (e.g., `a', `b',
+`c'), numbers (e.g., `0', `1', `5'), or other characters (e.g., `=',
+`-'). To the untrained eye, these patterns might look as random as the
+keystrokes of a cat walking across a keyboard. If you have ever
+witnessed such a feline typist, you will know exactly what we mean. Rest
+assured, no cats were harmed in the writing of this book :)
+
+To demystify these seemingly cryptic search patterns, consider an
+example: that of finding all the email addresses in a corpus. An email address, such
+as john.doe@someserver.com, can be interpreted as a user (john doe)
+located at a domain (someserver.com). Our task is to create a regular
+expression that captures all the email addresses in the text, regardless of
+the domain, whether it is gmail, yahoo, outlook, or others. Constructing
+a regular expression for this purpose might look challenging at first.
+For instance, a basic pattern to match email addresses could be
+something like:
+\textbf{{[}a-zA-Z0-9.\_\%+-{]}+@{[}a-zA-Z0-9.-{]}+\textbackslash.{[}a-zA-Z{]}\{2,\}}.
+This pattern is designed to match the general structure of email
+addresses, but it can be pretty tricky to read for those new to regular
+expressions. To aid in understanding and visualizing these patterns, we
+can use tools provided by the \texttt{re2r} package (Wenfeng 2020). This offers a way to visually break down and interpret each part of a
+regular expression. Figure~\ref{fig-regex-re2r} shows an example
+of what this visualization looks like.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load re2r package}
+\FunctionTok{library}\NormalTok{(re2r)}
+
+\CommentTok{\# Visualize email regex pattern}
+\FunctionTok{show\_regex}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b[a{-}zA{-}Z0{-}9.\_\%+{-}]+@[a{-}zA{-}Z0{-}9.{-}]+}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.[a{-}zA{-}Z]\{2,4\}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics{2.Chapter_files/figure-pdf/fig-regex-re2r-1.pdf}
+
+}
+
+\caption{\label{fig-regex-re2r}Visualization of a Regular Expression for
+an Email Address \newline Authors' own figure}
+
+\end{figure}%
+
+\emph{Program code ends}
+
+Note that the \texttt{re2r} package has been removed from CRAN and may
+contain bugs, such as displaying quantifiers like
+\texttt{\{2,4\}} inaccurately. We have installed it from \texttt{GitHub} for
+educational purposes. While it has potential as a tool, you should be
+aware of its limitations and bugs. Another R regex enhancement tool is
+the \texttt{regexplain} (Gadenbuie 2018) addin for RStudio, which is
+installable from GitHub. It provides a user-friendly regex experience
+for crafting and understanding regular expressions within RStudio. It
+use both base R functions and the \texttt{stringr} package
+(Wickham 2022b), on which there is more towards the end of this chapter.
+
+We notice that the regular expression contains a sequence of characters
+designed to capture one or more email addresses (Goyvaerts and Levithan
+2012). Let us decode this in plain English: The expression starts and
+ends with a word boundary \textbackslash b, encapsulating the email
+address. The user name consists of a combination of characters from
+a to z (or A to Z), numbers from 0 to 9, and special characters like a
+dot . , an underscore \_, a percentage \%, a plus +, and a hyphen -, in
+any order. This is followed by the @ symbol found in all email
+addresses. After this, the server name is specified, which can include
+letters (both upper and lower case), numbers, dots, and hyphens.
+Finally, the domain's extension is indicated by a dot followed by 2 to 4
+letters (e.g., .com, .org). It is important to note that while this
+pattern captures many email formats, it may not encompass all,
+especially more complex ones like second-level domains (e.g.,
+john.doe@myserver.ac.at). Thus, while this is effective for most common email
+addresses, the regex might not detect every possible valid email
+format. Nevertheless, by adjusting and expanding the pattern, it is
+possible to tailor the regex to match a wider variety of valid email
+formats, accommodating different structures and domain specifications.
+
+Let us now delve into the characters and metacharacters used in regular
+expressions in a structured manner. Regular expressions are composed of
+characters, literally symbols or letters, and metacharacters
+which have special meanings in the context of regex. One of the key aspects
+of regular expressions is the use of quantifiers, which allows us to
+specify the number of repetitions of characters in a pattern.
+
+\subsubsection{Quantifiers}\label{quantifiers}
+
+Quantifiers, as detailed in Sanchez (2013), define how many times a
+particular character or sequence of characters need to appear in a string
+for a match to be found. The various quantifiers and their functions are
+summarized in Table~\ref{tbl-quantifiers1}. These enable us
+to construct flexible and powerful search patterns in regular
+expressions.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Quantifiers}\label{tbl-quantifiers1}\tabularnewline
+\toprule\noalign{}
+Quantifier & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Quantifier & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{*} & Matches at least 0 times \\
+\texttt{+} & Matches at least 1 time \\
+\texttt{?} & Matches at most 1 time \\
+\texttt{\{n\}} & Matches exactly n times \\
+\texttt{\{n,\}} & Matches at least n times \\
+\texttt{\{n,\ m\}} & Matches between n and m times \\
+\end{longtable}
+
+The quantifier in a regular expression is placed after the character or
+group of characters whose occurrences (repetitions) it is meant to
+refer to. For example, let us create a character vector in R containing
+seven similar strings. These strings are designed to illustrate the
+effect of applying various quantifiers and how they affect pattern
+matching.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a vector of sample strings with varying patterns}
+\NormalTok{strings }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"xy"}\NormalTok{, }\StringTok{"xz"}\NormalTok{, }\StringTok{"xzy"}\NormalTok{, }\StringTok{"xzzy"}\NormalTok{, }\StringTok{"xzzzy"}\NormalTok{, }\StringTok{"xzzzzy"}\NormalTok{, }\StringTok{"xzzzzyzy"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+To identify patterns, such as finding all the sentences that contain a
+specific sequence of characters, we can use the \texttt{grep()}
+function. For instance, if we want to locate the sequence `xy' in our
+previously created vector, we would use
+\texttt{grep(\textquotesingle{}xy\textquotesingle{},\ strings)}. This
+function returns the indices of the vector elements containing a
+specific sequence, allowing us to identify and extract matching patterns
+quickly.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Identify indices of elements in vector \textquotesingle{}strings\textquotesingle{} that contain "xy"}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xy"}\NormalTok{, strings)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 2
+\end{verbatim}
+
+\emph{Program code ends}
+
+The \texttt{grep()} function in R is used to identify patterns within a
+vector of strings. By default, it returns the indices, i.e., the
+positions in the vector, where the pattern you specify matches. If you
+set the value parameter to \texttt{TRUE}, the function's behavior
+changes: Instead of returning the indices, it will return the actual
+strings that contain the pattern. This flexibility allows you to
+either locate where the pattern occurs in the vector or extract
+the matching elements.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Return elements in \textquotesingle{}strings\textquotesingle{} that contain "xy"}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xy"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+Let us analyze all the quantifying metacharacters and understand how
+they perform in regular expressions.
+
+The asterisk \texttt{*} matches no or more occurrences of the
+preceding character. For instance, in a pattern, it can be used to match
+any number of a specific character, such as z, that appears before
+another character, like y. So, \texttt{z*y} in a regular expression
+would match `y', `zy', `zzy', `zzzy', and so on, effectively capturing
+sequences where `z' appears any number of times (including none) before a `y'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Return elements matching \textquotesingle{}xz*y\textquotesingle{} pattern in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz*y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xy"       "xzy"      "xzzy"     "xzzzy"    "xzzzzy"   "xzzzzyzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The function successfully captured all the items in the vector where the
+letter `y' is preceded by no or more occurrences of `z'.
+
+Next, let us look at the plus character \texttt{+}. Unlike the
+asterisk, the plus sign matches the preceding character one or more
+times. It requires the preceding character to appear at least once,
+making it useful for patterns where the character's presence is
+mandatory but can repeat.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Return elements matching \textquotesingle{}xz+y\textquotesingle{} pattern in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz+y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xzy"      "xzzy"     "xzzzy"    "xzzzzy"   "xzzzzyzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The question-mark character \texttt{?} in regular expressions shows that
+the preceding character appears at least once or not at all. This means it allows for the
+presence of the character to be optional, indicating that the character
+might appear once or never in the search pattern.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Return elements matching \textquotesingle{}xz?y\textquotesingle{} pattern in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz?y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xy"  "xzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The quantifier \texttt{\{n\}}, enclosed in curly brackets, is used in
+regular expressions to match the precise number of occurrences – `n' – of the preceding
+character. This allows for precise control over how many times a
+character appears consecutively in the string being matched.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find \textquotesingle{}xz\{3\}y\textquotesingle{} (three \textquotesingle{}z\textquotesingle{}s before \textquotesingle{}y\textquotesingle{}) in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz\{3\}y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xzzzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The quantifier \texttt{\{n,\}} in regular expressions, followed by a
+comma, is used to match at least `n' occurrences of the preceding
+character, setting `n' as the lower boundary. The absence of an upper boundary
+in this quantifier means it can match `n' or more occurrences,
+effectively extending to any (potentially infinite) number of
+repetitions.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find \textquotesingle{}xz\{2,\}y\textquotesingle{} (at least two \textquotesingle{}z\textquotesingle{}s before \textquotesingle{}y\textquotesingle{}) in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz\{2,\}y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xzzy"     "xzzzy"    "xzzzzy"   "xzzzzyzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+In regular expressions, the quantifier \texttt{\{n,m\}} is used to match
+a character that appears at least `n' times but not more than `m' times.
+This allows us to specify a range for the number of occurrences of the
+preceding character, with `n' as the lower limit and `m' as the upper
+limit.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find \textquotesingle{}xz\{0,2\}y\textquotesingle{} (0 to 2 \textquotesingle{}z\textquotesingle{}s before \textquotesingle{}y\textquotesingle{}) in \textquotesingle{}strings\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"xz\{0,2\}y"}\NormalTok{, strings, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "xy"   "xzy"  "xzzy"
+\end{verbatim}
+
+\emph{Program code ends}
+
+In conclusion, this section has explored the versatile and powerful role
+of quantifiers in regular expressions within R. We have seen how
+quantifiers like \texttt{*}, \texttt{+}, \texttt{?}, \texttt{\{n\}},
+\texttt{\{n,\}}, and \texttt{\{n,m\}} help us to maintain precise control over
+pattern matching by specifying the number of occurrences of characters.
+
+\emph{Exercise starts}
+
+\textbf{Exercise}: Find all the string titles in the \texttt{prodtitle20}
+variable which contain the pattern `ire'. Use the \texttt{grep()}
+function in R for this purpose. Once you have identified these titles,
+continue your exploration by applying the quantifiers we have discussed
+above. Experiment with these quantifiers to discover a variety of
+patterns within the \texttt{prodtitle20} variable.
+
+\emph{Exercise ends}
+
+\subsubsection{Position of a pattern inside a
+string}\label{position-of-pattern-inside-a-string}
+
+In the following section, we will focus on anchors and boundaries in
+regular expressions, as detailed in sources like Bryan (2020). These
+elements are crucial for specifying the position of a string within a
+sequence of characters. Anchors denote a string's start and end, such as the circumflex (\^{}) for the former and the
+dollar sign (\$) for the latter.
+Boundaries, on the other hand, define specific positions within the
+string. A summary of these anchors and boundaries, along with their
+descriptions, is provided in Table~\ref{tbl-position1}.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Position of a Pattern Inside a
+String}\label{tbl-position1}\tabularnewline
+\toprule\noalign{}
+Anchors and Boundaries & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Anchors and Boundaries & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{\^{}} & Matches the beginning of a string \\
+\texttt{\$} & Matches the end of a string \\
+\texttt{\textbackslash{}b} & Matches a word boundary \\
+\texttt{\textbackslash{}B} & Matches a non-word boundary \\
+\end{longtable}
+
+We use an anchor in regular expressions to locate strings which start or
+end with a specific word or character. Conversely, a boundary is used to
+find a position between a word character (like letters and numbers) and
+a non-word character (like spaces or punctuation). While the beginning
+or end of a string could be considered a boundary, in regular
+expressions, anchors and boundaries are distinct concepts with specific
+uses. For example, if we want to capture all the sentences which start with
+the character sequence `Ki', we would use the \texttt{\^{}} anchor
+followed by `Ki'. The \texttt{\^{}} anchor explicitly matches a string's
+start, so \texttt{\^{}Ki} would find any string that begins with `Ki'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find elements in \textquotesingle{}prodtitle20\textquotesingle{} starting with "Ki"}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"\^{}Ki"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Kindle?"
+\end{verbatim}
+
+\emph{Program code ends}
+
+To capture phrases which end with a specific sequence of characters, such as
+`et', we use the \texttt{\$} anchor. This metacharacter is placed after
+the character sequence and ensures that the match occurs at the end of
+the string. For example, using \texttt{et\$} would match any string that
+concludes with `et'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find elements in \textquotesingle{}prodtitle20\textquotesingle{} ending with "et"}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"et$"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Great Tablet"        "Sweet Little Tablet"
+\end{verbatim}
+
+\emph{Program code ends}
+
+A word boundary in regular expressions, denoted as
+\texttt{\textbackslash{}\textbackslash{}b}, detects a position where a
+word character (like a digit, a letter, or an underscore) is adjacent to
+a non-word character (such as the beginning of a string, a tab, or a
+space). In R, the backslash \texttt{\textbackslash{}} is a special
+escape character. Therefore, when specifying a word boundary in a
+regular expression within R, double backslashes must be used to escape
+it properly, resulting in
+\texttt{\textbackslash{}\textbackslash{}\textbackslash{}\textbackslash{}b}.
+This ensures that the regular expression engine interprets it
+as a word boundary.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find elements in \textquotesingle{}prodtitle20\textquotesingle{} with the word "Fire" as a whole word}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{bFire}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The Kindle Fire is a great first effort"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The sequence
+\texttt{\textbackslash{}\textbackslash{}bFire\textbackslash{}\textbackslash{}b}
+successfully matches the term `Fire' as a standalone word. However, if
+`Fire' were in lowercase, this pattern would not match terms like
+`firefly', `crossfire', or `unfired', where `fire' is a substring of a
+larger word. The pattern will match sequences like `fire!me' because `!'
+is not considered a word character. The word boundary
+\texttt{\textbackslash{}\textbackslash{}b} can be used flexibly: Placing
+\texttt{\textbackslash{}\textbackslash{}b} before a term (e.g.,
+\texttt{\textbackslash{}\textbackslash{}bfire}) will match cases like
+`firefly', and placing it after a term (e.g.,
+\texttt{fire\textbackslash{}\textbackslash{}b}) will match cases like
+`crossfire'. You can use the word boundary at either or both ends of the
+search sequence.
+
+\texttt{\textbackslash{}\textbackslash{}B} is the complement of
+\texttt{\textbackslash{}\textbackslash{}b}. It matches positions where
+the adjacent characters are either both word characters or both non-word
+characters. For example, \texttt{\textbackslash{}\textbackslash{}B}
+would identify a match within strings like `\$(=\%@' or in cases where word
+characters surround a term without forming a standalone word. This makes
+\texttt{\textbackslash{}\textbackslash{}B} useful for detecting patterns
+which are not distinct words or embedded within other characters.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find elements in \textquotesingle{}prodtitle20\textquotesingle{} where "able" is part of another word}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{Bable}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{B"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Great Tablet"                                            
+[2] "Boss tablet."                                            
+[3] "Sweet Little Tablet"                                     
+[4] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+\end{verbatim}
+
+\emph{Program code ends}
+
+In the example above, the pattern
+\texttt{\textbackslash{}\textbackslash{}Bable\textbackslash{}\textbackslash{}B}
+is designed to detect the sequence `able' when it is part of a larger
+word and surrounded by other word characters. It will not identify `able'
+as a standalone word. However, it is important to note that this pattern will not match `able' when it is directly followed or preceded by
+non-word characters, such as a full stop or a space. Essentially,
+\texttt{\textbackslash{}\textbackslash{}B} requires both sides of
+`able', or any other collection of word characters, to be word characters, showing where `able' is embedded
+within a word but not at the beginning or end of a word.
+
+\subsubsection{Common operators}\label{common-operators}
+
+Operators in regular expressions, such as the dot (\texttt{.}) or
+character lists denoted by three dots embraced by square brackets
+(\texttt{{[}...{]})}, are essential when defining specific criteria for matches.
+These operators are the building blocks of regular expressions, allowing
+for the construction of complex search patterns.
+Table~\ref{tbl-character1} presents some of the most common operators
+used in regular expressions. For a comprehensive list and a detailed
+explanation of these operators, refer to the works of Sanchez (2013) and
+Forta (2018).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1831}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8169}}@{}}
+\caption{Common Regular Expression Characters and Their
+Functions}\label{tbl-character1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Character
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Character
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{.} & Matches any character except newline \\
+\texttt{{[}...{]}} & Matches any one of the characters inside the
+brackets. A dash \texttt{-} can specify a range, like
+\texttt{{[}a-z{]}} \\
+\texttt{{[}\^{}...{]}} & Matches any character not listed inside the
+brackets \\
+\texttt{\textbar{}} & The \texttt{OR} operator: matches patterns on
+either side of \texttt{\textbar{}} \\
+\texttt{(...)} & Groups characters. Used with quantifiers (\texttt{?},
+\texttt{*}, \texttt{+}, \texttt{\{n\}}). Groups can be referenced with
+\texttt{\textbackslash{}N}, where \texttt{N} is the group number \\
+\texttt{\textbackslash{}} & Escapes a special character's meaning, like
+\texttt{\textbackslash{}\$}, \texttt{\textbackslash{}*},
+\texttt{\textbackslash{}+}, etc. In R, use double backslashes, e.g.,
+\texttt{\textbackslash{}\textbackslash{}*} \\
+\end{longtable}
+
+Examine the following examples carefully to understand
+how the different elements in regular expressions work. The single dot
+(\texttt{.}) is a versatile operator in regular expressions. It matches
+single characters (except for newline characters). For instance, in
+the pattern \texttt{f.e}, the dot (\texttt{.}) will match any character
+that appears between `f' and `e', such as `fle', `fee', or `fze'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}fe\textquotesingle{} followed by any character in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"fe."}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Wifi version inferior to the 3g version"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The square brackets in regular expressions match any of the characters contained within them. When a hyphen is used between two letters it creates a
+range, selecting all the characters that lie between them in (English) alphabetical
+order. For example, \texttt{{[}a-i{]}} matches any letter from `a' to
+`i': a, b, c, d, e, f, g, h, or i. In a pattern such as
+\texttt{p{[}ru{]}}, `p' can be followed by either an `r' or a `u'. In a
+pattern like \texttt{p{[}a-i{]}}, `p' can be followed by any letter from
+`a' to `i'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}p\textquotesingle{} followed by \textquotesingle{}r\textquotesingle{} or \textquotesingle{}u\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"p[ru]"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Love the product!" "Good purchase"    
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}p\textquotesingle{} followed by any letter from \textquotesingle{}a\textquotesingle{} to \textquotesingle{}i\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"p[a{-}i]"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Not what I expected"
+\end{verbatim}
+
+\emph{Program code ends}
+
+The caret symbol (\texttt{\^{}}) inside square brackets (not at the
+beginning of the expression) inverts the character class, selecting
+characters that are not listed inside the brackets. For example, in a
+pattern like \texttt{f{[}\^{}i{]}}, the `f' must not be followed by an
+`i': It matches any character following `f' except for `i'. In contrast,
+a pattern like \texttt{fi} simply looks for the exact sequence `fi'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}f\textquotesingle{} not followed by \textquotesingle{}i\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"f[\^{}i]"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Best tech toy of 2010-2011"             
+[2] "Worked for one day!"                    
+[3] "Obviously only for the Tech Savvy"      
+[4] "Excellent for what it is!"              
+[5] "Less than satisfaction"                 
+[6] "The Kindle Fire is a great first effort"
+[7] "Wifi version inferior to the 3g version"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}fi\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"fi"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The Kindle Fire is a great first effort"
+[2] "Wifi version inferior to the 3g version"
+\end{verbatim}
+
+\emph{Program code ends}
+
+In regular expressions, the \texttt{OR} operator, represented by the
+vertical bar (\texttt{\textbar{}}), is used to match strings that
+contain one of multiple specified patterns. For example, using
+\texttt{er\textbar{}re} in a regular expression will match all strings
+that contain either the sequence `er' or `re'.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match \textquotesingle{}er\textquotesingle{} or \textquotesingle{}re\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"er|re"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Ignore the nonsense"                                     
+[2] "Great Tablet"                                            
+[3] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+[4] "The Kindle Fire is a great first effort"                 
+[5] "Wifi version inferior to the 3g version"                 
+\end{verbatim}
+
+\emph{Program code ends}
+
+Capturing parentheses (), are often understood less well than other
+operators. Quite simply, they allow us to treat multiple characters as a single unit. This can be particularly useful when applying quantifiers for extracting
+specific parts of a string. In the pattern \texttt{(xy)+}, the parentheses group together `xy', so the \texttt{+} quantifier applies to
+the sequence `xy', and not just 'x' or `y'. This pattern will also match strings
+such as `xyxy, 'xyxyxy', and so on, where `xy' repeats one or more
+times.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match one or more repetitions of \textquotesingle{}ire\textquotesingle{} in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"(ire)+"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The Kindle Fire is a great first effort"
+\end{verbatim}
+
+\emph{Program code ends}
+
+Capturing parentheses can work wonders in combination with
+\texttt{sub()} and \texttt{gsub()}, which stand for
+\textbf{sub}stitution and \textbf{g}lobal \textbf{sub}stitution
+respectively. The \texttt{sub()} function replaces the first occurrence
+of a pattern, while \texttt{gsub()} replaces all occurrences. When using
+capturing parentheses with these functions, the text within the
+parentheses is the target for substitution. Capturing parentheses
+are used to create captured groups. Capturing parentheses are
+represented by the \texttt{(} and \texttt{)} symbols, and a
+group is formed by the characters enclosed within these parentheses,
+such as \texttt{(xyz)}. We reference captured groups in the replacement
+string using double backslashes followed by a group number (e.g.,
+\textbackslash\textbackslash1 for the first group,
+\textbackslash\textbackslash2 for the second group, etc.), where the
+number corresponds to the order of the group. For example, in the
+pattern (xy) (yz), \textbackslash\textbackslash1 refers to the group,
+(xy), and \textbackslash\textbackslash2, refers to the group (yz). This
+allows us to specify which part of the pattern should be
+modified or which should remain \textbf{unmodified}. By default, the
+\texttt{gsub()} function processes each element of a character vector
+and returns a vector of the same length, including modified and
+unmodified elements. To focus on certain parts, we can first select
+the elements which match our criteria using a function like
+\texttt{grep()}. After isolating these elements, we then apply
+\texttt{gsub()} to them. This allows us to view and work with
+the data that matches our substitution pattern.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Identify elements containing \textquotesingle{}Kindle Fire\textquotesingle{}}
+\NormalTok{matches }\OtherTok{\textless{}{-}} \FunctionTok{grep}\NormalTok{(}\StringTok{"Kindle Fire"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Apply gsub only to matched elements}
+\NormalTok{modified }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"(Kindle) Fire"}\NormalTok{, }\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{1 Big Fire"}\NormalTok{, matches)}
+
+\CommentTok{\# Display modified elements}
+\NormalTok{modified}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The Kindle Big Fire is a great first effort"
+\end{verbatim}
+
+\emph{Program code ends}
+
+In our example, we searched for the sequence `Kindle Fire'. Using
+\texttt{gsub()}, we kept the `Kindle' part unchanged while substituting
+`Fire' for `Big Fire'. This was achieved by capturing groups and
+back-referencing: the `Kindle' part was captured in a group and then
+referenced in the replacement string to remain fixed. Another powerful
+application of this function is to swap two terms in a string. By placing each term in a
+separate group, we can use back-references in the replacement pattern to
+reverse their positions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Swap \textquotesingle{}Kindle\textquotesingle{} and \textquotesingle{}Fire\textquotesingle{}}
+\FunctionTok{gsub}\NormalTok{(}\StringTok{"(Kindle) (Fire)"}\NormalTok{, }\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{2 }\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{1"}\NormalTok{, matches)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The Fire Kindle is a great first effort"
+\end{verbatim}
+
+When we want to search for characters which are also metacharacters in
+regular expressions, these characters must `escape' because they
+have special meanings. For example, you might need to look for a dot (\texttt{.}) in a string. Remember that the dot
+is also a metacharacter used to match any character, so you need to
+'escape' it to transform it into a simple character. In most regular
+expression engines, escaping is done with a single backslash. However,
+in R, because the backslash itself is an escape character, you need to use two backslashes to represent a true
+backslash. The first backslash escapes the second, making it a true
+backslash, and the second backslash then escapes the dot
+(\texttt{\textbackslash{}\textbackslash{}.}), treating it as a true
+dot.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Match literal dots in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{."}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "eh.."                                                    
+[2] "Boss tablet."                                            
+[3] "I have learned my lesson."                               
+[4] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+\end{verbatim}
+
+\emph{Program code ends}
+
+\emph{Exercise starts}
+
+\textbf{Exercise 1}: Using the Product Reviews dataset, focus on the
+Title column. Find all titles that contain the word `love' and end
+with an exclamation mark `!'. Once you identified these, use regular expressions
+to replace the exclamation mark at the end of these titles with a
+question mark `?'. Employ back-referencing in your substitution.
+
+\textbf{Exercise 2}: Use grouping parentheses to match
+both ``can'' and ``can't''. Explore how the optional character operator
+\texttt{?} can be combined with parentheses to handle variations in word
+endings.
+
+\emph{Exercise ends}
+
+\subsubsection{Character classes}\label{character-classes}
+
+Character classes in regular expressions are powerful tools used to
+match specific sets of characters, such as letters, numbers, and more.
+In the POSIX standard for regular expressions, these classes are placed
+within square brackets and include additional colons and a key name,
+following the structure \texttt{{[}:keyname:{]}}. For example,
+\texttt{{[}:digit:{]}} represents all numerical digits, and
+\texttt{{[}:alpha:{]}} matches all alphabetical characters.
+Table~\ref{tbl-charclas1} summarizes some of the most widely used POSIX
+character classes (Sanchez 2013; Forta 2018).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1944}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8056}}@{}}
+\caption{POSIX Character Classes and Their
+Functions}\label{tbl-charclas1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Character
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Character
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{{[}:lower:{]}} & Matches lower-case letters \\
+\texttt{{[}:upper:{]}} & Matches upper-case letters \\
+\texttt{{[}:digit:{]}} & Matches digits,
+\texttt{0\ 1\ 2\ 3\ 4\ 5\ 6\ 7\ 8\ 9} \\
+\texttt{{[}:alpha:{]}} & Matches alphabetic characters \\
+\texttt{{[}:alnum:{]}} & Matches alphanumeric characters \\
+\texttt{{[}:xdigit:{]}} & Matches hexadecimal digits,
+\texttt{0-9\ A-F\ a-f} \\
+\texttt{{[}:blank:{]}} & Matches blank characters, i.e., space and
+tab \\
+\texttt{{[}:space:{]}} & Matches space characters: tab, newline,
+vertical tab, form feed, carriage return, space \\
+\texttt{{[}:punct:{]}} & Matches punctuation characters \\
+\texttt{{[}:graph:{]}} & Matches graphical (human-readable)
+characters \\
+\texttt{{[}:print:{]}} & Matches printable characters \\
+\texttt{{[}:cntrl:{]}} & Matches control characters \\
+\end{longtable}
+
+Note that POSIX character classes, shown with colons and square
+brackets \texttt{{[}:...:{]}}, must be used within another set of square
+brackets. The correct pattern for matching a specific character
+class, such as punctuation marks, would be \texttt{{[}{[}:punct:{]}{]}}.
+This pattern will match any character that is classified as a
+punctuation mark. Let us search for the titles that contain punctuation
+marks in the \textbf{prodtitle20} dataset.
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Find titles with punctuation in \textquotesingle{}prodtitle20\textquotesingle{}}
+\FunctionTok{grep}\NormalTok{(}\StringTok{"[[:punct:]]"}\NormalTok{, prodtitle20, }\AttributeTok{value =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Best tech toy of 2010-2011"                              
+[2] "Worked for one day!"                                     
+[3] "eh.."                                                    
+[4] "Excellent for what it is!"                               
+[5] "Love the product!"                                       
+[6] "Boss tablet."                                            
+[7] "I have learned my lesson."                               
+[8] "Lightweight 10-inch Android 2.3 tablet with so-so screen"
+[9] "Kindle?"                                                 
+\end{verbatim}
+
+\emph{Program code ends}
+
+\emph{Exercise starts}
+
+\textbf{Exercise}: Try writing regular expressions to identify titles
+with specific character types, like numerical digits or uppercase letters.
+Explore several patterns, such as those with punctuation, and apply
+these to the entire dataset. If you are up for a challenge use the whole
+\textbf{prodtitle} dataset.
+
+\emph{Exercise ends}
+
+\subsubsection{Sequences}\label{sequences}
+
+Shorthand character classes in regular expressions offer a concise
+notation system, similar to the more expansive character classes
+discussed earlier (refer to Table~\ref{tbl-sequences1}). These shorthand
+notations can often be used interchangeably with their longer character
+class counterparts. The syntax involves a backslash \textbackslash{}
+followed by a specific letter representing a particular set of
+characters. Remember, in R, you need to escape the backslash with
+another backslash. For a more comprehensive understanding of these
+shorthand character classes and their usage, consult Sanchez (2013) and 
+Forta (2018).
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Shorthand Character Classes in Regular
+Expressions}\label{tbl-sequences1}\tabularnewline
+\toprule\noalign{}
+Regex Shorthand & Description \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Regex Shorthand & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{\textbackslash{}d} & Matches a digit character \\
+\texttt{\textbackslash{}D} & Matches a non-digit character \\
+\texttt{\textbackslash{}s} & Matches a space character \\
+\texttt{\textbackslash{}S} & Matches a non-space character \\
+\texttt{\textbackslash{}w} & Matches a word character
+\texttt{{[}A-Za-z0-9{]}} \\
+\texttt{\textbackslash{}W} & Matches a non-word character
+\texttt{{[}\^{}A-Za-z0-9{]}} \\
+\texttt{\textbackslash{}t} & Matches a tab character \\
+\texttt{\textbackslash{}n} & Matches a new line character \\
+\texttt{\textbackslash{}r} & Matches a carriage return \\
+\end{longtable}
+
+\emph{Exercise starts}
+
+\textbf{Exercise}: Identify titles that contain specific patterns.
+First, look for those which include exactly two consecutive digits. Then, search
+for the ones which contain non-word characters (characters that are not
+letters, digits, or underscores).
+
+\emph{Exercise ends}
+
+Important: You have seen three types of symbols in this chapter which
+are borrowed from mathematics: parentheses (), brackets {[}{]}, and
+braces \{\}, in other books referred to as round, square, and curly
+brackets. The first ones are used for grouping, the second define
+character classes, and the third are used to quantify specific limits.
+
+\subsubsection{Regular expressions with the stringr
+package}\label{regular-expressions-with-the-stringr-package}
+
+The \texttt{stringr} package, part of Hadley Wickham's
+\texttt{tidyverse} suite of tools, can be installed independently or
+accessed as part of the entire \texttt{tidyverse} collection (refer to
+the introduction for installation details; Wickham 2022b). All the main
+functions in \texttt{stringr} start with the prefix \texttt{str\_} and
+are designed for efficient string manipulation and the application of regular expressions. One key advantage of using \texttt{stringr} is its
+standardization across the two regex standards implemented in R, which
+means you do not need to specify \texttt{perl=TRUE/FALSE} for regex
+operations (Bryan 2020). Examples of such functions are:
+\texttt{str\_detect()} for finding patterns, \texttt{str\_subset()} for
+extracting matching elements, and \texttt{str\_split\_fixed()} for
+splitting strings based on patterns. It is worth mentioning that the
+function \texttt{str\_view()} checks the representation of a string and
+how a pattern matches.
+
+\subsubsection{Regular expressions in search, and search and replace within
+RStudio}\label{regular-expressions-in-search-search-and-replace-within-rstudio}
+
+RStudio helps in using regular expression patterns to
+search for or replace text in R, Rnw, Rmd, or other types of file. To
+practice your regex skills in RStudio, you can create a regex sequence
+and then enable the `Regex' and `Wrap' options. For instance, consider
+the string ``Text Analytics for Digital Marketing''. Using the capturing
+parentheses expression \texttt{(Text)(.*?)(i)} in the search box will
+match the sequence ``Text Analyti''. This pattern uses three groups. The
+first one captures ``Text'', the second captures any examples of no character or
+least possible number, and the third captures ``i'' at its
+first occurrence (the least possible). Similarly
+\texttt{(ext)(.*?)(i)}, will match ``ext Analyti''. The addition of the
+middle group (\texttt{.*?)} makes the this `lazy', meaning it
+matches the shortest possible sequence available rather than the longest. The main
+difference between greedy (standard in R) and lazy (enabled in RStudio)
+matching, is that the former aims to match the longest possible sequence,
+while the latter matches the shortest. The (\texttt{?}) is the only way to instruct the regex engine to stop at the shortest possible
+match for a specified quantifier. For substitution, you can replace the
+content of one of the groups. For example, to change ``Text Analytics
+for Digital Marketing'' to ``My Text Analytics for Digital Marketing'':
+
+\begin{itemize}
+\tightlist
+\item
+  In the search box, enter \texttt{(Text)(.*)(Marketing)}
+\item
+  In the replace box, enter
+  \texttt{My\ Text\textbackslash{}2\textbackslash{}3}
+\end{itemize}
+
+This means that the second and third groups remain unchanged, and
+only ``Text'' is replaced with ``My text''. While R's regex engines
+(POSIX and Perl-like) do not inherently support lazy matching, RStudio,
+as an integrated development environment, provides this functionality,
+demonstrating the flexibility different tools offer in handling regular
+expressions. As a short exercise using the lazy version, you can try to
+substitute a string inside a sentence.
+
+\emph{Exercise starts}
+
+\textbf{Exercises}
+
+Copy and paste the following code into RStudio to begin working with a
+set of strings designed for practicing regular expressions:
+
+\emph{Program code starts}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{text\_strings }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"We have to extract these numbers 12, 47, 48"}\NormalTok{,}
+\StringTok{"The integers numbers are also interestings: 189 2036 314"}\NormalTok{,}
+\StringTok{"\textquotesingle{},\textquotesingle{}is a separator, so please extract these numbers 125,789,1450}
+\StringTok{and also these 564,90456"}\NormalTok{, }\StringTok{"We like to to offer you 7890$ per}
+\StringTok{month in order to complete this task... we are joking"}\NormalTok{, }\StringTok{"You are}
+\StringTok{going to learn 3 things, the first one is not to extract, and}
+\StringTok{2 and 3 are simply digits."}\NormalTok{, }\StringTok{"Have fun with our mighty test, you}
+\StringTok{are going to support science, progress, mankind wellness and you}
+\StringTok{are going to waste 30 or 60 minutes of your life."}\NormalTok{, }\StringTok{"you can also}
+\StringTok{extract exotic stuff like a456 gb67 and 45678911ghth"}\NormalTok{, }\StringTok{"Writing 1}
+\StringTok{example is not funny, please consider that 66\% is}
+\StringTok{validation+testing"}\NormalTok{, }\StringTok{"You you are a genius, I think that you like}
+\StringTok{arrays A LOT, [3,45,67,900,1974]"}\NormalTok{, }\StringTok{"Who loves arrays more than}
+\StringTok{me?"}\NormalTok{, }\StringTok{"\{366,78,90,5\}Yes, there are only 4 numbers inside"}\NormalTok{,}
+\StringTok{"Integers are fine but sometimes you like 99 cents after the 99}
+\StringTok{dollars"}\NormalTok{, }\StringTok{"100 euro are better than 99 euro"}\NormalTok{, }\StringTok{"I like to give you}
+\StringTok{1000 numbers now: 12 3 56 21 67, and more, [45,67,7]"}\NormalTok{, }\StringTok{"Ok ok 1 2}
+\StringTok{3 4 5 and the last one is 6"}\NormalTok{, }\StringTok{"33 trentini entrarono a Trento,}
+\StringTok{tutti e 33 di tratto in tratto trotterellando"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{Program code ends}
+
+\textbf{Selection}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Select all the strings with words containing exactly two consecutive
+  't's.
+\item
+  Select all the strings with words containing exactly two 't's (not
+  necessarily consecutive) or exactly two 'e's (not necessarily
+  consecutive).
+\item
+  Select all the strings that end in exactly one digit.
+\item
+  Select all the strings that end in two digits.
+\item
+  Select all the strings that have more than one capital letter.
+\item
+  Select all the strings that do not have the substring `nu'.
+\item
+  Select all the strings that contain special characters such as {[}, €,
+  and so on.
+\item
+  Select all the strings that do not contain special characters.
+\item
+  Select all the strings that end with a punctuation mark.
+\item
+  Select all the strings that start with a lowercase letter.
+\end{enumerate}
+
+\textbf{Substitution or addition}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Add a punctuation mark to strings that end without one.
+\item
+  Replace ``dollars'' with the \$ symbol.
+\item
+  Replace ``euros'' with the € symbol.
+\item
+  Replace consecutively repeating words with a single occurrence (e.g.,
+  ``Bye Bye'' becomes ``Bye'').
+\item
+  Replace digits separated by a space with digits separated by a comma.
+\item
+  Replace digits separated by a comma with digits separated by a comma
+  and a space.
+\item
+  Capitalize words that start with a lowercase letter.
+\item
+  Add a dollar sign at the end of strings that finish with a dot.
+\item
+  Insert a caret sign before the dot at the end of strings.
+\item
+  Place a caret sign at the beginning of strings that start with a
+  lowercase letter.
+\end{enumerate}
+
+Bonus Exercise: Identify and correct a phrase in the dataset that
+contains clear grammatical errors using regular expressions.
+
+\emph{Exercise ends}
+
+\textbf{Conclusion}
+
+\emph{Conclusion starts}
+
+This chapter was not intended to be an exhaustive exploration of regular
+expressions. Instead, it was designed to guide novice and intermediate
+users through the process of importing and manipulating text data in R,
+equipping you with fundamental and robust tools for finding, adding,
+removing, or substituting characters in your texts. We have presented regular using examples and exercises aimed at
+simplifying complex concepts to help you understand them easily. Additionally, we have
+introduced some basic statistics related to text strings, illustrated
+with the help of a dataset. With these skills and knowledge, you are now
+well-prepared to move on to the next chapters. We will continue the
+marketing analytics journey through this book by exploring essential
+areas such as obtaining text and text preprocessing. These chapters will
+build upon what you have learned so far.
+
+\emph{Conclusion ends}
