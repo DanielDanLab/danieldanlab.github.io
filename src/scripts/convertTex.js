@@ -25,14 +25,54 @@ const texFiles = fs.existsSync(TEX_DIR)
   ? fs.readdirSync(TEX_DIR).filter(f => f.endsWith('.tex'))
   : []
 
+function unwrapLatexMacro(s, macroName) {
+  const macroRegex = new RegExp(`\\\\${macroName}\\{`, 'g');
+  let out = '';
+  let lastIndex = 0;
+  let m;
+  while ((m = macroRegex.exec(s)) !== null) {
+    out += s.slice(lastIndex, m.index);
+    let start = m.index + m[0].length;
+    let depth = 1;
+    let i = start;
+    while (i < s.length && depth > 0) {
+      if (s[i] === '\\' && (s[i+1] === '{' || s[i+1] === '}')) {
+        i += 2; // skip escaped brace
+      } else if (s[i] === '{') {
+        depth++;
+        i++;
+      } else if (s[i] === '}') {
+        depth--;
+        i++;
+      } else {
+        i++;
+      }
+    }
+    if (depth === 0) {
+      out += s.slice(start, i-1);
+      lastIndex = i;
+    } else {
+      out += s.slice(m.index);
+      lastIndex = s.length;
+      break;
+    }
+    macroRegex.lastIndex = lastIndex;
+  }
+  out += s.slice(lastIndex);
+  return out;
+}
+
+
 // --- Helper: Clean LaTeX macros from comments and code ---
 function cleanLatexMacros(s) {
-  // Replace LaTeX single-quote macro with a literal '
+  // --- SpecialCharTok and StringTok escapes ---
+  s = s.replace(/\\SpecialCharTok\{(\\textbackslash\{\}\\textbackslash\{\})\}/g, '\\\\');
+  s = s.replace(/\\SpecialCharTok\{\\textbackslash\{\}\}/g, '\\');
+  s = s.replace(/\\StringTok\{"\}/g, '"');
+  // --- Other macros and operators ---
   s = s.replace(/\\textquotesingle(\{\})?/g, "'");
-  // Replace \textasciigrave{} or \textasciigrave with `
   s = s.replace(/\\textasciigrave\{\}/g, '`');
   s = s.replace(/\\textasciigrave/g, '`');
-  // Operators and general cleanups
   s = s
     .replace(/\\textless{}\s*\{\s*\-\s*\}/g, '<-')
     .replace(/\\textless{}\s*\-/g, '<-')
@@ -41,14 +81,15 @@ function cleanLatexMacros(s) {
     .replace(/\\%/g, '%')
     .replace(/\{\}/g, '');
 
-  // Remove general latex macros (recursive, in case of nesting)
+  s = unwrapLatexMacro(s, "StringTok");
+
+  // --- Remove general latex macros (recursive, in case of nesting) ---
   let prev;
   do {
     prev = s;
-    s = s.replace(/\\[a-zA-Z]+(?:\[\])?\{([^{}]*)\}/g, '$1');
+    s = s.replace(/\\[a-zA-Z]+(?:\[\])?\{([\s\S]*?)\}/g, '$1');
   } while (s !== prev);
-
-  // Restore special chars and whitespace
+  // --- Whitespace and special chars ---
   s = s
     .replace(/\\([#_])/g, '$1')
     .replace(/~+/g, ' ')
@@ -56,13 +97,23 @@ function cleanLatexMacros(s) {
     .replace(/^\s*\{+/, '')
     .replace(/\}+\s*$/, '')
     .trimEnd();
+  // Inline \CommentTok to R comment (removes any leading hash or space in the comment)
+  s = s.replace(/\\CommentTok\{\s*#?\s*([^}]*)\}/g, '# $1');
+  // Replace {-} with -
+  s = s.replace(/\{\-\}/g, '-');
+  // Unescape LaTeX-escaped curly braces for regex quantifiers
+  s = s.replace(/\\\{([0-9,]+)\\\}/g, '{$1}');
+  // Remove any stray braces inside character classes in regex
+  s = s.replace(/\[([^\]]*)\]/g, (m, chars) => '[' + chars.replace(/[{}]/g, '') + ']');
+  // Remove only empty macro braces left after macro expansion
+  s = s.replace(/\{\}/g, '');
 
   return s;
 }
 
 // --- Improved LaTeX-to-R conversion (comments + code) ---
 function latexToR(line) {
-  // 1. Dedicated processing for LaTeX comments
+  // 1. Dedicated processing for LaTeX (full line) comments
   const commentMatch = line.match(/^\s*\\CommentTok\{\s*#?(.*)\}$/)
   if (commentMatch) {
     // Remove a single leading backslash-hash and any following space
@@ -162,14 +213,21 @@ for (const file of texFiles) {
       }
 
       // Output only present headings, properly indented
-      if (currentSection)       outputLines.push(`# ${currentSection}`)
-      if (currentSubsection)    outputLines.push(`#   ${currentSubsection}`)
-      if (currentSubsubsection) outputLines.push(`#     ${currentSubsubsection}`)
+      if (currentSection) {
+        outputLines.push(`# Section: ${currentSection}`)
+      }
+      if (currentSubsection) {
+        outputLines.push(`#   Subsection: ${currentSubsection}`)
+      }
+      if (currentSubsubsection) {
+        outputLines.push(`#     Subsubsection: ${currentSubsubsection}`)
+      }
       if (currentSection || currentSubsection || currentSubsubsection)
-        outputLines.push('')
+        outputLines.push('')      
 
       outputLines.push(...codeLines.map(latexToR))
-      outputLines.push('# ─────────────────────────────────────────────')
+      outputLines.push('# ──────────────────────────────────────────────────────────────')
+      outputLines.push('')
       outputLines.push('')
     }
   }
