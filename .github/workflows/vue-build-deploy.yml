@@ -1,31 +1,40 @@
-name: Build & Deploy Vue SPA to Pages
+name: Build & Deploy Companion Site to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
 
+    steps:
+      # 1) checkout code
+      - uses: actions/checkout@v3
+
+      # 2) use Node 18
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
+      # 3) install dependencies fresh
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
-        run: npm run build      # package.json build must output to ./docs or ./dist
+      # 4) run your TeX -> R Script conversion
+      - name: Run conversion pipeline
+        run: npm run convert
 
+      # 5) build the static site into ./docs
+      - name: Build site
+        run: npm run build
+
+      # 6) deploy the contents of ./docs to the gh-pages branch (or main, if you’re using docs/ on main)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: main      
-          publish_dir: ./docs       # or ./dist dep. on build folder
+          # If you serve from the main branch’s docs/ folder:
+          publish_branch: main
+          publish_dir: docs
