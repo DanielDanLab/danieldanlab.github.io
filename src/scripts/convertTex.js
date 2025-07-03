@@ -73,6 +73,8 @@ function cleanLatexMacros(s) {
   s = s.replace(/\\textquotesingle(\{\})?/g, "'");
   s = s.replace(/\\textasciigrave\{\}/g, '`');
   s = s.replace(/\\textasciigrave/g, '`');
+  s = s.replace(/\\textasciitilde/g, '~');
+  s = s.replace(/\\sim/g, '~');
   s = s
     .replace(/\\textless{}\s*\{\s*\-\s*\}/g, '<-')
     .replace(/\\textless{}\s*\-/g, '<-')
@@ -89,10 +91,19 @@ function cleanLatexMacros(s) {
     prev = s;
     s = s.replace(/\\[a-zA-Z]+(?:\[\])?\{([\s\S]*?)\}/g, '$1');
   } while (s !== prev);
+  // Remove macros wrapping single braces or parens/brackets (including whitespace)
+  s = s.replace(/\\[a-zA-Z]+(?:\[\])?\{\s*([\(\)\[\]{}])\s*\}/g, '$1');
+  // Remove any stray \NormalTok
+  s = s.replace(/\\NormalTok\b/g, '');
+  // Remove stray backslashes before braces, parentheses, or brackets
+  s = s.replace(/\\([{}()])/g, '$1');
+  // Remove backslash at line end (from LaTeX linebreak)
+  s = s.replace(/\\\s*$/g, '');
+  s = s.replace(/^\s*{\s*$/gm, '{');
+  s = s.replace(/^\s*}\s*$/gm, '}');
   // --- Whitespace and special chars ---
   s = s
     .replace(/\\([#_])/g, '$1')
-    .replace(/~+/g, ' ')
     .replace(/ +/g, ' ')
     .replace(/^\s*\{+/, '')
     .replace(/\}+\s*$/, '')
