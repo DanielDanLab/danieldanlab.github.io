@@ -23,5 +23,7 @@ export default defineConfig({
   build: {
     outDir: 'docs',
   },
-  assetsInclude: ['**/*.R']
+  assetsInclude: [
+    '**/*.R', '**/*.md'
+  ]
 })
