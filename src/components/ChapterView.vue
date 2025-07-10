@@ -95,29 +95,27 @@ async function loadChapter() {
   summary.value = ''
   showSummary.value = false
 
-  // load R script text
+  // 1) fetch the R script text
   try {
-    const rawMod = await import(
-      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?raw`
-    )
-    rScript.value = rawMod.default
-  } catch {}
+    const res = await fetch(`/content/${slug.value}/${slug.value}.R`)
+    if (res.ok) {
+      rScript.value = await res.text()
+      // 2) set the download URL
+      rUrl.value = `/content/${slug.value}/${slug.value}.R`
+    }
+  } catch {
+    // no R script
+  }
 
-  // load R script URL
+  // 3) fetch the AI summary markdown
   try {
-    const urlMod = await import(
-      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?url`
-    )
-    rUrl.value = urlMod.default
-  } catch {}
-
-  // load AI summary
-  try {
-    const sumMod = await import(
-      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.summary.md?raw`
-    )
-    summary.value = sumMod.default
-  } catch {}
+    const res = await fetch(`/content/${slug.value}/${slug.value}.summary.md`)
+    if (res.ok) {
+      summary.value = await res.text()
+    }
+  } catch {
+    // no summary
+  }
 }
 
 // re-run on slug change and initial mount
@@ -187,6 +185,7 @@ const renderedSummary = computed(() => {
   border-radius: 8px;
   margin: 2rem 0;
   line-height: 1.5;
+  text-align: left;
 }
 
 .ai-summary em {
