@@ -21,19 +21,33 @@
       </router-link>
     </div>
 
-    <!-- R script download + display -->
-    <div v-if="rScript || rUrl" class="r-code">
-      <div class="download-container">
-        <a
-          v-if="rUrl"
-          :href="rUrl"
-          :download="`${slug}.R`"
-          class="btn-download"
-        >
-          Download
-        </a>
-      </div>
+    <!-- controls: download + summary toggle -->
+    <div class="download-container">
+      <a
+        v-if="rUrl"
+        :href="rUrl"
+        :download="`${slug}.R`"
+        class="btn-download"
+      >
+        Download
+      </a>
 
+      <button
+        v-if="renderedSummary"
+        class="btn-summary"
+        @click="showSummary = !showSummary"
+      >
+        {{ showSummary ? 'Hide AI Summary' : 'Show AI Summary' }}
+      </button>
+    </div>
+
+    <!-- AI Summary panel -->
+    <div v-if="showSummary && renderedSummary"
+      class="ai-summary"
+      v-html="renderedSummary"/>
+
+    <!-- R script filename + code -->
+    <div v-if="rScript || rUrl" class="r-code">
       <div v-if="rScript" class="filename">{{ slug }}.R</div>
       <pre v-if="rScript"><code>{{ rScript }}</code></pre>
     </div>
@@ -42,24 +56,25 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { useRoute }    from 'vue-router'
+import { useRoute }           from 'vue-router'
+import { marked }             from 'marked'
 
+// chapter order
 const allChapters = [
   '1.Chapter','2.Chapter','3.Chapter','4.Chapter','5.Chapter',
   '6.Chapter','7.Chapter','8.Chapter','9.Chapter','10.Chapter'
 ]
 
-// 1) reactive slug from the route
 const route = useRoute()
 const slug  = computed(() => route.params.slug)
-
-// 2) reactive title
 const title = computed(() => slug.value.replace('.', '. '))
 
-// 3) prev / next
+// navigation helpers
 const currentIndex = computed(() => allChapters.indexOf(slug.value))
 const prevSlug = computed(() =>
-  currentIndex.value > 0 ? allChapters[currentIndex.value - 1] : null
+  currentIndex.value > 0
+    ? allChapters[currentIndex.value - 1]
+    : null
 )
 const nextSlug = computed(() =>
   currentIndex.value < allChapters.length - 1
@@ -67,15 +82,20 @@ const nextSlug = computed(() =>
     : null
 )
 
-// 4) R‐script state
-const rScript = ref('')
-const rUrl    = ref('')
+// script + summary state
+const rScript     = ref('')
+const rUrl        = ref('')
+const summary     = ref('')
+const showSummary = ref(false)
 
-// 5) load function
+// load both R script and summary whenever slug changes
 async function loadChapter() {
   rScript.value = ''
   rUrl.value    = ''
+  summary.value = ''
+  showSummary.value = false
 
+  // load R script text
   try {
     const rawMod = await import(
       /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?raw`
@@ -83,16 +103,33 @@ async function loadChapter() {
     rScript.value = rawMod.default
   } catch {}
 
+  // load R script URL
   try {
     const urlMod = await import(
       /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?url`
     )
     rUrl.value = urlMod.default
   } catch {}
+
+  // load AI summary
+  try {
+    const sumMod = await import(
+      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.summary.md?raw`
+    )
+    summary.value = sumMod.default
+  } catch {}
 }
 
-// 6) watch slug (and run once on initial load)
+// re-run on slug change and initial mount
 watch(slug, loadChapter, { immediate: true })
+
+// render summary as HTML if markdown, else wrap in <p>
+const renderedSummary = computed(() => {
+  if (!summary.value) return ''
+  return summary.value.includes('\n')
+    ? marked(summary.value)
+    : `<p>${summary.value}</p>`
+})
 </script>
 
 <style scoped>
@@ -102,13 +139,12 @@ watch(slug, loadChapter, { immediate: true })
   line-height: 1.6;
 }
 
-/* ─── Navigation Row ─────────────────────────────────────── */
+/* navigation */
 .chapter-nav {
   position: relative;
   text-align: center;
   margin-bottom: 1.5rem;
 }
-/* absolutely position links */
 .nav-link {
   position: absolute;
   top: 50%;
@@ -117,38 +153,58 @@ watch(slug, loadChapter, { immediate: true })
   text-decoration: none;
   font-weight: 500;
 }
-.nav-link:hover {
-  text-decoration: underline;
-}
-/* left and right offsets */
-.nav-link.prev {
-  left: 0.5rem;
-}
-.nav-link.next {
-  right: 0.5rem;
-}
-/* center title normally */
+.nav-link.prev { left: 0.5rem; }
+.nav-link.next { right: 0.5rem; }
 .chapter-title {
   margin: 0;
   font-size: 1.75rem;
   font-weight: bold;
 }
 
-/* ─── Download / Filename / Code ───────────────────────── */
+/* controls */
 .download-container {
-  text-align: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
   margin-bottom: 1rem;
 }
-.btn-download {
+.btn-download,
+.btn-summary {
   background: #42b983;
   color: white;
+  border: none;
   padding: 0.4rem 0.8rem;
   border-radius: 4px;
-  text-decoration: none;
+  cursor: pointer;
 }
-.btn-download:hover {
+.btn-download:hover,
+.btn-summary:hover {
   background: #36996f;
 }
+.ai-summary {
+  background: #f5f7fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  line-height: 1.5;
+}
+
+.ai-summary em {
+  display: block;
+  margin: 0.5rem 0 1rem;
+}
+
+.ai-summary ul {
+  margin-left: 1.25rem;
+  list-style-type: disc;
+}
+
+.ai-summary strong {
+  display: block;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+/* R code display */
 .filename {
   font-family: monospace;
   font-weight: bold;
