@@ -1,72 +1,166 @@
-<!-- src/components/ChapterView.vue -->
 <template>
-    <div class="chapter-view">
-      <h1>{{ slug }}</h1>
-      <div v-html="htmlContent" class="markdown-content" />
-  
-      <section v-if="images.length">
-        <h2>Figures</h2>
-        <div class="figures">
-          <div v-for="(src, i) in images" :key="i">
-            <img :src="src" :alt="`Figure ${i+1}`" />
-          </div>
-        </div>
-      </section>
-  
-      <section v-if="snippets.length">
-        <h2>Code Snippets</h2>
-        <pre v-for="(code, i) in snippets" :key="i"><code>{{ code }}</code></pre>
-      </section>
+  <div class="chapter-view">
+    <!-- navigation + title -->
+    <div class="chapter-nav">
+      <router-link
+        v-if="prevSlug"
+        :to="`/chapters/${prevSlug}`"
+        class="nav-link prev"
+      >
+        ← Previous
+      </router-link>
+
+      <h1 class="chapter-title">{{ title }}</h1>
+
+      <router-link
+        v-if="nextSlug"
+        :to="`/chapters/${nextSlug}`"
+        class="nav-link next"
+      >
+        Next →
+      </router-link>
     </div>
-  </template>
-  
-  <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute }          from 'vue-router'
-import { marked }            from 'marked'
 
-const route       = useRoute()
-const slug        = route.params.slug
-const htmlContent = ref('')
-const images      = []
-const snippets    = []
+    <!-- R script download + display -->
+    <div v-if="rScript || rUrl" class="r-code">
+      <div class="download-container">
+        <a
+          v-if="rUrl"
+          :href="rUrl"
+          :download="`${slug}.R`"
+          class="btn-download"
+        >
+          Download
+        </a>
+      </div>
 
-const allImages   = import.meta.glob('../content/*/media/*',   { eager: true, as: 'url' })
-const allSnippets = import.meta.glob('../content/*/code-snippets/*.txt', { eager: true, as: 'raw' })
+      <div v-if="rScript" class="filename">{{ slug }}.R</div>
+      <pre v-if="rScript"><code>{{ rScript }}</code></pre>
+    </div>
+  </div>
+</template>
 
-onMounted(async () => {
-  // 1) Load and render Markdown via fetch
-  const mdUrl  = new URL(`../content/${slug}/${slug}.md`, import.meta.url).href
-  const mdText = await fetch(mdUrl).then(r => r.text())
-  htmlContent.value = marked(mdText)
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useRoute }    from 'vue-router'
 
-  // 2) Images
-  for (const [path, url] of Object.entries(allImages)) {
-    if (path.includes(`/content/${slug}/media/`)) images.push(url)
-  }
+const allChapters = [
+  '1.Chapter','2.Chapter','3.Chapter','4.Chapter','5.Chapter',
+  '6.Chapter','7.Chapter','8.Chapter','9.Chapter','10.Chapter'
+]
 
-  // 3) Snippets
-  for (const [path, raw] of Object.entries(allSnippets)) {
-    if (path.includes(`/content/${slug}/code-snippets/`)) snippets.push(raw)
-  }
-})
+// 1) reactive slug from the route
+const route = useRoute()
+const slug  = computed(() => route.params.slug)
+
+// 2) reactive title
+const title = computed(() => slug.value.replace('.', '. '))
+
+// 3) prev / next
+const currentIndex = computed(() => allChapters.indexOf(slug.value))
+const prevSlug = computed(() =>
+  currentIndex.value > 0 ? allChapters[currentIndex.value - 1] : null
+)
+const nextSlug = computed(() =>
+  currentIndex.value < allChapters.length - 1
+    ? allChapters[currentIndex.value + 1]
+    : null
+)
+
+// 4) R‐script state
+const rScript = ref('')
+const rUrl    = ref('')
+
+// 5) load function
+async function loadChapter() {
+  rScript.value = ''
+  rUrl.value    = ''
+
+  try {
+    const rawMod = await import(
+      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?raw`
+    )
+    rScript.value = rawMod.default
+  } catch {}
+
+  try {
+    const urlMod = await import(
+      /* @vite-ignore */ `../content/${slug.value}/${slug.value}.R?url`
+    )
+    rUrl.value = urlMod.default
+  } catch {}
+}
+
+// 6) watch slug (and run once on initial load)
+watch(slug, loadChapter, { immediate: true })
 </script>
 
-  
-  <style scoped>
-  .markdown-content img {
-    max-width: 100%;
-  }
-  .figures {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-    gap: 1rem;
-  }
-  .chapter-view pre {
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 4px;
-    overflow-x: auto;
-  }
-  </style>
-  
+<style scoped>
+.chapter-view {
+  max-width: 800px;
+  margin: 2rem auto;
+  line-height: 1.6;
+}
+
+/* ─── Navigation Row ─────────────────────────────────────── */
+.chapter-nav {
+  position: relative;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+/* absolutely position links */
+.nav-link {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #42b983;
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav-link:hover {
+  text-decoration: underline;
+}
+/* left and right offsets */
+.nav-link.prev {
+  left: 0.5rem;
+}
+.nav-link.next {
+  right: 0.5rem;
+}
+/* center title normally */
+.chapter-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+/* ─── Download / Filename / Code ───────────────────────── */
+.download-container {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.btn-download {
+  background: #42b983;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.btn-download:hover {
+  background: #36996f;
+}
+.filename {
+  font-family: monospace;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+.r-code pre {
+  text-align: left;
+  background: #282c34;
+  color: #abb2bf;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow: auto;
+}
+</style>
