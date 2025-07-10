@@ -8,7 +8,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname  = path.dirname(__filename)
 
 const TEX_DIR     = path.resolve(__dirname, '../../overleaf/chapters')
-const CONTENT_DIR = path.resolve(__dirname, '../content')
+// Previously pointed at src/content. Now emit into public/content.
+const CONTENT_DIR = path.resolve(__dirname, '../../public/content')
 
 // Ensure a directory exists
 function ensureDir(dir) {
