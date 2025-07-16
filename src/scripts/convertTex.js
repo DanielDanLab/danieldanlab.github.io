@@ -15,10 +15,6 @@ const CONTENT_DIR = path.resolve(__dirname, '../../public/content')
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 }
-
-// Clear out old content
-const rmDir = fs.rmSync || fs.rmdirSync
-rmDir(CONTENT_DIR, { recursive: true, force: true })
 ensureDir(CONTENT_DIR)
 
 // Find all .tex files
@@ -169,7 +165,14 @@ for (const file of texFiles) {
   const chapterDir = path.join(CONTENT_DIR, slug)
   const rPath      = path.join(chapterDir, `${slug}.R`)
 
-  rmDir(chapterDir, { recursive: true, force: true })
+  // Only remove old .R scripts; keep any .summary.md
+  if (fs.existsSync(chapterDir)) {
+    for (const existing of fs.readdirSync(chapterDir)) {
+      if (existing.endsWith('.R')) {
+        fs.unlinkSync(path.join(chapterDir, existing))
+      }
+    }
+  }
   ensureDir(chapterDir)
 
   const texContent = fs.readFileSync(path.join(TEX_DIR, file), 'utf8')
