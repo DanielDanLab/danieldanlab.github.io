@@ -9,9 +9,10 @@ globalThis.crypto = webcrypto
 
 export default defineConfig({
   // Use root "/" in development, and your GitHub Pages sub-path in production
-  base: process.env.NODE_ENV === 'production'
+  /*base: process.env.NODE_ENV === 'production'
     ? '/danieldanlab.github.io/'
-    : '/',
+    : '/',*/
+    base: './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
