@@ -36,5 +36,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # If you serve from the main branch’s docs/ folder:
-          publish_branch: main
+          publish_branch: gh-pages
           publish_dir: docs
