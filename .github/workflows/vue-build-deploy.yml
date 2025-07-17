@@ -10,11 +10,11 @@ jobs:
 
     steps:
       # 1) checkout code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # 2) use Node 18
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -32,9 +32,9 @@ jobs:
 
       # 6) deploy the contents of ./docs to the gh-pages branch (or main, if you’re using docs/ on main)
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # If you serve from the main branch’s docs/ folder:
           publish_branch: gh-pages
-          publish_dir: docs 
+          publish_dir: ./docs 
