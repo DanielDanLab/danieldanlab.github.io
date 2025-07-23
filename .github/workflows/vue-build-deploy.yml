@@ -8,8 +8,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read   # GITHUB_TOKEN read-only
-      pages: write     # allow pages API calls
+      contents: write
 
     steps:
       # 1) checkout code
