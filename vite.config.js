@@ -12,10 +12,10 @@ export default defineConfig(({mode}) => {
   return {
     
     // Use root "/" in development, and your GitHub Pages sub-path in production
-    /*base: process.env.NODE_ENV === 'production'
+    base: process.env.NODE_ENV === 'production'
     ? '/danieldanlab.github.io/'
-    : '/',*/
-    base: isProd ? "/" : "./",
+    : '/',
+    //base: isProd ? "/" : "./",
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
