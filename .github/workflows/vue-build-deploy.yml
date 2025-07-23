@@ -41,6 +41,6 @@ jobs:
           # If you serve from the main branch’s docs/ folder:
           publish_branch: gh-pages
           publish_dir: ./docs 
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
           keep_files: false
