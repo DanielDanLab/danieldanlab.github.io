@@ -6,7 +6,7 @@
   "scripts": {
     "convert": "node src/scripts/convertTex.js",
     "dev":     "vite",
-    "build":   "vite build --mode production",
+    "build":   "vite build",
     "serve":   "vite preview"
   },
   "dependencies": {
