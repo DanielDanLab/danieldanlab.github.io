@@ -100,10 +100,56 @@ Whenever you merge into `main`, CI rebuilds and redeploys the live site.
 
 ---
 
-## 🤝 Contributing
+## 🖥️ Understanding the Vue SPA
+
+This companion site is built as a Single Page Application (SPA) using Vue.js. Below are practical pointers for anyone new to Vue:
+
+### Project Entry & Mount Point
+- **`src/main.js`**  
+  - Imports Vue, the root component (`App.vue`), and the router.  
+  - Mounts the app to `<div id="app">` in `index.html`.
+
+### Root Component
+- **`src/App.vue`**  
+  - Defines the global layout: navigation bar, router view placeholder (`<router-view/>`).  
+  - Modify this file to change site-wide elements (e.g. new header, footer, nav links, etc.).
+
+### Routing
+- **`src/router/index.js`**  
+  - Registers all routes (e.g. `/chapters`, `/chapters/:slug`, `/data`).  
+  - To add a new page, create a component in `src/components/`, then add a route entry in `src/router/index.js`.
+
+### Components & Views
+- **`src/components/`**  
+  - Reusable UI pieces (e.g., `ChapterList.vue`, `ChapterView.vue`).  
+  - To tweak chapter listings or detail layouts, edit these files.  
+  - Full-page views (e.g., `Data.vue`).  
+  - Add new components/views here and reference them in the router.
+
+### Static Content & Fetching
+- All generated R scripts and AI summaries live under **`public/content/<slug>/`**, where `<slug>` means `1. Chapter`, `2. Chapter`, etc.  
+- The Vue code uses `fetch('/content/...')` to load these files at runtime.  
+- To update chapter code or summaries, place `.R` or `.summary.md` files into `public/content/<slug>/` and execute the git commands to push the changes.
+
+### Styling
+- Global styles: **`src/assets/style.css`**  
+- Component-scoped styles: inside each `.vue` file under `<style scoped>`.  
+- To adjust colors, fonts, or layout, update these CSS sections.
+
+### Development Workflow
+1. **Convert**: `npm run convert` extracts from LaTeX and writes to `public/content/`.  
+2. **Dev Server**: `npm run dev` starts a hot-reload server at `http://localhost:5173`.  
+3. **Build**: `npm run build` bundles the SPA into `docs/` for deployment.  
+4. **Preview**: `npm run serve` serves the `docs/` folder locally for final checks.
+
+> **Tip**: When you edit Vue files, the dev server reloads automatically—no manual refresh needed.
+
+---
+
+## 🤝 Contributing (git workflow)
 
 1. Pull latest sources: `git pull`
-2. Create a new branch off `main`.  `git checkout -b 'new-branch-name'` 
+2. Create a new branch off `main`: `git checkout -b 'branc h-name'` 
 3. Update code, LaTeX sources, or summaries.  
 4. Push, open a PR, and merge to `main`. `git add 'filename-you-added'` -> `git commit -m 'commit message explanation'` -> `git push` -> create merge request by click on the link that appears in the console -> create and merge pull request 
 5. CI will automatically rebuild and deploy.
