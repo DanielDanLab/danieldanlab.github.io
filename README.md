@@ -29,13 +29,14 @@ It builds via Vite, deploys into `docs/`, and is served on GitHub Pages.
 │   ├── assets/                    # global CSS, images, etc.
 │   ├── components/                # reusable Vue components
 │   │   ├── ChapterList.vue
-│   │   └── ChapterView.vue
+│   │   ├── ChapterView.vue
+│   │   ├── Contact.vue
+│   │   ├── Data.vue
+│   │   └── Home.vue
 │   ├── router/                    # Vue Router setup
 │   │   └── index.js
 │   ├── scripts/
 │   │   └── convertTex.js          # Node script: .tex → .R + summaries
-│   ├── views/
-│   │   └── Data.vue               # downloads for raw data files
 │   └── main.js                    # app entrypoint
 ├── docs/                          # built site (output of `npm run build`)
 │   ├── index.html
@@ -153,6 +154,73 @@ This companion site is built as a Single Page Application (SPA) using Vue.js. Be
 3. Update code, LaTeX sources, or summaries.  
 4. Push, open a PR, and merge to `main`. `git add 'filename-you-added'` -> `git commit -m 'commit message explanation'` -> `git push` -> create merge request by click on the link that appears in the console -> create and merge pull request 
 5. CI will automatically rebuild and deploy.
+
+---
+
+## ❓ Questions & Answers
+
+### What if I want to replace the LaTeX source files?
+1. **Update the Overleaf files**: make edits in the original `.tex` files under `overleaf/chapters`.  
+2. **Reload into local repo**: download the updated `.tex` files into `overleaf/chapters`.  
+3. **Run the converter**:
+   ```bash
+   npm run convert
+   ```
+   This regenerates all `.R` scripts (preserving the `.summary.md` files for the AI summary) in `public/content`.  
+4. **Review changes**: run `npm run dev` to verify locally.  
+5. **Commit & PR**:
+   ```bash
+   git checkout -b update-latex (you could put any other branch name, does not have to be 'update-latex')
+   git add overleaf/chapters public/content (here you would add every file that you changed; you can see which files you changed by typing `git status`)
+   git commit -m "Update LaTeX sources and regenerate R scripts" (choose the commit message to your liking)
+   git push -u origin update-latex
+   ```
+   Open a pull request against `main`. (this is done by following the links in the console after pushing)
+6. **Merge** and let CI rebuild & deploy. (this step is also done in the gitlab ui)
+
+### What if I want to update the AI summaries?
+1. **Edit the Markdown**:
+   - Open `public/content/<slug>/<slug>.summary.md`.  
+   - Make your edits in Markdown format (follow the existing headings).  
+2. **Preview locally**:
+   ```bash
+   npm run dev
+   ```
+   Click “Show AI Summary” in the chapter view to verify.  
+3. **Commit & PR**:
+   ```bash
+   git checkout -b update-summaries
+   git add public/content
+   git commit -m "Revise AI summaries for chapters"
+   git push -u origin update-summaries
+   ```
+   Open a pull request against `main`.  
+4. **Merge** and let CI rebuild & deploy (summaries are static assets).
+
+### What if I want to add a new navbar item (e.g., “Presentations”)?
+1. **Create a new view**:
+   - Add `src/components/Presentations.vue` with your page template.  
+2. **Add a route**:
+   ```js
+   // src/router/index.js
+   import Presentations from '@/components/Presentations.vue'
+   // ...
+   { path: '/presentations', name: 'Presentations', component: Presentations },
+   ```
+3. **Add a nav link**:
+   - In `src/App.vue` inside the `<nav>` element:
+     ```html
+     <router-link to="/presentations">Presentations</router-link>
+     ```
+4. **Style or adjust** as needed in CSS.  
+5. **Commit & PR**:
+   ```bash
+   git checkout -b add-presentations
+   git add src/components src/router App.vue
+   git commit -m "Add Presentations page to navbar"
+   git push -u origin add-presentations
+   ```
+6. **Merge** and CI will rebuild & deploy automatically.
 
 ---
 
