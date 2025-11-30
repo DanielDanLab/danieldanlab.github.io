@@ -2,7 +2,7 @@
     <div class="home">
       <h1 class="book-title">Text Analytics in Marketing</h1>
       <p class="book-subtitle">
-        Your companion website for  
+        Your companion website for the book 
         Text Analytics in Marketing
       </p>
       <p class="book-meta">
