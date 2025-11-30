@@ -1,9 +1,9 @@
 <template>
     <div class="home">
-      <h1 class="book-title">Online Content Analysis with Applications for Marketing</h1>
+      <h1 class="book-title">Text Analytics in Marketing</h1>
       <p class="book-subtitle">
         Your companion website for  
-        Online Content Analysis with Applications for Marketing
+        Text Analytics in Marketing
       </p>
       <p class="book-meta">
         <strong>Authors:</strong> Daniel Dan, Thomas Reutterer<br/>
