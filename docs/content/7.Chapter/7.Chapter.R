@@ -20,6 +20,23 @@ dat$topic <- topics(lda)
 head(dat[,c("Review_date", "topic", "Title")], 10)
 # ──────────────────────────────────────────────────────────────
 
+# Create the dfmt document
+library(quanteda)
+
+prodreviews <- read.csv("data/Product Reviews.csv")
+corp <- corpus(prodreviews, text_field = "Content")
+
+toks <- tokens(
+  corp,
+  remove_punct = TRUE,
+  remove_numbers = TRUE
+) |>
+  tokens_tolower() |>
+  tokens_remove(stopwords("en"))
+
+dfmt <- dfm(toks)
+
+
 
 # Section: Latent Dirichlet allocation
 #   Subsection: Seeded LDA.
