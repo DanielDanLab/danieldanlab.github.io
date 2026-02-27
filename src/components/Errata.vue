@@ -29,6 +29,7 @@ toks &lt;- tokens(
   tokens_remove(stopwords("en"))
 
 dfmt &lt;- dfm(toks)</code></pre>
+        <p class="errata-thanks">We thank Professor Tsung-wu Ho for spotting this omission.</p>
       </div>
     </div>
   </div>
@@ -80,5 +81,10 @@ dfmt &lt;- dfm(toks)</code></pre>
 }
 .errata-item code {
   font-family: 'Courier New', Courier, monospace;
+}
+.errata-thanks {
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: #555;
 }
 </style>
