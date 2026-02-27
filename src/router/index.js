@@ -5,6 +5,7 @@ import ChapterList from '../components/ChapterList.vue'
 import ChapterView from '../components/ChapterView.vue'
 import Contact from '../components/Contact.vue'
 import Data from '../components/Data.vue'
+import Errata from '../components/Errata.vue'
 
 export default createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,7 @@ export default createRouter({
     { path: '/chapters/:slug', component: ChapterView },
     { path: '/contact', component: Contact },
     { path: '/data', component: Data },
+    { path: '/errata', component: Errata },
     { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
