@@ -1,4 +1,4 @@
-# Companion Website for “Online Content Analysis with Applications for Marketing”
+# Companion Website for the book “Online Text Analytics in Marketing”
 
 This project hosts a Vue.js–based companion site for the textbook, with:
 
