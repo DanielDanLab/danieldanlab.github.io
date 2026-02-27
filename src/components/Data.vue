@@ -19,7 +19,6 @@
   <script setup>
   const files = [
     'dictionary.yml',
-    'placeholder.txt',
     'Product Reviews.csv',
     'sample.csv',
     'sample.pdf'
