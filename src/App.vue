@@ -5,6 +5,7 @@
       <router-link to="/chapters">Chapters</router-link>
       <router-link to="/data">Data</router-link>
       <router-link to="/contact">Contact</router-link>
+            <router-link to="/errata">Errata</router-link>
     </nav>
     <router-view />
   </div>
