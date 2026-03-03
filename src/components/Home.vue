@@ -7,7 +7,7 @@
       </p>
       <p class="book-meta">
         <strong>Authors:</strong> Daniel Dan, Thomas Reutterer<br/>
-        <strong>Published:</strong> February 2026
+        <strong>Published:</strong> February 2026<br/>
                       If you use this book in class, please send me an email at daniel.dan@modul.ac.at — I will be happy to support you.
       </p>
       <router-link to="/chapters" class="btn-chapters">
