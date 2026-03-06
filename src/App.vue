@@ -5,8 +5,9 @@
       <router-link to="/chapters">Chapters</router-link>
       <router-link to="/data">Data</router-link>
       <router-link to="/contact">Contact</router-link>
-            <router-link to="/errata">Errata</router-link>
-          <!-- Private stats link: only visible to admin -->
+          <router-link to="/errata">Errata</router-link>
+    </nav>
+    <!-- Private stats link: only visible to admin -->
     <a
       href="https://danieldanlab.goatcounter.com"
       target="_blank"
@@ -14,11 +15,9 @@
       class="stats-link"
       title="Site Statistics"
     >&#128202;</a>
-    </nav>
     <router-view />
   </div>
 </template>
-
 
 <script setup>
 // No imports needed here; the router is injected in main.js
@@ -41,7 +40,9 @@ nav a {
   color: #42b983;
 }
 nav a.router-link-active {
-  .stats-link {
+  font-weight: bold;
+}
+.stats-link {
   position: fixed;
   bottom: 1.5rem;
   left: 1.5rem;
@@ -53,7 +54,5 @@ nav a.router-link-active {
 }
 .stats-link:hover {
   opacity: 0.85;
-}
-  font-weight: bold;
 }
 </style>
