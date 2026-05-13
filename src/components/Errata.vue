@@ -31,6 +31,18 @@ toks &lt;- tokens(
 dfmt &lt;- dfm(toks)</code></pre>
         <p class="errata-thanks">We thank Professor Tsung-wu Ho for spotting this omission.</p>
       </div>
+            <div class="errata-item">
+        <h2>Chapter 6.2.4 &mdash; Clarification on hyperplanes (p. 187, line 7 ff.)</h2>
+        <p><strong>Location:</strong> Page 187, line 7 ff.</p>
+        <p>The sentence should read:</p>
+        <blockquote>
+          &ldquo;For example, in a three-dimensional space, a hyperplane will have two dimensions,
+          while in a two-dimensional space the hyperplane has one dimension, basically a line.&rdquo;
+        </blockquote>
+        <p class="errata-thanks">
+          We thank Clara Wiebel (<a href="https://www.tum.de/" target="_blank" rel="noopener noreferrer">Technische Universit&auml;t M&uuml;nchen</a>) for this correction.
+        </p>
+      </div>
     </div>
   </div>
 </template>
