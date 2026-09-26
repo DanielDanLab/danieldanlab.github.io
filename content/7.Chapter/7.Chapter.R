@@ -1,6 +1,22 @@
 # Section: Latent Dirichlet allocation
 #   Subsection: Applying simple LDA
 
+# Create the dfmt document
+library(quanteda)
+
+prodreviews <- read.csv("data/Product Reviews.csv")
+corp <- corpus(prodreviews, text_field = "Content")
+
+toks <- tokens(
+ corp,
+ remove_punct = TRUE,
+ remove_numbers = TRUE
+) |>
+ tokens_tolower() |>
+ tokens_remove(stopwords("en"))
+
+dfmt <- dfm(toks)
+
 # Fit an LDA model to the DFM with 5 topics
 set.seed(42)
 lda <- textmodel_lda(dfmt, k = 5, verbose = FALSE)
