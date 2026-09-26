@@ -217,7 +217,7 @@ for both brands being fairly similar.
   \FunctionTok{tm\_map}\NormalTok{(removePunctuation) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Remove punctuation}
   \FunctionTok{tm\_map}\NormalTok{(removeNumbers) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Remove numbers}
   \CommentTok{\# tm\_map(stemDocument) \%\textgreater{}\% \# Stemming (commented out)}
-  \FunctionTok{tm\_map}\NormalTok{(}\FunctionTok{content\_transformer}\NormalTok{(lemmatize\_words)) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Lemmatization}
+  \FunctionTok{tm\_map}\NormalTok{(}\FunctionTok{content\_transformer}\NormalTok{(lemmatize\_strings)) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Lemmatization}
   \FunctionTok{tm\_map}\NormalTok{(stripWhitespace) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# Remove whitespace}
   \FunctionTok{DocumentTermMatrix}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
   \CommentTok{\# weightTfIdf() \%\textgreater{}\% \# Tf{-}Idf weighting (commented out)}
