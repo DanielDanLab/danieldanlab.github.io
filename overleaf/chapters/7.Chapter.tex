@@ -442,6 +442,22 @@ vocabulary.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# Create the dfmt document}
+\FunctionTok{library}\NormalTok{(quanteda)}
+
+\NormalTok{prodreviews }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data/Product Reviews.csv"}\NormalTok{)}
+\NormalTok{corp }\OtherTok{\textless{}{-}} \FunctionTok{corpus}\NormalTok{(prodreviews, }\AttributeTok{text\_field =} \StringTok{"Content"}\NormalTok{)}
+
+\NormalTok{toks }\OtherTok{\textless{}{-}} \FunctionTok{tokens}\NormalTok{(}
+\NormalTok{  corp,}
+  \AttributeTok{remove\_punct =} \ConstantTok{TRUE}\NormalTok{,}
+  \AttributeTok{remove\_numbers =} \ConstantTok{TRUE}
+\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{tokens\_tolower}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{tokens\_remove}\NormalTok{(}\FunctionTok{stopwords}\NormalTok{(}\StringTok{"en"}\NormalTok{))}
+
+\NormalTok{dfmt }\OtherTok{\textless{}{-}} \FunctionTok{dfm}\NormalTok{(toks)}
+
 \CommentTok{\# Fit an LDA model to the DFM with 5 topics}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
 \NormalTok{lda }\OtherTok{\textless{}{-}} \FunctionTok{textmodel\_lda}\NormalTok{(dfmt, }\AttributeTok{k =} \DecValTok{5}\NormalTok{, }\AttributeTok{verbose =} \ConstantTok{FALSE}\NormalTok{)}
