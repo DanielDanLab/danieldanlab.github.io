@@ -50,7 +50,7 @@ dtm <- corpus %>%
  tm_map(removePunctuation) %>% # Remove punctuation
  tm_map(removeNumbers) %>% # Remove numbers
 # tm_map(stemDocument) %>% # Stemming (commented out)
- tm_map(content_transformer(lemmatize_words)) %>% # Lemmatization
+ tm_map(content_transformer(lemmatize_strings)) %>% # Lemmatization
  tm_map(stripWhitespace) %>% # Remove whitespace
  DocumentTermMatrix() %>%
 # weightTfIdf() %>% # Tf-Idf weighting (commented out)
