@@ -43,6 +43,23 @@ dfmt &lt;- dfm(toks)</code></pre>
           We thank Clara Wiebel (<a href="https://www.tum.de/" target="_blank" rel="noopener noreferrer">Technische Universit&auml;t M&uuml;nchen</a>) for this correction.
         </p>
       </div>
+      <div class="errata-item">
+        <h2>Chapter 6.2.1 &mdash; Lemmatization in the data set preparation code (p. 175)</h2>
+        <p><strong>Location:</strong> Page 175, code that creates the document-term matrix.</p>
+        <p>
+          The line <code>tm_map(content_transformer(lemmatize_words))</code> does not lemmatize the reviews.
+          <code>lemmatize_words()</code> expects a vector of single words, but <code>tm_map()</code> passes
+          each review as one string, so the text is returned unchanged (e.g. &ldquo;apps&rdquo; and
+          &ldquo;applications&rdquo; remain separate terms). Use <code>lemmatize_strings()</code>, which
+          lemmatizes every word of each document:
+        </p>
+        <pre><code>tm_map(content_transformer(lemmatize_strings)) %&gt;% # Lemmatization</code></pre>
+        <p>
+          The online code for Chapter 6 has been corrected. With lemmatization working, the document-term
+          matrix has fewer terms (e.g. &ldquo;apps&rdquo; is counted as &ldquo;app&rdquo;), so the classification
+          results differ slightly from those printed in the book.
+        </p>
+      </div>
     </div>
   </div>
 </template>
