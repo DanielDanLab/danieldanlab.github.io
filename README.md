@@ -6,7 +6,7 @@ This project hosts a Vue.js–based companion site for the textbook, with:
 - **AI-generated summaries** for each chapter  
 - **Raw data files** for download  
 
-It builds via Vite, deploys into `docs/`, and is served on GitHub Pages.
+It builds via Vite into `docs/` and is served on GitHub Pages from the `gh-pages` branch. The `docs/` folder is generated, not stored in the repo.
 
 ---
 
@@ -38,7 +38,7 @@ It builds via Vite, deploys into `docs/`, and is served on GitHub Pages.
 │   ├── scripts/
 │   │   └── convertTex.js          # Node script: .tex → .R + summaries
 │   └── main.js                    # app entrypoint
-├── docs/                          # built site (output of `npm run build`)
+├── docs/                          # built site (output of `npm run build`, not committed)
 │   ├── index.html
 │   └── assets/                    # production JS/CSS bundles
 ├── package.json                   # scripts & dependencies
@@ -90,6 +90,11 @@ This repo uses a GitHub Actions workflow to automate:
 4. GitHub Pages (configured to serve `gh-pages` → root) publishes the site
 
 Whenever you merge into `main`, CI rebuilds and redeploys the live site.
+
+**Notes**
+
+- `docs/` is listed in `.gitignore`: do not commit it. The live site is always rebuilt from source.
+- To change the R code on the site, edit the chapter in `overleaf/chapters/*.tex`. `public/content/*.R` is regenerated from the `.tex` files on every deploy, so edits made only there are overwritten.
 
 ---
 
