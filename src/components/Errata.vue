@@ -60,6 +60,31 @@ dfmt &lt;- dfm(toks)</code></pre>
           results differ slightly from those printed in the book.
         </p>
       </div>
+      <div class="errata-item">
+        <h2>Chapter 7.2: Reassignment of &ldquo;screen&rdquo; in the Gibbs sampling example (p. 217)</h2>
+        <p><strong>Location:</strong> Page 217, line 232.</p>
+        <p>
+          In the reassignment of &ldquo;screen&rdquo; in Doc1, the document-topic factor for T<sub>1</sub>
+          should use the counts without the current word, as is done for T<sub>2</sub>:
+          (2 + 0.1) / (2 + 2 &times; 0.1) = 2.1 / 2.2. The combined value for T<sub>1</sub> is therefore
+          0.01 / 7.08 &times; 2.1 / 2.2 = 0.00135, not 0.001608.
+        </p>
+        <p>
+          The conclusion is unchanged: T<sub>2</sub> (0.00755) is more likely than T<sub>1</sub>,
+          with probabilities of about 85% and 15%.
+        </p>
+      </div>
+      <div class="errata-item">
+        <h2>Chapter 7.2: Clarification on the reassignment step (p. 217, lines 237&ndash;240)</h2>
+        <p><strong>Location:</strong> Page 217, lines 237&ndash;240.</p>
+        <p>
+          The new topic of &ldquo;screen&rdquo; is drawn at random with probabilities proportional to the
+          two values (about 15% for T<sub>1</sub> and 85% for T<sub>2</sub>); it is not simply set to the
+          larger one. Unlike the initial assignment, which ignores the data, this draw is weighted by the
+          current counts. Keeping a small chance for the less likely topic lets the sampler move away from
+          a poor starting arrangement; as the counts sharpen over the iterations, the assignments stabilise.
+        </p>
+      </div>
     </div>
   </div>
 </template>
