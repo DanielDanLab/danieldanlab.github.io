@@ -85,6 +85,76 @@ dfmt &lt;- dfm(toks)</code></pre>
           a poor starting arrangement; as the counts sharpen over the iterations, the assignments stabilise.
         </p>
       </div>
+      <div class="errata-item">
+        <h2>Chapter 2.3.3: Number of unique titles with the repaired data set (p. 28)</h2>
+        <p><strong>Location:</strong> Page 28, output of <code>length(unique(prodtitle))</code> and the sentence below it.</p>
+        <p>
+          The printed values (31,405 unique titles, 9,336 duplicates) are correct for the original version of
+          <code>Product Reviews.csv</code>. In September 2026 the data file on this site was repaired: 217 damaged rows
+          (titles and reviews cut at the first semicolon, and three spreadsheet errors) were restored. With the repaired file the code returns
+          31,433 unique titles out of 40,741, so 9,308 titles are duplicates.
+        </p>
+      </div>
+      <div class="errata-item">
+        <h2>Chapter 2.4.5: <code>\w</code> and <code>\W</code> in Table 2.5 (p. 44)</h2>
+        <p><strong>Location:</strong> Page 44, Table 2.5, rows <code>\w</code> and <code>\W</code>.</p>
+        <p>
+          A word character also includes the underscore, as stated in Section 2.4.2. The rows should read:
+        </p>
+        <pre><code>\w   Matches a word character      [A-Za-z0-9_]
+\W   Matches a nonword character   [^A-Za-z0-9_]</code></pre>
+        <p>For example, <code>grepl("^\\w+$", "a_b")</code> returns <code>TRUE</code>.</p>
+      </div>
+      <div class="errata-item">
+        <h2>Chapter 2.4.7: Lazy quantifiers are supported in R (p. 45)</h2>
+        <p><strong>Location:</strong> Page 45, first paragraph (&ldquo;greedy (standard in R) and lazy (enabled in RStudio)&rdquo;) and last paragraph of the section.</p>
+        <p>
+          R&rsquo;s regex engines do support lazy matching. Adding <code>?</code> after a quantifier
+          (<code>*?</code>, <code>+?</code>, <code>??</code>, <code>{n,m}?</code>) makes it lazy both in the default
+          engine and with <code>perl = TRUE</code>, and also in <strong>stringr</strong>. Greedy matching is only the
+          default. The sentence on p. 45 should read: &ldquo;Quantifiers in R are greedy by default; adding
+          <code>?</code> makes them lazy, both in R&rsquo;s regex functions and in RStudio&rsquo;s search and replace.&rdquo;
+        </p>
+        <pre><code>x &lt;- "Text Analytics for Digital Marketing"
+regmatches(x, regexpr("(Text)(.*?)(i)", x))               # "Text Analyti"
+regmatches(x, regexpr("(Text)(.*?)(i)", x, perl = TRUE))  # "Text Analyti"
+regmatches(x, regexpr("(Text)(.*)(i)", x))                # "Text Analytics for Digital Marketi"</code></pre>
+      </div>
+      <div class="errata-item">
+        <h2>Chapter 4.3.1: Term frequency of Doc 2 in Table 4.2 (p. 105)</h2>
+        <p><strong>Location:</strong> Page 105, Table 4.2, row &ldquo;tf Doc 2&rdquo;.</p>
+        <p>
+          Doc 2 has three terms, so each of its terms has tf = 1/3, which rounds to <strong>0.33</strong>, not 0.34.
+          The tf-idf value of &ldquo;best&rdquo; in Doc 2 is unchanged: 0.33 &times; 0.30 = 0.10.
+        </p>
+      </div>
+      <div class="errata-item">
+        <h2>Chapter 10.6.1: Error function and gradient in the word2vec update (pp. 342&ndash;343)</h2>
+        <p><strong>Location:</strong> Page 342, definition of the error <em>E</em>, and page 343, the gradients and the numerical example.</p>
+        <p>
+          The error is defined as <em>E</em> = <em>t</em> &minus; &sigma;(<em>v</em> &middot; <em>u</em>), with gradient
+          &minus;&sigma;(<em>v</em> &middot; <em>u</em>)(1 &minus; &sigma;(<em>v</em> &middot; <em>u</em>)) &middot; <em>u</em>.
+          The target <em>t</em> then drops out of the gradient, so the update always increases <em>v</em> &middot; <em>u</em>.
+          This is right for a positive pair (<em>t</em> = 1) but moves the vectors the wrong way for a negative
+          pair (<em>t</em> = 0).
+        </p>
+        <p>
+          Word2vec with negative sampling minimises the log loss
+          <em>E</em> = &minus;[<em>t</em> log &sigma;(<em>v</em> &middot; <em>u</em>) + (1 &minus; <em>t</em>) log(1 &minus; &sigma;(<em>v</em> &middot; <em>u</em>))].
+          Its gradients are:
+        </p>
+        <pre><code>&part;E/&part;v = (&sigma;(v &middot; u) &minus; t) &middot; u
+&part;E/&part;u = (&sigma;(v &middot; u) &minus; t) &middot; v
+
+v_new = v_old &minus; &eta; &middot; (&sigma;(v_old &middot; u_old) &minus; t) &middot; u_old
+u_new = u_old &minus; &eta; &middot; (&sigma;(v_old &middot; u_old) &minus; t) &middot; v_old</code></pre>
+        <p>
+          In the numerical example (<em>v</em> = (0.5, 0.3), <em>u</em> = (0.1, 0.2), <em>t</em> = 1, &eta; = 0.1),
+          &sigma;(0.11) &asymp; 0.5275, so the gradient for <em>v</em> is (0.5275 &minus; 1) &middot; (0.1, 0.2) &asymp;
+          (&minus;0.0473, &minus;0.0945) and the update gives <em>v</em><sub>new</sub> &asymp; <strong>(0.5047, 0.3095)</strong>,
+          not (0.50249, 0.30498). For a negative pair (<em>t</em> = 0) the same formula moves <em>v</em> away from <em>u</em>.
+        </p>
+      </div>
     </div>
   </div>
 </template>
